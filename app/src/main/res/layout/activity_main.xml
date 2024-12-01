@@ -25,6 +25,7 @@
         android:layout_centerHorizontal="true"
         android:hint="@string/usr"
         android:gravity="center_horizontal"
+        android:layout_marginStart="60dp"
         android:padding="18dp"
         android:textSize="20sp"
         />
@@ -36,7 +37,22 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:hint="@string/pass"
+        android:layout_below="@id/enter_usr"
         android:gravity="center_horizontal"
+        android:layout_marginStart="60dp"
         android:padding="18dp"
         android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/supabutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/enter_pass"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/confirmar" />
+
+
 </RelativeLayout>
