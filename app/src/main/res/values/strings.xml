@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OpenGym</string>
+    <string name="usr">Usuario</string>
+    <string name="pass">Contraseña</string>
 </resources>
