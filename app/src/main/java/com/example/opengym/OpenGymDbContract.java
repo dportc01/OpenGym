@@ -9,15 +9,18 @@ public final class OpenGymDbContract {
             "CREATE TABLE " + Users.TABLE_NAME + " (" +
                     Users._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     Users.COLUMN_NAME + " TEXT," +
-                    Users.COLUMN_PASSWORD + " TEXT)";
+                    Users.COLUMN_PASSWORD + " TEXT," +
+                    Users.COLUMN_EMAIL + " TEXT," +
+                    Users.COLUMN_PREMIUM + " INTEGER DEFAULT 0)";
 
-    private static final String SQL_DELETE_ENTRIES =
+    public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + Users.TABLE_NAME;
 
     public static class Users implements BaseColumns {
         public static final String TABLE_NAME = "users";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PASSWORD = "password";
-
+        public static final String COLUMN_EMAIL = "email";
+        public static final String COLUMN_PREMIUM = "premium";
     }
 }
