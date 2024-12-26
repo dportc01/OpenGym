@@ -50,6 +50,7 @@
         android:layout_below="@id/enter_pass"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:backgroundTint="@color/purple"
         android:layout_marginStart="60dp"
         android:layout_marginTop="20dp"
         android:text="@string/confirmar" />
