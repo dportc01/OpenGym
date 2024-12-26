@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/add_row_button"
+        android:layout_marginBottom="16dp">
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0">
+
+            <!-- Header Row -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/purple"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/rutinas"
+                    android:textStyle="bold"
+                    android:padding="8dp"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:padding="8dp"
+                    android:textColor="@android:color/white" />
+            </TableRow>
+
+            <!-- Static Row Example -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/rutina1"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black" />
+
+                <Button
+                    android:id="@+id/button_row1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/acceder"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@android:color/white" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+    <!-- Button to Add Rows -->
+    <Button
+        android:id="@+id/add_row_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nuevarutina"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/black"
+        android:textColor="@android:color/white"
+        android:padding="12dp"
+        android:textStyle="bold" />
+</RelativeLayout>

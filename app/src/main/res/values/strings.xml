@@ -3,4 +3,8 @@
     <string name="usr">Usuario</string>
     <string name="pass">Contraseña</string>
     <string name="confirmar">Confirmar</string>
+    <string name="rutinas">Tus rutinas</string>
+    <string name="rutina1">Rutina 1</string>
+    <string name="acceder">Acceder</string>
+    <string name="nuevarutina">Añadir rutina</string>
 </resources>
