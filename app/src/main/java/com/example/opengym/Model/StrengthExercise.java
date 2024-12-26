@@ -1,0 +1,27 @@
+package com.example.opengym.Model;
+
+public class StrengthExercise implements IExercise {
+
+    private int numOfReps;
+    private int numOfSets;
+    private float weight;
+    private String name;
+
+    public StrengthExercise(String name, int numOfReps, int numOfSets, float weight) {
+        this.name = name;
+        this.numOfReps = numOfReps;
+        this.numOfSets = numOfSets;
+        this.weight = weight;
+    }
+
+    public StrengthExercise() {
+        this.name = "";
+        this.numOfReps = 0;
+        this.numOfSets = 0;
+        this.weight = 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+}

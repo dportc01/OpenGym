@@ -1,4 +1,4 @@
-package com.example.opengym;
+package com.example.opengym.Model;
 
 import android.provider.BaseColumns;
 
