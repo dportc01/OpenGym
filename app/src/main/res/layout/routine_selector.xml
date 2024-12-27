@@ -5,6 +5,7 @@
     android:padding="16dp"
     android:background="@color/white">
 
+    <!-- Scrollable Table -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -32,40 +33,27 @@
                     android:text="@string/rutinas"
                     android:textStyle="bold"
                     android:padding="8dp"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:padding="8dp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:gravity="center" />
             </TableRow>
 
-            <!-- Static Row Example -->
+            <!-- Example Row -->
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/rutina1"
-                    android:padding="8dp"
-                    android:textColor="@color/black" />
 
                 <Button
                     android:id="@+id/button_row1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/acceder"
+                    android:text="@string/rutina1"
                     android:backgroundTint="@color/black"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:padding="16dp" />
             </TableRow>
+
         </TableLayout>
     </ScrollView>
 
@@ -79,5 +67,6 @@
         android:backgroundTint="@color/black"
         android:textColor="@color/white"
         android:padding="12dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
 </RelativeLayout>
