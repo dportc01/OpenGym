@@ -24,4 +24,16 @@ public class StrengthExercise implements IExercise {
     public String getName() {
         return name;
     }
+
+    public int getNumOfReps() {
+        return numOfReps;
+    }
+
+    public int getNumOfSets() {
+        return numOfSets;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
 }
