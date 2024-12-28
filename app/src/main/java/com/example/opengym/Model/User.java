@@ -1,24 +1,30 @@
 package com.example.opengym.Model;
 
+import java.util.ArrayList;
+
 public class User {
     private String name;
-    private String email;
     private String password;
     private boolean premium;
+    private ArrayList<Routine> routinesList;
 
-    public User(String name, String email, String password, boolean premium) {
+    public User(String name, String password, boolean premium, ArrayList<Routine> routinesList) {
         this.name = name;
-        this.email = email;
         this.password = password;
         this.premium = premium;
+        this.routinesList = routinesList;
     }
+
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+        this.premium = false;
+        this.routinesList = new ArrayList<Routine>();
+    }
+
 
     public String getName() {
         return name;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getPassword() {
@@ -31,10 +37,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setPassword(String password) {

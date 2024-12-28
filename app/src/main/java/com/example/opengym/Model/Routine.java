@@ -1,12 +1,22 @@
 package com.example.opengym.Model;
 
+import java.util.ArrayList;
+
 public class Routine {
     private String name;
     private String description;
+    private ArrayList<Session> sessionsList;
 
-    public Routine(String name, String description) {
+    public Routine(String name, String description, ArrayList<Session> sessionsList) {
         this.name = name;
         this.description = description;
+        this.sessionsList = sessionsList;
+    }
+
+    public Routine() {
+        this.name = "";
+        this.description = "";
+        this.sessionsList = new ArrayList<Session>();
     }
 
     public void removeSession() {
