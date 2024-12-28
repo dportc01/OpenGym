@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.core.app.ActivityScenario;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,14 +21,13 @@ public class DatabaseTest {
     private OpenGymDbHelper dbHelper;
     private final String[] juanInfo = {
             "Juan",
-            "1234",
-            "Juan@snakemail.com"
+            "1234"
     };
 
     @Before
     public void initDbData() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        dbHelper = new OpenGymDbHelper(appContext);
+        dbHelper = OpenGymDbHelper.getInstance(appContext);
     }
 
     private void addJuan() throws android.database.SQLException {
@@ -37,7 +37,6 @@ public class DatabaseTest {
         ContentValues values = new ContentValues();
         values.put(OpenGymDbContract.Users.COLUMN_NAME, juanInfo[0]);
         values.put(OpenGymDbContract.Users.COLUMN_PASSWORD, juanInfo[1]);
-        values.put(OpenGymDbContract.Users.COLUMN_EMAIL, juanInfo[2]);
 
         db.insertOrThrow(OpenGymDbContract.Users.TABLE_NAME, null, values);
     }
@@ -52,7 +51,6 @@ public class DatabaseTest {
         String[] projection = {
                 OpenGymDbContract.Users.COLUMN_NAME,
                 OpenGymDbContract.Users.COLUMN_PASSWORD,
-                OpenGymDbContract.Users.COLUMN_EMAIL,
                 OpenGymDbContract.Users.COLUMN_PREMIUM
         };
 
@@ -69,13 +67,12 @@ public class DatabaseTest {
                 null
         );
 
-        String name, password, email;
+        String name, password;
         int premium;
 
         if (cursor != null && cursor.moveToFirst()) {
             name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_NAME));
             password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_PASSWORD));
-            email = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_EMAIL));
             premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_PREMIUM));
         }
         else {
@@ -85,7 +82,6 @@ public class DatabaseTest {
 
         Assert.assertEquals(juanInfo[0], name);
         Assert.assertEquals(juanInfo[1], password);
-        Assert.assertEquals(juanInfo[2], email);
         Assert.assertEquals(0, premium);
     }
 
@@ -107,10 +103,7 @@ public class DatabaseTest {
         db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                OpenGymDbContract.Users.COLUMN_NAME,
-                OpenGymDbContract.Users.COLUMN_PASSWORD,
-                OpenGymDbContract.Users.COLUMN_EMAIL,
-                OpenGymDbContract.Users.COLUMN_PREMIUM
+                OpenGymDbContract.Users.COLUMN_NAME
         };
 
         String selection = OpenGymDbContract.Users.COLUMN_NAME + " = ?";
@@ -125,6 +118,46 @@ public class DatabaseTest {
                 null,
                 null
         );
+    }
+
+    @Test
+    public void consistencyTest() {
+
+        addJuan();
+
+        ActivityScenario.launch(Main.class).close();
+        ActivityScenario.launch(Main.class);
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                OpenGymDbContract.Users.COLUMN_NAME
+        };
+
+        String selection = OpenGymDbContract.Users.COLUMN_NAME + " = ?";
+        String[] selectionArgs = {juanInfo[0]};
+
+        Cursor cursor = db.query(
+                OpenGymDbContract.Users.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        String name;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_NAME));
+        }
+        else {
+            throw new AssertionError("El cursor no encontro nada");
+        }
+
+
+        Assert.assertEquals(juanInfo[0], name);
     }
 
     @After
