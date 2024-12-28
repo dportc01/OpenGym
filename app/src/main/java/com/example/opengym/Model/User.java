@@ -53,34 +53,44 @@ public class User {
         File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File file = new File(downloadsDir, name + ".csv");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            write.write(String.format("NombreRutina: \"%s\"\n", routine.getName()));
-            writer.write(String.format("Descripcion: \"%s\"\n", routine.getDescription()));
-            writer.write("NombreSesion,TipoEjercicio,NombreEjercicio,Repeticiones,Series,Peso,Duración\n");
+            writer.write("Rutina,Descripcion,Sesion,Fecha,DuracionDescanso,NombreEjercicio,TipoEjercicio,Repeticiones,Series,Peso,Duracion\n");
+            String routineData = String.format(
+                "%s,%s\n",
+                routine.getName(),
+                routine.getDescription()
+            );
             for (Session session : routine.getSessionsList()) {
+                String sessionData = String.format(
+                    "%s%s,%s,%s,%d,",
+                    routineData,
+                    session.getName(),
+                    session.getDate().toString(),
+                    session.getRestDuration()
+                );
                 for (Exercise exercise : session.getExercisesList()) {
-                    String row;
+                    String exerciseData;
                     if (exercise instanceof StrengthExercise) {
                         StrengthExercise strenghExercise = (StrengthExercise) exercise;
-                        row = String.format(
-                            "%s,%s,%s,%d,%d,%.2f,-\n",
-                            session.getName(),
+                        exerciseData = String.format(
+                            "%s%s,%s,%s,%d,%d,%.2f,-\n",
+                            sessionData,
+                            se.getName(),
                             "Fuerza",
-                            strenghExercise.getName(),
-                            strenghExercise.getNumOfReps(),
-                            strenghExercise.getNumOfSets(),
-                            strenghExercise.getWeight()
+                            se.getNumOfReps(),
+                            se.getNumOfSets(),
+                            se.getWeight()
                         );
                     } else {
                         TimeExercise timedExercise = (TimeExercise) exercise;
-                        row = String.format(
-                            "%s,%s,%s,-,-,-,%d\n",
-                            session.getName(),
+                        exerciseData = String.format(
+                            "%s%s,%s,%s,-,-,-,%d\n",
+                            sessionData,
+                            te.getName(),
                             "Tiempo",
-                            timedExercise.getName(),
-                            timedExercise.getTime()
+                            te.getTime()
                         );
                     }
-                    writer.write(row);
+                    writer.write(exerciseData);
                 }
             }
         } catch (IOException e) {
@@ -88,9 +98,57 @@ public class User {
         }
     }
 
-    public void importUserRoutine() {
+    public void importUserRoutine(String filePath) {
+        File file = new File(filePath);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            Routine newRoutine = null;
 
-        // TODO
+            line = reader.readLine();
+            if(line == null) {
+                return;
+            }
+
+            String[] parts = line.split(",");
+            String routineName = parts[0];
+            String routineDescription = parts[1];
+            newRoutine = new Routine(routineName, routineDescription);
+            routinesList.add(newRoutine);
+
+            currentSession = parts[2];
+            while(line != null) {
+                parts = line.split(",");
+                currentSession = parts[2];
+                ArrayList<IExercise> exercises = new ArrayList<IExercise>();
+                while(parts[2] == currentSession) {
+                    newExercise = extractExerciseData(reader, newRoutine);
+                    exercises.add(newExercise);
+                    line = reader.readLine();
+                }
+                Session newSession = new Session(parts[2], parts[3], Integer.parseInt(parts[4]), exercises);
+                newRoutine.add(newSession);
+                // TODO Crear metodo para crear y añadir sesiones a rutinas
+                line = reader.readLine();
+            }  
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private IExercise extractExerciseData(String[] dataRow) {
+        IExercise newExercise = null;
+        if (dataRow[7].equals("Fuerza")) {
+            newExercise = new StrengthExercise(
+                dataRow[6],
+                Integer.parseInt(dataRow[8]),
+                Integer.parseInt(dataRow[9]),
+                Float.parseFloat(dataRow[10])
+            );
+        } else {
+            newExercise = new TimeExercise(dataRow[6], Integer.parseInt(dataRow[11]));
+        }
+        return newExercise;
+        // TODO Dar uso a la factoria
     }
 
     public void addRoutine(String name) {

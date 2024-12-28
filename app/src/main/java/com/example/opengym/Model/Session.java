@@ -28,6 +28,14 @@ public class Session {
         return name;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public int getRestDuration() {
+        return restDuration;
+    }
+
     public ArrayList<IExercise> getExercisesList() {
         return exercisesList;
     }
