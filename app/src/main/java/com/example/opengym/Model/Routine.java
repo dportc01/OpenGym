@@ -19,6 +19,10 @@ public class Routine {
         this.sessionsList = new ArrayList<Session>();
     }
 
+    public void getInfoDB() {
+        // TODO implement here
+    }
+
     public void removeSession() {
         // TODO implement here
     }

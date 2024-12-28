@@ -24,6 +24,14 @@ public class Session {
         this.exercisesList = new ArrayList<IExercise>();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void getInfoDB() {
+        // TODO implement here
+    }
+
     public void removeExercise() {
         // TODO implement here
     }

@@ -22,9 +22,27 @@ public class User {
         this.routinesList = new ArrayList<Routine>();
     }
 
+    public User() {
+        this.name = "";
+        this.password = "";
+        this.premium = false;
+        this.routinesList = new ArrayList<Routine>();
+    }
 
+    // Get the user's information from the database
+    public void getInfoDB() {
+        // TODO
+    }
     public String getName() {
         return name;
+    }
+
+    public void exportUserRoutine() {
+        // TODO
+    }
+
+    public void importUserRoutine() {
+        // TODO
     }
 
     public String getPassword() {

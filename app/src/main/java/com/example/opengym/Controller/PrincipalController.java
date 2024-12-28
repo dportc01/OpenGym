@@ -2,7 +2,38 @@ package com.example.opengym.Controller;
 
 import com.example.opengym.Model.User;
 
-public class PrincipalController {
-    private final User user;
+import java.util.ArrayList;
 
+public class PrincipalController {
+    private final User controlledUser;
+
+    public PrincipalController() {
+        this.controlledUser = new User();
+        controlledUser.getInfoDB();
+    }
+
+    public String getUserName() {
+        return controlledUser.getName();
+    }
+
+    public void exportUserRoutine() {
+        // TODO
+    }
+
+    public void importUserRoutine() {
+        // TODO
+    }
+
+    public void removeUserRoutine() {
+        // TODO
+    }
+
+    public void addUserRoutine() {
+        // TODO
+    }
+
+    public ArrayList<String> getUserRoutinesName() {
+        // TODO
+        return null;
+    }
 }
