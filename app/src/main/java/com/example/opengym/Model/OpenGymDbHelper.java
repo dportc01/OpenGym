@@ -1,5 +1,6 @@
 package com.example.opengym.Model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -29,4 +30,19 @@ public class OpenGymDbHelper extends SQLiteOpenHelper {
         db.execSQL(OpenGymDbContract.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
+
+    public void addUser(String name, String password, Context appContext) {
+
+        getInstance(appContext);
+
+        SQLiteDatabase db = instance.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(OpenGymDbContract.Users.COLUMN_NAME, name);
+        values.put(OpenGymDbContract.Users.COLUMN_PASSWORD, password);
+
+        db.insertOrThrow(OpenGymDbContract.Users.TABLE_NAME, null, values);
+    }
+
+    //TODO metodos para terminar todos los add()
 }
