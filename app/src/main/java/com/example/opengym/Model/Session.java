@@ -28,6 +28,10 @@ public class Session {
         return name;
     }
 
+    public ArrayList<IExercise> getExercisesList() {
+        return exercisesList;
+    }
+
     public void getInfoDB() {
         // TODO implement here
     }

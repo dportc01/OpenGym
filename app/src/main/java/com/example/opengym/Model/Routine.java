@@ -31,14 +31,6 @@ public class Routine {
         // TODO implement here
     }
 
-    public void exportRoutine() {
-        // TODO implement here
-    }
-
-    public void importRoutine() {
-        // TODO implement here
-    }
-
     public String getName() {
         return name;
     }
@@ -55,4 +47,7 @@ public class Routine {
         this.description = description;
     }
 
+    public ArrayList<Session> getSessionsList() {
+        return sessionsList;
+    }
 }

@@ -16,8 +16,8 @@ public class PrincipalController {
         return controlledUser.getName();
     }
 
-    public void exportUserRoutine() {
-        // TODO
+    public void exportUserRoutine(String routineName){
+        user.exportRoutine(routineName);
     }
 
     public void importUserRoutine() {
