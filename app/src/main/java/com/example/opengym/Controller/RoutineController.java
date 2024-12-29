@@ -1,6 +1,6 @@
 package com.example.opengym.Controller;
 
-import com.example.opengym.Model.Routine;
+import com.example.opengym.Model.Entities.Routine;
 
 public class RoutineController {
     private Routine controlledRoutine;

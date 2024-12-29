@@ -1,4 +1,4 @@
-package com.example.opengym.Model;
+package com.example.opengym.Model.Entities;
 
 public class ExerciseFactory {
     public IExercise createExercise(String nombre, int duracion) {

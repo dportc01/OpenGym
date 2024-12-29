@@ -31,18 +31,9 @@ public class OpenGymDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addUser(String name, String password, Context appContext) {
-
-        getInstance(appContext);
-
-        SQLiteDatabase db = instance.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(OpenGymDbContract.Users.COLUMN_NAME, name);
-        values.put(OpenGymDbContract.Users.COLUMN_PASSWORD, password);
-
-        db.insertOrThrow(OpenGymDbContract.Users.TABLE_NAME, null, values);
+    public void closeConnection(SQLiteDatabase db) {
+        if (db != null) {
+            db.close();
+        }
     }
-
-    //TODO metodos para terminar todos los add()
 }

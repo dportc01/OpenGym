@@ -41,11 +41,11 @@ public class DatabaseTest {
 
         ContentValues values = new ContentValues();
 
-        values.put(OpenGymDbContract.Routines.COLUMN_NAME, routineInfo[0]);
-        values.put(OpenGymDbContract.Routines.COLUMN_DESCRIPTION, routineInfo[1]);
-        values.put(OpenGymDbContract.Routines.COLUMN_USERNAME, routineInfo[2]);
+        values.put(OpenGymDbContract.RoutinesTable.COLUMN_NAME, routineInfo[0]);
+        values.put(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION, routineInfo[1]);
+        values.put(OpenGymDbContract.RoutinesTable.COLUMN_USERNAME, routineInfo[2]);
 
-        db.insertOrThrow(OpenGymDbContract.Routines.TABLE_NAME, null, values);
+        db.insertOrThrow(OpenGymDbContract.RoutinesTable.TABLE_NAME, null, values);
     }
 
     //Start of test
@@ -64,16 +64,16 @@ public class DatabaseTest {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                OpenGymDbContract.Users.COLUMN_NAME,
-                OpenGymDbContract.Users.COLUMN_PASSWORD,
-                OpenGymDbContract.Users.COLUMN_PREMIUM
+                OpenGymDbContract.UsersTable.COLUMN_NAME,
+                OpenGymDbContract.UsersTable.COLUMN_PASSWORD,
+                OpenGymDbContract.UsersTable.COLUMN_PREMIUM
         };
 
-        String selection = OpenGymDbContract.Users.COLUMN_NAME + " = ?";
+        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " = ?";
         String[] selectionArgs = {juanInfo[0]};
 
         Cursor cursor = db.query(
-                OpenGymDbContract.Users.TABLE_NAME,
+                OpenGymDbContract.UsersTable.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
@@ -86,9 +86,9 @@ public class DatabaseTest {
         int premium;
 
         if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_NAME));
-            password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_PASSWORD));
-            premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_PREMIUM));
+            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_NAME));
+            password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PASSWORD));
+            premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PREMIUM));
         }
         else {
             throw new AssertionError("El cursor no encontro nada");
@@ -118,16 +118,16 @@ public class DatabaseTest {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                OpenGymDbContract.Routines.COLUMN_NAME,
-                OpenGymDbContract.Routines.COLUMN_DESCRIPTION,
-                OpenGymDbContract.Routines.COLUMN_USERNAME
+                OpenGymDbContract.RoutinesTable.COLUMN_NAME,
+                OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION,
+                OpenGymDbContract.RoutinesTable.COLUMN_USERNAME
         };
 
-        String selection = OpenGymDbContract.Routines.COLUMN_NAME + " = ?";
+        String selection = OpenGymDbContract.RoutinesTable.COLUMN_NAME + " = ?";
         String[] selectionArgs = {juanInfo[2]};
 
         Cursor cursor = db.query(
-                OpenGymDbContract.Users.TABLE_NAME,
+                OpenGymDbContract.UsersTable.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
@@ -140,9 +140,9 @@ public class DatabaseTest {
         int premium;
 
         if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_NAME));
-            password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_PASSWORD));
-            premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_PREMIUM));
+            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_NAME));
+            password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PASSWORD));
+            premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PREMIUM));
         }
         else {
             throw new AssertionError("El cursor no encontro nada");
@@ -166,14 +166,14 @@ public class DatabaseTest {
         db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                OpenGymDbContract.Users.COLUMN_NAME
+                OpenGymDbContract.UsersTable.COLUMN_NAME
         };
 
-        String selection = OpenGymDbContract.Users.COLUMN_NAME + " = ?";
+        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " = ?";
         String[] selectionArgs = {juanInfo[0]};
 
         Cursor cursor = db.query(
-                OpenGymDbContract.Users.TABLE_NAME,
+                OpenGymDbContract.UsersTable.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
@@ -194,14 +194,14 @@ public class DatabaseTest {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                OpenGymDbContract.Users.COLUMN_NAME
+                OpenGymDbContract.UsersTable.COLUMN_NAME
         };
 
-        String selection = OpenGymDbContract.Users.COLUMN_NAME + " = ?";
+        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " = ?";
         String[] selectionArgs = {juanInfo[0]};
 
         Cursor cursor = db.query(
-                OpenGymDbContract.Users.TABLE_NAME,
+                OpenGymDbContract.UsersTable.TABLE_NAME,
                 projection,
                 selection,
                 selectionArgs,
@@ -213,7 +213,7 @@ public class DatabaseTest {
         String name;
 
         if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.Users.COLUMN_NAME));
+            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_NAME));
         }
         else {
             throw new AssertionError("El cursor no encontro nada");
