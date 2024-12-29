@@ -14,16 +14,16 @@ public class SessionController {
         return controlledSession.getName();
     }
 
-    public void removeSessionExercise() {
-        controlledSession.removeExercise();
+    public void removeSessionExercise(String name) {
+        controlledSession.removeExercise(name);
     }
 
-    public void addSessionExercise() {
-        controlledSession.addExercise();
+    public void addSessionExercise(IExercise exercise) {
+        controlledSession.addExercise(exercise);
     }
 
-    public void getSessionExercises() {
-        // TODO
+    public ArrayList<IExercise> getSessionExercises() {
+        controlledSession.getExercisesList();
     }
 
 

@@ -23,12 +23,20 @@ public class Routine {
         // TODO implement here
     }
 
-    public void removeSession() {
-        // TODO implement here
+    public void removeSession(String name) {
+        if (sessionsList.isEmpty()){
+            return;
+        }
+        for (Session session : sessionsList) {
+            if (session.getName().equals(name)) {
+                sessionsList.remove(session);
+                return;
+            }
+        }
     }
 
-    public void addSession() {
-        // TODO implement here
+    public void addSession(Session session) {
+        sessionsList.add(session);
     }
 
     public String getName() {

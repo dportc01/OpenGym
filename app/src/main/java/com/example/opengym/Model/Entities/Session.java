@@ -28,6 +28,14 @@ public class Session {
         return name;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public int getRestDuration() {
+        return restDuration;
+    }
+
     public ArrayList<IExercise> getExercisesList() {
         return exercisesList;
     }
@@ -37,11 +45,19 @@ public class Session {
     }
 
     public void removeExercise() {
-        // TODO implement here
+        if (exercisesList.isEmpty()){
+            return;
+        }
+        for (IExercise exercise : exercisesList) {
+            if (exercise.getName().equals(name)) {
+                exercisesList.remove(exercise);
+                return;
+            }
+        }
     }
 
-    public void addExercise() {
-        // TODO implement here
+    public void addExercise(IExercise exercise) {
+        exercisesList.add(exercise);
     }
 
 }

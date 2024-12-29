@@ -1,14 +1,21 @@
 package com.example.opengym.Model.Entities;
 
 public class ExerciseFactory {
-    public IExercise createExercise(String exerciseType) {
+    public IExercise createExercise(String nombre, int duracion) {
+        IExercise exercise = new TimedExercise(nombre, duracion);
+        return exercise;
+    }
+
+    public IExercise createExercise(String nombre, int sets, int reps, float weight) {
+        IExercise exercise = new StrengthExercise(nombre, sets, reps, weight);
+        return exercise;
+    }
+
+    public IExercise createExercise(String tipo) {
         IExercise exercise = null;
-        if (exerciseType == null) {
-            return null;
-        }
-        if (exerciseType.equalsIgnoreCase("TIMED")) {
+        if (tipo.equals("Timed")) {
             exercise = new TimedExercise();
-        } else if (exerciseType.equalsIgnoreCase("STRENGTH")) {
+        } else if (tipo.equals("Strength")) {
             exercise = new StrengthExercise();
         }
         return exercise;
