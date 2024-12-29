@@ -18,11 +18,15 @@ public class RoutineController {
         return controlledRoutine.getDescription();
     }
 
-    public void removeRoutineSession() {
-        controlledRoutine.removeSession();
+    public ArrayList<Session> getRoutineSessions() {
+        return controlledRoutine.getSessionsList();
     }
 
-    public void addRoutineSession() {
-        controlledRoutine.addSession();
+    public void removeRoutineSession(String name) {
+        controlledRoutine.removeSession(name);
+    }
+
+    public void addRoutineSession(Session session) {
+        controlledRoutine.addSession(session);
     }
 }

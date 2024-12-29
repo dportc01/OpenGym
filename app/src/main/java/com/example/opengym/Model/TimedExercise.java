@@ -18,7 +18,19 @@ public class TimedExercise implements IExercise {
         return name;
     }
 
+    public String getType() {
+        return "Timed";
+    }
+
     public int getTime() {
         return durationExercise;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTime(int durationExercise) {
+        this.durationExercise = durationExercise;
     }
 }

@@ -39,6 +39,27 @@ public class User {
         return name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public boolean getPremium() {
+        return premium;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setPremium(boolean premium) {
+        this.premium = premium;
+    }
+
+
     public void exportUserRoutine(String name) {
         Routine routine = null;
         for (Routine r : routinesList) {
@@ -69,7 +90,7 @@ public class User {
                 );
                 for (Exercise exercise : session.getExercisesList()) {
                     String exerciseData;
-                    if (exercise instanceof StrengthExercise) {
+                    if (exercise.getType() == "Strength") {
                         StrengthExercise strenghExercise = (StrengthExercise) exercise;
                         exerciseData = String.format(
                             "%s%s,%s,%s,%d,%d,%.2f,-\n",
@@ -137,46 +158,31 @@ public class User {
 
     private IExercise extractExerciseData(String[] dataRow) {
         IExercise newExercise = null;
-        if (dataRow[7].equals("Fuerza")) {
-            newExercise = new StrengthExercise(
+        if (dataRow[7].equals("Strength")) {
+            newExercise = new ExerciseFactory.createExercise(
                 dataRow[6],
                 Integer.parseInt(dataRow[8]),
                 Integer.parseInt(dataRow[9]),
                 Float.parseFloat(dataRow[10])
             );
         } else {
-            newExercise = new TimeExercise(dataRow[6], Integer.parseInt(dataRow[11]));
+            newExercise = new ExerciseFactory.createExercise(
+                dataRow[6], 
+                Integer.parseInt(dataRow[11]));
         }
         return newExercise;
-        // TODO Dar uso a la factoria
     }
 
-    public void addRoutine(String name) {
+    public void addRoutine(Routine routine) {
         routinesList.add(routine);
     }
 
     public void removeRoutine(Routine routine) {
-        routinesList.remove(routine);
+        for (Routine r : routinesList) {
+            if (r.getName().equals(routine.getName())) {
+                routinesList.remove(r);
+                return;
+            }
+        }
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public boolean getPremium() {
-        return premium;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setPremium(boolean premium) {
-        this.premium = premium;
-    }
-
 }

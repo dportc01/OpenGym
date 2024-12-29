@@ -16,24 +16,27 @@ public class PrincipalController {
         return controlledUser.getName();
     }
 
-    public void exportUserRoutine(String routineName){
-        user.exportRoutine(routineName);
+    public void exportUserRoutine(String routineName) {
+        controlledUser.exportRoutine(routineName);
     }
 
-    public void importUserRoutine() {
-        // TODO
+    public void importUserRoutine(String filePath) {
+        controlledUser.importRoutine(filePath);
     }
 
-    public void removeUserRoutine() {
-        // TODO
+    public void removeUserRoutine(Routine routine) {
+        controlledUser.removeRoutine(routine);
     }
 
-    public void addUserRoutine() {
-        // TODO
+    public void addUserRoutine(Routine routine) {
+        controlledUser.addRoutine(routine);
     }
 
     public ArrayList<String> getUserRoutinesName() {
-        // TODO
-        return null;
+        ArrayList<String> routinesName = new ArrayList<String>();
+        for(int i = 0; i < controlledUser.getRoutinesList().size(); i++){
+            routinesName.add(controlledUser.getRoutinesList().get(i).getName());
+        }
+        return routinesName;
     }
 }

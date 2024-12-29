@@ -25,6 +25,10 @@ public class StrengthExercise implements IExercise {
         return name;
     }
 
+    public String getType() {
+        return "Strength";
+    }
+
     public int getNumOfReps() {
         return numOfReps;
     }
@@ -35,5 +39,21 @@ public class StrengthExercise implements IExercise {
 
     public float getWeight() {
         return weight;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNumOfReps(int numOfReps) {
+        this.numOfReps = numOfReps;
+    }
+
+    public void setNumOfSets(int numOfSets) {
+        this.numOfSets = numOfSets;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 }
