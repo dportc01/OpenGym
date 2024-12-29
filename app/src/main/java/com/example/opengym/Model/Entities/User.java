@@ -10,6 +10,7 @@ public class User {
     private boolean premium;
     private ArrayList<Routine> routinesList;
 
+
     public User(String name, String password, boolean premium, ArrayList<Routine> routinesList) {
         this.name = name;
         this.password = password;

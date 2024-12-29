@@ -13,27 +13,20 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 
+import com.example.opengym.Model.DAO.UserDAO;
 import com.example.opengym.Model.OpenGymDbContract;
 import com.example.opengym.Model.OpenGymDbHelper;
+import com.example.opengym.Model.Entities.User;
 
 public class DatabaseTest {
 
-    private OpenGymDbHelper dbHelper;
     Context appContext;
-    private final String[] juanInfo = {
-            "Juan",
-            "1234"
-    };
+    User Juan;
     private final String[] routineInfo = {
             "Epic Routine",
             "This epic routine will get you pumping those muscles in no time!",
             "Juan"
     };
-
-    private void addJuan(Context context) throws android.database.SQLException {
-
-        dbHelper.addUser(juanInfo[0], juanInfo[1], context);
-    }
 
     private void addEpicRoutine() throws android.database.SQLException {
 
@@ -53,51 +46,22 @@ public class DatabaseTest {
     @Before
     public void initDbData() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        dbHelper = OpenGymDbHelper.getInstance(appContext);
+        Juan = new User("Juan", "1234");
     }
 
     @Test
     public void userAdd() throws android.database.SQLException {
 
-        addJuan(appContext);
+        UserDAO dbBridge = new UserDAO(appContext);
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        dbBridge.create(Juan);
+        User dbUser = dbBridge.read(Juan.getName());
 
-        String[] projection = {
-                OpenGymDbContract.UsersTable.COLUMN_NAME,
-                OpenGymDbContract.UsersTable.COLUMN_PASSWORD,
-                OpenGymDbContract.UsersTable.COLUMN_PREMIUM
-        };
+        Assert.assertEquals(Juan.getName(), dbUser.getName());
+        Assert.assertEquals(Juan.getPassword(), dbUser.getPassword());
+        Assert.assertFalse(dbUser.getPremium());
 
-        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " = ?";
-        String[] selectionArgs = {juanInfo[0]};
-
-        Cursor cursor = db.query(
-                OpenGymDbContract.UsersTable.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        String name, password;
-        int premium;
-
-        if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_NAME));
-            password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PASSWORD));
-            premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PREMIUM));
-        }
-        else {
-            throw new AssertionError("El cursor no encontro nada");
-        }
-
-
-        Assert.assertEquals(juanInfo[0], name);
-        Assert.assertEquals(juanInfo[1], password);
-        Assert.assertEquals(0, premium);
+        dbBridge.closeConection();
     }
 
     @Test
@@ -184,7 +148,7 @@ public class DatabaseTest {
     }
 
     @Test
-    public void consistencyTest() {
+    public void PersistencyTest() {
 
         addJuan(appContext);
 
