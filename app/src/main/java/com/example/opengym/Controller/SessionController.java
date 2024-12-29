@@ -1,6 +1,6 @@
 package com.example.opengym.Controller;
 
-import com.example.opengym.Model.Session;
+import com.example.opengym.Model.Entities.Session;
 
 public class SessionController {
     private Session controlledSession;

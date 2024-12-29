@@ -1,4 +1,4 @@
-package com.example.opengym.Model;
+package com.example.opengym.Model.Entities;
 
 public interface IExercise {
    String getName();

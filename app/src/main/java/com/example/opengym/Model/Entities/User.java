@@ -1,4 +1,4 @@
-package com.example.opengym.Model;
+package com.example.opengym.Model.Entities;
 
 import java.io.FileWriter;
 import java.io.IOException;

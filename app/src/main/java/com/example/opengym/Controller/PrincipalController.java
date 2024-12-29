@@ -1,6 +1,6 @@
 package com.example.opengym.Controller;
 
-import com.example.opengym.Model.User;
+import com.example.opengym.Model.Entities.User;
 
 import java.util.ArrayList;
 
