@@ -19,8 +19,8 @@ public class SignUpController {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(OpenGymDbContract.Users.COLUMN_NAME, name);
-        values.put(OpenGymDbContract.Users.COLUMN_PASSWORD, password);
-        db.insertOrThrow(OpenGymDbContract.Users.TABLE_NAME, null, values);
+        values.put(OpenGymDbContract.UsersTable.COLUMN_NAME, name);
+        values.put(OpenGymDbContract.UsersTable.COLUMN_PASSWORD, password);
+        db.insertOrThrow(OpenGymDbContract.UsersTable.TABLE_NAME, null, values);
     }
 }
