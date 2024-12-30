@@ -1,5 +1,7 @@
 package com.example.opengym.Controller;
 
+import android.content.Context;
+
 import com.example.opengym.Model.Entities.User;
 
 import java.util.ArrayList;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 public class PrincipalController {
     private final User controlledUser;
 
-    public PrincipalController() {
+    public PrincipalController(Context context) {
         this.controlledUser = new User();
         controlledUser.getInfoDB();
     }
