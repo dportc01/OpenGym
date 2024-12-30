@@ -1,8 +1,19 @@
 package com.example.opengym.Model.Entities;
 
+import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
+import java.util.Locale;
+
+import com.example.opengym.Model.DAO.UserDAO;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.File;
 
 public class User {
     private String name;
@@ -33,8 +44,9 @@ public class User {
     }
 
     // Get the user's information from the database
-    public void getInfoDB() {
-        // TODO
+    public void getInfoDB(String id, Context context) {
+        UserDAO userDAO = new UserDAO(context);
+        userDAO.read(id);
     }
     public String getName() {
         return name;
@@ -83,40 +95,43 @@ public class User {
             );
             for (Session session : routine.getSessionsList()) {
                 String sessionData = String.format(
+                    new Locale("es", "ES"),
                     "%s%s,%s,%s,%d,",
                     routineData,
                     session.getName(),
                     session.getDate().toString(),
                     session.getRestDuration()
                 );
-                for (Exercise exercise : session.getExercisesList()) {
+                for (IExercise exercise : session.getExercisesList()) {
                     String exerciseData;
-                    if (exercise.getType() == "Strength") {
-                        StrengthExercise strenghExercise = (StrengthExercise) exercise;
+                    if (exercise.getType().equals("Strength")) {
+                        StrengthExercise strengthExercise = (StrengthExercise) exercise;
                         exerciseData = String.format(
+                            new Locale("es", "ES"),
                             "%s%s,%s,%s,%d,%d,%.2f,-\n",
                             sessionData,
-                            se.getName(),
-                            "Fuerza",
-                            se.getNumOfReps(),
-                            se.getNumOfSets(),
-                            se.getWeight()
+                            strengthExercise.getName(),
+                            "Strength",
+                            strengthExercise.getNumOfReps(),
+                            strengthExercise.getNumOfSets(),
+                            strengthExercise.getWeight()
                         );
                     } else {
-                        TimeExercise timedExercise = (TimeExercise) exercise;
+                        TimedExercise timedExercise = (TimedExercise) exercise;
                         exerciseData = String.format(
+                             new Locale("es", "ES"),
                             "%s%s,%s,%s,-,-,-,%d\n",
                             sessionData,
-                            te.getName(),
-                            "Tiempo",
-                            te.getTime()
+                            timedExercise.getName(),
+                            "Timed",
+                            timedExercise.getTime()
                         );
                     }
                     writer.write(exerciseData);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("User", "Error exporting user routine", e);
         }
     }
 
@@ -124,7 +139,7 @@ public class User {
         File file = new File(filePath);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
-            Routine newRoutine = null;
+            Routine newRoutine;
 
             line = reader.readLine();
             if(line == null) {
@@ -153,7 +168,7 @@ public class User {
                 line = reader.readLine();
             }  
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("User", "Error importing user routine", e);
         }
     }
 
