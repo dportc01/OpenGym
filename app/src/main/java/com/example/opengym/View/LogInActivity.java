@@ -14,6 +14,7 @@ public class LogInActivity extends AppCompatActivity {
 
     // Declaración de las variables para los campos de texto y el botón
     private EditText enterUsr, enterPass;
+    private Button supabutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,7 @@ public class LogInActivity extends AppCompatActivity {
         // Inicialización de los campos EditText y el botón
         enterUsr = findViewById(R.id.enter_usr);
         enterPass = findViewById(R.id.enter_pass);
-        Button supabutton = findViewById(R.id.supabutton);
+        supabutton = findViewById(R.id.supabutton);
 
         // Configuración del botón para manejar el clic
         supabutton.setOnClickListener(v -> {
