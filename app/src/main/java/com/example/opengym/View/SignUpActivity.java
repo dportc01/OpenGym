@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.opengym.Controller.LogInController;
 import com.example.opengym.R;
 
-public class LogInActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     // Declaración de las variables para los campos de texto y el botón
     private EditText enterUsr, enterPass;
@@ -35,10 +35,10 @@ public class LogInActivity extends AppCompatActivity {
             // Verificar si ambos campos tienen contenido
             if (username.isEmpty() || password.isEmpty()) {
                 // Mostrar un mensaje si algún campo está vacío
-                Toast.makeText(LogInActivity.this, "Por favor ingrese todos los campos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this, "Por favor ingrese todos los campos", Toast.LENGTH_SHORT).show();
             } else {
                 // Aquí se pasa la información al controlador
-                Intent intent = new Intent(LogInActivity.this, LogInController.class);
+                Intent intent = new Intent(SignUpActivity.this, LogInController.class);
                 intent.putExtra("username", username);  // Pasar el nombre de usuario
                 intent.putExtra("password", password);  // Pasar la contraseña
                 startActivity(intent);  // Iniciar la nueva actividad
