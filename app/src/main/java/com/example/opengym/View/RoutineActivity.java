@@ -90,7 +90,7 @@ public class RoutineActivity extends AppCompatActivity {
         tableLayout.addView(newRow);
     }
 
-    // Método para obtener la lista de rutinas
+    // Metodo para obtener lista de rutinas
     public List<String> getRutinas() {
         return rutinaNames;  // Devuelve la lista con los nombres de las rutinas
     }
