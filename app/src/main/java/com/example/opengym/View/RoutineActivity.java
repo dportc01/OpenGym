@@ -16,7 +16,6 @@ import com.example.opengym.R;
 public class RoutineActivity extends AppCompatActivity {
 
     private TableLayout tableLayout;
-    private int rutinaCounter = 2; // Contador temporal para rutinas
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +25,11 @@ public class RoutineActivity extends AppCompatActivity {
         tableLayout = findViewById(R.id.tableLayout);
         Button addRowButton = findViewById(R.id.add_row_button);
 
-        // Reemplazar la clase anónima con lambda
         addRowButton.setOnClickListener(v -> showNameInputDialog());
     }
 
     private void showNameInputDialog() {
-        // Crear un EditText para que el usuario ingrese el nombre de la rutina
+        // Crear un EditText para que el usuario introduzca el nombre de la rutina
         final EditText input = new EditText(this);
         input.setHint("Escribe el nombre de la rutina");
 
