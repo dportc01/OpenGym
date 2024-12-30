@@ -1,6 +1,7 @@
 package com.example.opengym.View;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -12,9 +13,13 @@ import androidx.core.content.ContextCompat;
 
 import com.example.opengym.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RoutineActivity extends AppCompatActivity {
 
     private TableLayout tableLayout;
+    private List<String> rutinaNames = new ArrayList<>(); // Lista para almacenar los nombres de las rutinas
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,7 @@ public class RoutineActivity extends AppCompatActivity {
         tableLayout = findViewById(R.id.tableLayout);
         Button addRowButton = findViewById(R.id.add_row_button);
 
+        // Establecer el OnClickListener usando la sintaxis lambda
         addRowButton.setOnClickListener(v -> showNameInputDialog());
     }
 
@@ -42,6 +48,7 @@ public class RoutineActivity extends AppCompatActivity {
                         Toast.makeText(RoutineActivity.this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                     } else {
                         addNewRoutine(routineName);  // Añadir la rutina con el nombre personalizado
+                        rutinaNames.add(routineName); // Agregar el nombre de la rutina a la lista
                     }
                 })
                 .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
@@ -81,5 +88,10 @@ public class RoutineActivity extends AppCompatActivity {
 
         // Añadir la fila al TableLayout
         tableLayout.addView(newRow);
+    }
+
+    // Método para obtener la lista de rutinas
+    public List<String> getRutinas() {
+        return rutinaNames;  // Devuelve la lista con los nombres de las rutinas
     }
 }
