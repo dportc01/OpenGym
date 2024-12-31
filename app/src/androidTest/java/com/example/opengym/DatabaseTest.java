@@ -1,12 +1,12 @@
 package com.example.opengym;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,28 +22,14 @@ public class DatabaseTest {
 
     Context appContext;
     User Juan;
+    UserDAO dbUsers;
     private final String[] routineInfo = {
             "Epic Routine",
             "This epic routine will get you pumping those muscles in no time!",
             "Juan"
     };
 
-    /*
-    private void addEpicRoutine() throws android.database.SQLException {
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(OpenGymDbContract.RoutinesTable.COLUMN_NAME, routineInfo[0]);
-        values.put(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION, routineInfo[1]);
-        values.put(OpenGymDbContract.RoutinesTable.COLUMN_USERNAME, routineInfo[2]);
-
-        db.insertOrThrow(OpenGymDbContract.RoutinesTable.TABLE_NAME, null, values);
-    }
-     */
-
-    //Start of test
+    //------------ Start of tests
 
     @Before
     public void initDbData() {
@@ -52,28 +38,31 @@ public class DatabaseTest {
     }
 
     @Test
-    public void userAdd() throws android.database.SQLException {
+    public void userAdd() throws SQLException {
 
-        UserDAO dbBridge = new UserDAO(appContext);
+        dbUsers = new UserDAO(appContext);
 
-        dbBridge.create(Juan);
-        User dbUser = dbBridge.read(Juan.getName());
+        dbUsers.create(Juan);
+        User dbUser = dbUsers.read(Juan.getName());
 
         Assert.assertEquals(Juan.getName(), dbUser.getName());
         Assert.assertEquals(Juan.getPassword(), dbUser.getPassword());
         Assert.assertFalse(dbUser.getPremium());
+
+        dbUsers.closeConnection();
     }
 
-    /*
     @Test
     public void pkUsers() throws Exception {
 
-        addJuan(appContext);
-        Assert.assertThrows(android.database.sqlite.SQLiteConstraintException.class, () -> {
-            addJuan(appContext);
-        });
+        dbUsers = new UserDAO(appContext);
+
+        dbUsers.create(Juan);
+
+        Assert.assertThrows(SQLiteConstraintException.class, () -> dbUsers.create(Juan));
     }
 
+    /*
     @Test
     public void addRoutine() {
 
@@ -118,81 +107,56 @@ public class DatabaseTest {
         Assert.assertEquals(juanInfo[1], password);
         Assert.assertEquals(0, premium);
     }
+    */
 
     @Test (expected = android.database.sqlite.SQLiteException.class)
     public void testEmptyDb() {
 
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        dbUsers = new UserDAO(appContext);
 
-        addJuan(appContext);
+        dbUsers.create(Juan);
+
+        OpenGymDbHelper dbHelper = OpenGymDbHelper.getInstance(appContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         db.execSQL(OpenGymDbContract.SQL_DELETE_ENTRIES);
 
-        db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                OpenGymDbContract.UsersTable.COLUMN_NAME
-        };
-
-        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " = ?";
-        String[] selectionArgs = {juanInfo[0]};
-
-        Cursor cursor = db.query(
-                OpenGymDbContract.UsersTable.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
+        dbUsers.read(Juan.getName());
     }
 
     @Test
-    public void PersistencyTest() {
+    public void PersistenceTest() {
 
-        addJuan(appContext);
+        try (ActivityScenario<Main> scenario = ActivityScenario.launch(Main.class)) {
+            scenario.onActivity(activity -> {
 
-        ActivityScenario.launch(Main.class).close();
-        ActivityScenario.launch(Main.class);
+                dbUsers = new UserDAO(activity.getApplicationContext());
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+                dbUsers.create(Juan);
+                dbUsers.closeConnection();
+            });
 
-        String[] projection = {
-                OpenGymDbContract.UsersTable.COLUMN_NAME
-        };
+            scenario.close();
 
-        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " = ?";
-        String[] selectionArgs = {juanInfo[0]};
+            try (ActivityScenario<Main> restartedScenario = ActivityScenario.launch(Main.class)) {
+                restartedScenario.onActivity(activity -> {
 
-        Cursor cursor = db.query(
-                OpenGymDbContract.UsersTable.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
+                    UserDAO newBridge = new UserDAO(activity.getApplicationContext());
 
-        String name;
+                    User dbUser = newBridge.read(Juan.getName());
+                    newBridge.closeConnection();
 
-        if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_NAME));
+                    Assert.assertEquals(Juan.getName(), dbUser.getName());
+                });
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Test failed", e);
         }
-        else {
-            throw new AssertionError("El cursor no encontro nada");
-        }
-
-
-        Assert.assertEquals(juanInfo[0], name);
     }
-     */
 
     @After
     public void removeDbData() {
-        OpenGymDbHelper dbHelper;
-        dbHelper = OpenGymDbHelper.getInstance(appContext);
+        OpenGymDbHelper dbHelper = OpenGymDbHelper.getInstance(appContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.execSQL(OpenGymDbContract.SQL_DELETE_ENTRIES);
         dbHelper.onCreate(db);

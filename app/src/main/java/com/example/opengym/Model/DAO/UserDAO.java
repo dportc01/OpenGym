@@ -22,6 +22,7 @@ public class UserDAO implements GenericDAO<User>  {
 
     @Override
     public void create(User entity) throws SQLException {
+
         db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -33,15 +34,19 @@ public class UserDAO implements GenericDAO<User>  {
     }
 
     @Override
-    public int delete(User entity) {
-        return 0;
+    public int delete(String id) {
+
+        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " LIKE ?";
+        String[] selectionArgs = {id};
+
+        return db.delete(OpenGymDbContract.UsersTable.TABLE_NAME, selection, selectionArgs);
     }
 
     @SuppressLint("Range")
     @Override
     public User read(String id) {
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        db = dbHelper.getReadableDatabase();
 
         String[] projection = {
                 OpenGymDbContract.UsersTable.COLUMN_NAME,
@@ -80,16 +85,12 @@ public class UserDAO implements GenericDAO<User>  {
     }
 
     @Override
-    public int update(User entity) {
+    public int update(User entity, String id) {
         return 0;
     }
 
     @Override
-    public void closeConection() {
+    public void closeConnection() {
         dbHelper.close();
-    }
-
-    public void readName() {
-
     }
 }
