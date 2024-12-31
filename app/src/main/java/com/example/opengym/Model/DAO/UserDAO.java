@@ -44,12 +44,12 @@ public class UserDAO implements GenericDAO<User>  {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                OpenGymDbContract.RoutinesTable.COLUMN_NAME,
-                OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION,
-                OpenGymDbContract.RoutinesTable.COLUMN_USERNAME
+                OpenGymDbContract.UsersTable.COLUMN_NAME,
+                OpenGymDbContract.UsersTable.COLUMN_PASSWORD,
+                OpenGymDbContract.UsersTable.COLUMN_PREMIUM
         };
 
-        String selection = OpenGymDbContract.RoutinesTable.COLUMN_NAME + " = ?";
+        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " = ?";
         String[] selectionArgs = {id};
 
         Cursor cursor = db.query(
@@ -76,7 +76,7 @@ public class UserDAO implements GenericDAO<User>  {
 
         cursor.close();
 
-        return new User(name, password, (premium==0), null);
+        return new User(name, password, (premium!=0), null);
     }
 
     @Override

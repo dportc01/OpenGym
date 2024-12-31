@@ -2,6 +2,7 @@ package com.example.opengym.Controller;
 
 import android.content.Context;
 
+import com.example.opengym.Model.Entities.Routine;
 import com.example.opengym.Model.Entities.User;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class PrincipalController {
 
     public PrincipalController(Context context) {
         this.controlledUser = new User();
-        controlledUser.getInfoDB();
+        //controlledUser.getInfoDB();
     }
 
     public String getUserName() {
@@ -19,11 +20,11 @@ public class PrincipalController {
     }
 
     public void exportUserRoutine(String routineName) {
-        controlledUser.exportRoutine(routineName);
+        //controlledUser.exportRoutine(routineName);
     }
 
     public void importUserRoutine(String filePath) {
-        controlledUser.importRoutine(filePath);
+        //controlledUser.importRoutine(filePath);
     }
 
     public void removeUserRoutine(Routine routine) {
@@ -36,9 +37,9 @@ public class PrincipalController {
 
     public ArrayList<String> getUserRoutinesName() {
         ArrayList<String> routinesName = new ArrayList<String>();
-        for(int i = 0; i < controlledUser.getRoutinesList().size(); i++){
-            routinesName.add(controlledUser.getRoutinesList().get(i).getName());
-        }
+        //for(int i = 0; i < controlledUser.getRoutinesList().size(); i++){
+        //    routinesName.add(controlledUser.getRoutinesList().get(i).getName());
+        //}
         return routinesName;
     }
 }

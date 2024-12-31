@@ -135,6 +135,7 @@ public class User {
         }
     }
 
+    /**
     public void importUserRoutine(String filePath) {
         File file = new File(filePath);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -188,6 +189,7 @@ public class User {
         }
         return newExercise;
     }
+    **/
 
     public void addRoutine(Routine routine) {
         routinesList.add(routine);

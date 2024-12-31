@@ -1,6 +1,9 @@
 package com.example.opengym.Controller;
 
+import com.example.opengym.Model.Entities.IExercise;
 import com.example.opengym.Model.Entities.Session;
+
+import java.util.ArrayList;
 
 public class SessionController {
     private Session controlledSession;
@@ -15,16 +18,18 @@ public class SessionController {
     }
 
     public void removeSessionExercise(String name) {
-        controlledSession.removeExercise(name);
+        //controlledSession.removeExercise(name);
     }
 
     public void addSessionExercise(IExercise exercise) {
         controlledSession.addExercise(exercise);
     }
 
+    /*
     public ArrayList<IExercise> getSessionExercises() {
         controlledSession.getExercisesList();
     }
+     */
 
 
 }
