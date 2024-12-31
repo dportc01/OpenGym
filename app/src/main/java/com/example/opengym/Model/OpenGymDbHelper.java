@@ -16,7 +16,7 @@ public class OpenGymDbHelper extends SQLiteOpenHelper {
 
     public static synchronized OpenGymDbHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new OpenGymDbHelper(context.getApplicationContext());
+            instance = new OpenGymDbHelper(context);
         }
         return instance;
     }
@@ -29,11 +29,5 @@ public class OpenGymDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(OpenGymDbContract.SQL_DELETE_ENTRIES);
         onCreate(db);
-    }
-
-    public void closeConnection(SQLiteDatabase db) {
-        if (db != null) {
-            db.close();
-        }
     }
 }

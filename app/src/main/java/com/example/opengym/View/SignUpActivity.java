@@ -7,7 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.opengym.Controller.LogInController;
+import com.example.opengym.Controller.SignUpController;
 import com.example.opengym.R;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -38,7 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this, "Por favor ingrese todos los campos", Toast.LENGTH_SHORT).show();
             } else {
                 // Aquí se pasa la información al controlador
-                Intent intent = new Intent(SignUpActivity.this, LogInController.class);
+                Intent intent = new Intent(SignUpActivity.this, SignUpController.class);
                 intent.putExtra("username", username);  // Pasar el nombre de usuario
                 intent.putExtra("password", password);  // Pasar la contraseña
                 startActivity(intent);  // Iniciar la nueva actividad

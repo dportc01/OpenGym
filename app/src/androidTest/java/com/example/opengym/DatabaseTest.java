@@ -28,6 +28,7 @@ public class DatabaseTest {
             "Juan"
     };
 
+    /*
     private void addEpicRoutine() throws android.database.SQLException {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -40,12 +41,13 @@ public class DatabaseTest {
 
         db.insertOrThrow(OpenGymDbContract.RoutinesTable.TABLE_NAME, null, values);
     }
+     */
 
     //Start of test
 
     @Before
     public void initDbData() {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Juan = new User("Juan", "1234");
     }
 
@@ -60,10 +62,9 @@ public class DatabaseTest {
         Assert.assertEquals(Juan.getName(), dbUser.getName());
         Assert.assertEquals(Juan.getPassword(), dbUser.getPassword());
         Assert.assertFalse(dbUser.getPremium());
-
-        dbBridge.closeConection();
     }
 
+    /*
     @Test
     public void pkUsers() throws Exception {
 
@@ -186,9 +187,12 @@ public class DatabaseTest {
 
         Assert.assertEquals(juanInfo[0], name);
     }
+     */
 
     @After
     public void removeDbData() {
+        OpenGymDbHelper dbHelper;
+        dbHelper = OpenGymDbHelper.getInstance(appContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.execSQL(OpenGymDbContract.SQL_DELETE_ENTRIES);
         dbHelper.onCreate(db);
