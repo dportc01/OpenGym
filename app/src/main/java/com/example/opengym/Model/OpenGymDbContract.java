@@ -44,19 +44,21 @@ public final class OpenGymDbContract {
                     "PRIMARY KEY (" + TimedExerciseTable.COLUMN_SESSIONNAME + ", " + TimedExerciseTable.COLUMN_NAME + "), " +
                     "FOREIGN KEY (" + TimedExerciseTable.COLUMN_SESSIONNAME + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_NAME + "));";
 
-    public static final String SQL_CREATE_ENTRIES =
-            SQL_CREATE_USERS_ENTRIES + " " +
-            SQL_CREATE_ROUTINES_ENTRIES + " " +
-            SQL_CREATE_SESSIONS_ENTRIES + " " +
-            SQL_CREATE_STRENGTHEXERCISE_ENTRIES + " " +
-            SQL_CREATE_TIMEDEXERCISE_ENTRIES;
+    public static final String SQL_DELETE_USERS_ENTRIES =
+            "DROP TABLE IF EXISTS " + UsersTable.TABLE_NAME + ";";
 
-    public static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + UsersTable.TABLE_NAME + "; " +
-            "DROP TABLE IF EXISTS " + RoutinesTable.TABLE_NAME + "; " +
-            "DROP TABLE IF EXISTS " + SessionsTable.TABLE_NAME + "; " +
-            "DROP TABLE IF EXISTS " + StrengthExerciseTable.TABLE_NAME + "; " +
+    public static final String SQL_DELETE_ROUTINES_ENTRIES =
+            "DROP TABLE IF EXISTS " + RoutinesTable.TABLE_NAME + ";";
+
+    public static final String SQL_DELETE_SESSIONS_ENTRIES =
+            "DROP TABLE IF EXISTS " + SessionsTable.TABLE_NAME + ";";
+
+    public static final String SQL_DELETE_STRENGTHEXERCISE_ENTRIES =
+            "DROP TABLE IF EXISTS " + StrengthExerciseTable.TABLE_NAME + ";";
+
+    public static final String SQL_DELETE_TIMEDEXERCISE_ENTRIES =
             "DROP TABLE IF EXISTS " + TimedExerciseTable.TABLE_NAME + ";";
+
 
     public static class UsersTable {
 
