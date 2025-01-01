@@ -16,7 +16,6 @@ import org.junit.After;
 import com.example.opengym.Model.DAO.RoutineDAO;
 import com.example.opengym.Model.DAO.UserDAO;
 import com.example.opengym.Model.Entities.Routine;
-import com.example.opengym.Model.OpenGymDbContract;
 import com.example.opengym.Model.OpenGymDbHelper;
 import com.example.opengym.Model.Entities.User;
 
@@ -99,16 +98,38 @@ public class DatabaseTest {
         OpenGymDbHelper dbHelper = OpenGymDbHelper.getInstance(appContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        db.execSQL(OpenGymDbContract.SQL_DELETE_ENTRIES);
+        dbHelper.sql_delete_entries(db);
 
         dbUsers.read(Juan.getName(), null);
     }
 
-    @Test (expected = android.database.sqlite.SQLiteException.class)
+    @Test (expected = android.database.sqlite.SQLiteConstraintException.class)
     public void addRoutineNoUsers() {
+
+        dbUsers = new UserDAO(appContext);
+        Assert.assertNull(dbUsers.read(Juan.getName(), null));
 
         dbRoutines = new RoutineDAO(appContext);
         dbRoutines.create(EpicRoutine, Juan.getName());
+    }
+
+    @Test
+    public void addRoutine() {
+
+        dbUsers = new UserDAO(appContext);
+        Assert.assertEquals(1, dbUsers.create(Juan, null));
+
+        dbUsers.closeConnection();
+
+        dbRoutines = new RoutineDAO(appContext);
+        Assert.assertEquals(1, dbRoutines.create(EpicRoutine, Juan.getName()));
+
+        Routine obtainedRoutine = dbRoutines.read(EpicRoutine.getName(), Juan.getName());
+
+        Assert.assertEquals(EpicRoutine.getName(), obtainedRoutine.getName());
+        Assert.assertEquals(EpicRoutine.getDescription(), obtainedRoutine.getDescription());
+
+        dbRoutines.closeConnection();
     }
 
     @Test
@@ -145,7 +166,7 @@ public class DatabaseTest {
     public void removeDbData() {
         OpenGymDbHelper dbHelper = OpenGymDbHelper.getInstance(appContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.execSQL(OpenGymDbContract.SQL_DELETE_ENTRIES);
+        dbHelper.sql_delete_entries(db);
         dbHelper.onCreate(db);
     }
 }

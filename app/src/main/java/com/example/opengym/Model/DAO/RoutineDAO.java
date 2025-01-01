@@ -29,8 +29,8 @@ public class RoutineDAO implements GenericDAO<Routine> {
         ContentValues values = new ContentValues();
 
         values.put(OpenGymDbContract.RoutinesTable.COLUMN_NAME, entity.getName());
-        values.put(OpenGymDbContract.RoutinesTable.COLUMN_USERNAME, parentId);
         values.put(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION, entity.getDescription());
+        values.put(OpenGymDbContract.RoutinesTable.COLUMN_USERNAME, parentId);
 
         return db.insertOrThrow(OpenGymDbContract.RoutinesTable.TABLE_NAME, null, values);
     }
@@ -76,7 +76,7 @@ public class RoutineDAO implements GenericDAO<Routine> {
 
         if (cursor != null && cursor.moveToFirst()) {
             name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_NAME));
-            description = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_USERNAME));
+            description = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION));
         }
         else {
             return null;

@@ -1,14 +1,12 @@
 package com.example.opengym.Model.DAO;
 
-import com.example.opengym.Model.Entities.User;
-
 public interface GenericDAO<T> {
 
     /**
      * Create an new entry on the database
      * @param entity new entity to add to the database
      * @param parentId Foreign key that is used in the primary key,
-     * can be null if it doesn't have it
+     * can be <code>null</code> if it doesn't have it
      * @return row ID or -1 if an error curred
      */
     long create(T entity, String parentId);
@@ -17,7 +15,7 @@ public interface GenericDAO<T> {
      * Remove an entry from the database
      * @param id primary key of the entry
      * @param parentId Foreign key that is used in the primary key,
-     * can be null if it doesn't have it
+     * can be <code>null</code> if it doesn't have it
      * @return numbers of rows affected by the operation
      */
     int delete(String id, String parentId);
