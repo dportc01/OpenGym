@@ -46,7 +46,7 @@ public class User {
     // Get the user's information from the database
     public void getInfoDB(String id, Context context) {
         UserDAO userDAO = new UserDAO(context);
-        userDAO.read(id);
+        userDAO.read(id, null);
     }
     public String getName() {
         return name;
