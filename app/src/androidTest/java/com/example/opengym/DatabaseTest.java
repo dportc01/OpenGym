@@ -13,7 +13,9 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 
+import com.example.opengym.Model.DAO.RoutineDAO;
 import com.example.opengym.Model.DAO.UserDAO;
+import com.example.opengym.Model.Entities.Routine;
 import com.example.opengym.Model.OpenGymDbContract;
 import com.example.opengym.Model.OpenGymDbHelper;
 import com.example.opengym.Model.Entities.User;
@@ -23,11 +25,8 @@ public class DatabaseTest {
     Context appContext;
     User Juan;
     UserDAO dbUsers;
-    private final String[] routineInfo = {
-            "Epic Routine",
-            "This epic routine will get you pumping those muscles in no time!",
-            "Juan"
-    };
+    Routine EpicRoutine;
+    RoutineDAO dbRoutines;
 
     //------------ Start of tests
 
@@ -35,6 +34,7 @@ public class DatabaseTest {
     public void initDbData() {
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Juan = new User("Juan", "1234");
+        EpicRoutine = new Routine("Epic Routine", "Amazing routine to get ripped in 3 months", null);
     }
 
     @Test
@@ -42,86 +42,73 @@ public class DatabaseTest {
 
         dbUsers = new UserDAO(appContext);
 
-        dbUsers.create(Juan);
-        User dbUser = dbUsers.read(Juan.getName());
+        dbUsers.create(Juan, null);
+        User newUser = dbUsers.read(Juan.getName(), null);
 
-        Assert.assertEquals(Juan.getName(), dbUser.getName());
-        Assert.assertEquals(Juan.getPassword(), dbUser.getPassword());
-        Assert.assertFalse(dbUser.getPremium());
+        Assert.assertEquals(Juan.getName(), newUser.getName());
+        Assert.assertEquals(Juan.getPassword(), newUser.getPassword());
+        Assert.assertFalse(newUser.getPremium());
 
         dbUsers.closeConnection();
     }
 
     @Test
-    public void pkUsers() throws Exception {
+    public void pkUsers() {
 
         dbUsers = new UserDAO(appContext);
+        dbUsers.create(Juan, null);
 
-        dbUsers.create(Juan);
-
-        Assert.assertThrows(SQLiteConstraintException.class, () -> dbUsers.create(Juan));
+        Assert.assertThrows(SQLiteConstraintException.class, () -> dbUsers.create(Juan, null));
     }
 
-    /*
     @Test
-    public void addRoutine() {
+    public void removeUser() {
 
-        addJuan(appContext);
-        addEpicRoutine();
+        dbUsers = new UserDAO(appContext);
+        dbUsers.create(Juan, null);
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Assert.assertEquals(1, dbUsers.delete(Juan.getName(), null));
+        Assert.assertEquals(0, dbUsers.delete(Juan.getName(), null));
 
-        String[] projection = {
-                OpenGymDbContract.RoutinesTable.COLUMN_NAME,
-                OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION,
-                OpenGymDbContract.RoutinesTable.COLUMN_USERNAME
-        };
-
-        String selection = OpenGymDbContract.RoutinesTable.COLUMN_NAME + " = ?";
-        String[] selectionArgs = {juanInfo[2]};
-
-        Cursor cursor = db.query(
-                OpenGymDbContract.UsersTable.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        String name, password;
-        int premium;
-
-        if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_NAME));
-            password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PASSWORD));
-            premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PREMIUM));
-        }
-        else {
-            throw new AssertionError("El cursor no encontro nada");
-        }
-
-
-        Assert.assertEquals(juanInfo[0], name);
-        Assert.assertEquals(juanInfo[1], password);
-        Assert.assertEquals(0, premium);
+        Assert.assertNull(dbUsers.read(Juan.getName(), null));
     }
-    */
+
+    @Test
+    public void updateUser() {
+
+        dbUsers = new UserDAO(appContext);
+        dbUsers.create(Juan, null);
+
+        User JuanPremium = new User(Juan.getName(), "4321", true, null);
+        Assert.assertEquals(1, dbUsers.update(JuanPremium, Juan.getName(), null));
+
+        User newUser = dbUsers.read(Juan.getName(), null);
+
+        Assert.assertEquals(JuanPremium.getName(), newUser.getName());
+        Assert.assertEquals(JuanPremium.getPassword(), newUser.getPassword());
+        Assert.assertTrue(newUser.getPremium());
+    }
 
     @Test (expected = android.database.sqlite.SQLiteException.class)
     public void testEmptyDb() {
 
         dbUsers = new UserDAO(appContext);
 
-        dbUsers.create(Juan);
+        dbUsers.create(Juan, null);
 
         OpenGymDbHelper dbHelper = OpenGymDbHelper.getInstance(appContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         db.execSQL(OpenGymDbContract.SQL_DELETE_ENTRIES);
 
-        dbUsers.read(Juan.getName());
+        dbUsers.read(Juan.getName(), null);
+    }
+
+    @Test (expected = android.database.sqlite.SQLiteException.class)
+    public void addRoutineNoUsers() {
+
+        dbRoutines = new RoutineDAO(appContext);
+        dbRoutines.create(EpicRoutine, Juan.getName());
     }
 
     @Test
@@ -132,7 +119,7 @@ public class DatabaseTest {
 
                 dbUsers = new UserDAO(activity.getApplicationContext());
 
-                dbUsers.create(Juan);
+                dbUsers.create(Juan, null);
                 dbUsers.closeConnection();
             });
 
@@ -143,10 +130,10 @@ public class DatabaseTest {
 
                     UserDAO newBridge = new UserDAO(activity.getApplicationContext());
 
-                    User dbUser = newBridge.read(Juan.getName());
+                    User newUser = newBridge.read(Juan.getName(), null);
                     newBridge.closeConnection();
 
-                    Assert.assertEquals(Juan.getName(), dbUser.getName());
+                    Assert.assertEquals(Juan.getName(), newUser.getName());
                 });
             }
         } catch (Exception e) {
