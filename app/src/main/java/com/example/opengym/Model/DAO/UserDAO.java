@@ -113,12 +113,15 @@ public class UserDAO implements GenericDAO<User>  {
 
     @SuppressLint("Range")
     public User userExist() {
+
         db = dbHelper.getReadableDatabase();
+
         String[] projection = {
                 OpenGymDbContract.UsersTable.COLUMN_NAME,
                 OpenGymDbContract.UsersTable.COLUMN_PASSWORD,
                 OpenGymDbContract.UsersTable.COLUMN_PREMIUM
         };
+
         Cursor cursor = db.query(
                 OpenGymDbContract.UsersTable.TABLE_NAME,
                 projection,
@@ -136,9 +139,12 @@ public class UserDAO implements GenericDAO<User>  {
             name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_NAME));
             password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PASSWORD));
             premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PREMIUM));
+
             cursor.close();
+
             return new User(name, password, (premium!=0), null);
         }
+
         return null;
     }
     @Override

@@ -11,38 +11,42 @@ public final class OpenGymDbContract {
 
     public static final String SQL_CREATE_ROUTINES_ENTRIES =
             "CREATE TABLE " + RoutinesTable.TABLE_NAME + " (" +
+                    RoutinesTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     RoutinesTable.COLUMN_NAME + " TEXT, " +
                     RoutinesTable.COLUMN_DESCRIPTION + " TEXT, " +
                     RoutinesTable.COLUMN_USERNAME + " TEXT, " +
-                    "PRIMARY KEY (" + RoutinesTable.COLUMN_USERNAME + ", " + RoutinesTable.COLUMN_NAME + "), " +
-                    "FOREIGN KEY (" + RoutinesTable.COLUMN_USERNAME + ") REFERENCES " + UsersTable.TABLE_NAME + "(" + UsersTable.COLUMN_NAME + "));";
+                    "FOREIGN KEY (" + RoutinesTable.COLUMN_USERNAME + ") REFERENCES " + UsersTable.TABLE_NAME + "(" + UsersTable.COLUMN_NAME + "));" +
+                    "UNIQUE (" + RoutinesTable.COLUMN_NAME + ", " + RoutinesTable.COLUMN_USERNAME + "));";
 
     public static final String SQL_CREATE_SESSIONS_ENTRIES =
             "CREATE TABLE " + SessionsTable.TABLE_NAME + " (" +
+                    SessionsTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     SessionsTable.COLUMN_NAME + " TEXT, " +
                     SessionsTable.COLUMN_RESTDURATION + " INTEGER, " +
-                    SessionsTable.COLUMN_ROUTINENAME + " TEXT, " +
                     SessionsTable.COLUMN_DATE + " TEXT, " +
-                    "PRIMARY KEY (" + SessionsTable.COLUMN_ROUTINENAME + ", " + SessionsTable.COLUMN_NAME + "), " +
-                    "FOREIGN KEY (" + SessionsTable.COLUMN_ROUTINENAME + ") REFERENCES " + RoutinesTable.TABLE_NAME + "(" + RoutinesTable.COLUMN_NAME + "));";
+                    SessionsTable.COLUMN_ROUTINEID + " INTEGER, " +
+                    "FOREIGN KEY (" + SessionsTable.COLUMN_ROUTINEID + ") REFERENCES " + RoutinesTable.TABLE_NAME + "(" + RoutinesTable.COLUMN_ID + "));" +
+                    "UNIQUE (" + SessionsTable.COLUMN_NAME + ", " + SessionsTable.COLUMN_ROUTINEID + "));";
 
     public static final String SQL_CREATE_STRENGTHEXERCISE_ENTRIES =
             "CREATE TABLE " + StrengthExerciseTable.TABLE_NAME + " (" +
+                    StrengthExerciseTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     StrengthExerciseTable.COLUMN_NAME + " TEXT, " +
                     StrengthExerciseTable.COLUMN_SETS + " INTEGER, " +
                     StrengthExerciseTable.COLUMN_REPETITIONS + " INTEGER, " +
                     StrengthExerciseTable.COLUMN_WEIGHT + " INTEGER, " +
-                    StrengthExerciseTable.COLUMN_SESSIONNAME + " TEXT, " +
-                    "PRIMARY KEY (" + StrengthExerciseTable.COLUMN_SESSIONNAME + ", " + StrengthExerciseTable.COLUMN_NAME + "), " +
-                    "FOREIGN KEY (" + StrengthExerciseTable.COLUMN_SESSIONNAME + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_NAME + "));";
+                    StrengthExerciseTable.COLUMN_SESSIONID + " INTEGER, " +
+                    "FOREIGN KEY (" + StrengthExerciseTable.COLUMN_SESSIONID + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_ID + "));" +
+                    "UNIQUE (" + StrengthExerciseTable.COLUMN_NAME + ", " + StrengthExerciseTable.COLUMN_SESSIONID + "));";
 
     public static final String SQL_CREATE_TIMEDEXERCISE_ENTRIES =
             "CREATE TABLE " + TimedExerciseTable.TABLE_NAME + " (" +
+                    TimedExerciseTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TimedExerciseTable.COLUMN_NAME + " TEXT, " +
                     TimedExerciseTable.COLUMN_DURATION + " INTEGER, " + // Assuming duration is in seconds or minutes, represented as INTEGER
-                    TimedExerciseTable.COLUMN_SESSIONNAME + " TEXT, " +
-                    "PRIMARY KEY (" + TimedExerciseTable.COLUMN_SESSIONNAME + ", " + TimedExerciseTable.COLUMN_NAME + "), " +
-                    "FOREIGN KEY (" + TimedExerciseTable.COLUMN_SESSIONNAME + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_NAME + "));";
+                    TimedExerciseTable.COLUMN_SESSIONID + " INTEGER, " +
+                    "FOREIGN KEY (" + TimedExerciseTable.COLUMN_SESSIONID + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_ID + "));" +
+                    "UNIQUE (" + TimedExerciseTable.COLUMN_NAME + ", " + TimedExerciseTable.COLUMN_SESSIONID + "));";
 
     public static final String SQL_DELETE_USERS_ENTRIES =
             "DROP TABLE IF EXISTS " + UsersTable.TABLE_NAME + ";";
@@ -73,6 +77,7 @@ public final class OpenGymDbContract {
 
         public static final String TABLE_NAME = "routines";
 
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_USERNAME = "userName";
@@ -82,9 +87,10 @@ public final class OpenGymDbContract {
 
         public static final String TABLE_NAME = "sessions";
 
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_RESTDURATION = "restDuration";
-        public static final String COLUMN_ROUTINENAME = "routineName";
+        public static final String COLUMN_ROUTINEID = "routineID";
         public static final String COLUMN_DATE = "date";
     }
 
@@ -92,19 +98,21 @@ public final class OpenGymDbContract {
 
         public static final String TABLE_NAME = "strengthExercise";
 
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_SETS = "sets";
         public static final String COLUMN_REPETITIONS = "repetitions";
         public static final String COLUMN_WEIGHT = "weight";
-        public static final String COLUMN_SESSIONNAME = "sessionName";
+        public static final String COLUMN_SESSIONID = "sessionId";
     }
 
     public static class TimedExerciseTable {
 
         public static final String TABLE_NAME = "timedExercise";
 
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DURATION = "duration";
-        public static final String COLUMN_SESSIONNAME = "sessionName";
+        public static final String COLUMN_SESSIONID = "sessionId";
     }
 }
