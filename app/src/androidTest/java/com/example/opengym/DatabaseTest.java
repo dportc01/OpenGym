@@ -133,6 +133,20 @@ public class DatabaseTest {
     }
 
     @Test
+    public void removeRoutine() {
+
+        dbUsers = new UserDAO(appContext);
+        dbUsers.create(Juan, null);
+
+        dbRoutines = new RoutineDAO(appContext);
+        dbRoutines.create(EpicRoutine, Juan.getName());
+
+        Assert.assertEquals(1, dbRoutines.delete(EpicRoutine.getName(), Juan.getName()));
+        Assert.assertEquals(0, dbRoutines.delete(EpicRoutine.getName(), Juan.getName()));
+    }
+
+    //Ignore this test it needs to be updated
+    @Test
     public void PersistenceTest() {
 
         try (ActivityScenario<Main> scenario = ActivityScenario.launch(Main.class)) {
