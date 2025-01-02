@@ -22,11 +22,12 @@ public class Main extends AppCompatActivity {
 
         // Redirect based on user existence
         Intent intent;
-        if (userDAO.userExist()) {
+        if (userDAO.userExist() != null) {
             intent = new Intent(this, PrincipalActivity.class);
         } else {
             intent = new Intent(this, SignUpActivity.class);
         }
+        userDAO.closeConnection();
         startActivity(intent);
         finish();
     }}
