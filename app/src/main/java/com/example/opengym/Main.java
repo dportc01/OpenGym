@@ -1,5 +1,6 @@
 package com.example.opengym;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -8,17 +9,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.opengym.Model.DAO.UserDAO;
+import com.example.opengym.View.PrincipalActivity;
+import com.example.opengym.View.SignUpActivity;
+
 public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
-}
+        UserDAO userDAO = new UserDAO(this);
+
+        // Redirect based on user existence
+        Intent intent;
+        if (userDAO.userExist()) {
+            intent = new Intent(this, PrincipalActivity.class);
+        } else {
+            intent = new Intent(this, SignUpActivity.class);
+        }
+        startActivity(intent);
+        finish();
+    }}

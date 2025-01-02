@@ -111,6 +111,27 @@ public class UserDAO implements GenericDAO<User>  {
                 selectionArgs);
     }
 
+    public boolean userExist() {
+        db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                OpenGymDbContract.UsersTable.COLUMN_NAME,
+                OpenGymDbContract.UsersTable.COLUMN_PASSWORD
+        };
+        Cursor cursor = db.query(
+                OpenGymDbContract.UsersTable.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        }
+        return false;
+    }
     @Override
     public void closeConnection() {
         dbHelper.close();
