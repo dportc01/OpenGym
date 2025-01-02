@@ -1,11 +1,9 @@
 package com.example.opengym.Controller;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import com.example.opengym.Model.DAO.UserDAO;
+import com.example.opengym.Model.Entities.User;
 
-import com.example.opengym.Model.OpenGymDbContract;
-import com.example.opengym.Model.OpenGymDbHelper;
+import android.content.Context;
 
 public class SignUpController {
 
@@ -13,14 +11,10 @@ public class SignUpController {
     }
 
     public void signUp(String name, String password, Context context) {
-
-        OpenGymDbHelper dbHelper;
-        dbHelper = OpenGymDbHelper.getInstance(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(OpenGymDbContract.UsersTable.COLUMN_NAME, name);
-        values.put(OpenGymDbContract.UsersTable.COLUMN_PASSWORD, password);
-        db.insertOrThrow(OpenGymDbContract.UsersTable.TABLE_NAME, null, values);
+        UserDAO userDao = new UserDAO(context);
+        long check = userDao.create(new User(name, password), null);
+        if (check == -1) {
+            throw new IllegalArgumentException("Error creating user");
+        }
     }
 }

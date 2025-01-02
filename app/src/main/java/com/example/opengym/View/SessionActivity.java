@@ -1,4 +1,6 @@
 package com.example.opengym.View;
 
-public class SessionActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class SessionActivity extends AppCompatActivity {
 }
