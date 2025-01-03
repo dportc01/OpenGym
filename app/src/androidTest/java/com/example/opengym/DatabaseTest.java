@@ -2,7 +2,6 @@ package com.example.opengym;
 
 import android.content.Context;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.test.core.app.ActivityScenario;
@@ -12,20 +11,28 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
-
 import com.example.opengym.Model.DAO.RoutineDAO;
+import com.example.opengym.Model.DAO.SessionDAO;
 import com.example.opengym.Model.DAO.UserDAO;
 import com.example.opengym.Model.Entities.Routine;
+import com.example.opengym.Model.Entities.Session;
 import com.example.opengym.Model.OpenGymDbHelper;
 import com.example.opengym.Model.Entities.User;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class DatabaseTest {
 
     Context appContext;
     User Juan;
     UserDAO dbUsers;
+
     Routine EpicRoutine;
     RoutineDAO dbRoutines;
+
+    Session MondaySession;
+    SessionDAO dbSessions;
 
     //------------ Start of tests
 
@@ -34,6 +41,7 @@ public class DatabaseTest {
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Juan = new User("Juan", "1234");
         EpicRoutine = new Routine("Epic Routine", "Amazing routine to get ripped in 3 months", null);
+        MondaySession = new Session("Monday", null, 2, null);
     }
 
     @Test
@@ -51,13 +59,13 @@ public class DatabaseTest {
         dbUsers.closeConnection();
     }
 
-    @Test
-    public void pkUsers() {
+    @Test (expected = SQLException.class)
+    public void UniqueUsers() {
 
         dbUsers = new UserDAO(appContext);
         dbUsers.create(Juan, null);
 
-        Assert.assertThrows(SQLiteConstraintException.class, () -> dbUsers.create(Juan, null));
+        Assert.assertEquals(-1, dbUsers.create(Juan, null));
     }
 
     @Test
@@ -78,13 +86,13 @@ public class DatabaseTest {
         dbUsers = new UserDAO(appContext);
         dbUsers.create(Juan, null);
 
-        User JuanPremium = new User(Juan.getName(), "4321", true, null);
-        Assert.assertEquals(1, dbUsers.update(JuanPremium, Juan.getName(), null));
+        User JuanAlberto = new User("Juan Alberto", "4321", true, null);
+        Assert.assertEquals(1, dbUsers.update(JuanAlberto, Juan.getName(), null));
 
-        User newUser = dbUsers.read(Juan.getName(), null);
+        User newUser = dbUsers.read(JuanAlberto.getName(), null);
 
-        Assert.assertEquals(JuanPremium.getName(), newUser.getName());
-        Assert.assertEquals(JuanPremium.getPassword(), newUser.getPassword());
+        Assert.assertEquals(JuanAlberto.getName(), newUser.getName());
+        Assert.assertEquals(JuanAlberto.getPassword(), newUser.getPassword());
         Assert.assertTrue(newUser.getPremium());
     }
 
@@ -143,6 +151,141 @@ public class DatabaseTest {
 
         Assert.assertEquals(1, dbRoutines.delete(EpicRoutine.getName(), Juan.getName()));
         Assert.assertEquals(0, dbRoutines.delete(EpicRoutine.getName(), Juan.getName()));
+        dbRoutines.closeConnection();
+    }
+
+    @Test
+    public void updateRoutine() {
+
+        dbUsers = new UserDAO(appContext);
+        dbUsers.create(Juan, null);
+        dbUsers.closeConnection();
+
+        dbRoutines = new RoutineDAO(appContext);
+        dbRoutines.create(EpicRoutine, Juan.getName());
+
+        Routine MoreEpicRoutine = new Routine("EPIC ROUTINE", "Routine to start training from zero", null);
+
+        Assert.assertEquals(1, dbRoutines.update(MoreEpicRoutine, EpicRoutine.getName(), Juan.getName()));
+        Routine newRoutine =  dbRoutines.read(MoreEpicRoutine.getName(), Juan.getName());
+
+        Assert.assertEquals(MoreEpicRoutine.getDescription(), newRoutine.getDescription());
+
+        dbRoutines.closeConnection();
+    }
+
+    @Test
+    public  void getAllRoutines() {
+
+        dbUsers = new UserDAO(appContext);
+        dbUsers.create(Juan, null);
+        dbUsers.closeConnection();
+
+        Routine NewbieRoutine = new Routine("Newbie routine", "Routine to start training from zero", null);
+        Routine MisteriousRoutine = new Routine("Mysterious Routine", "Mysterious routine with unexpected results", null);
+
+        dbRoutines = new RoutineDAO(appContext);
+        dbRoutines.create(EpicRoutine, Juan.getName());
+        dbRoutines.create(NewbieRoutine, Juan.getName());
+        dbRoutines.create(MisteriousRoutine, Juan.getName());
+
+        ArrayList<Routine> Routines = dbRoutines.getAll(Juan.getName());
+
+        boolean found;
+
+        found = Routines.get(0).getName().equals(EpicRoutine.getName());
+        Assert.assertTrue(found);
+        found = Routines.get(1).getName().equals(NewbieRoutine.getName());
+        Assert.assertTrue(found);
+        found = Routines.get(2).getName().equals(MisteriousRoutine.getName());
+        Assert.assertTrue(found);
+    }
+
+    private void prepareSession() {
+
+        dbUsers = new UserDAO(appContext);
+        dbUsers.create(Juan, null);
+
+        dbRoutines = new RoutineDAO(appContext);
+        dbRoutines.create(EpicRoutine, Juan.getName());
+    }
+
+    @Test
+    public void addSession() {
+
+        prepareSession();
+
+        dbSessions = new SessionDAO(appContext);
+        Assert.assertEquals(1, dbSessions.create(MondaySession, EpicRoutine.getName()));
+    }
+
+    @Test
+    public void deleteSession() {
+
+        prepareSession();
+
+        dbSessions = new SessionDAO(appContext);
+        dbSessions.create(MondaySession, EpicRoutine.getName());
+        Assert.assertEquals(1, dbSessions.delete(MondaySession.getName(), EpicRoutine.getName()));
+    }
+
+    @Test
+    public void readSession() {
+
+        prepareSession();
+
+        dbSessions = new SessionDAO(appContext);
+        dbSessions.create(MondaySession, EpicRoutine.getName());
+        Session ReadSession = dbSessions.read(MondaySession.getName(), EpicRoutine.getName());
+
+        Assert.assertEquals(MondaySession.getName(), ReadSession.getName());
+        Assert.assertEquals(MondaySession.getDate(), ReadSession.getDate());
+        Assert.assertEquals(MondaySession.getRestDuration(), ReadSession.getRestDuration());
+    }
+
+    @Test
+    public void updateSession() {
+
+        prepareSession();
+
+        dbSessions = new SessionDAO(appContext);
+        dbSessions.create(MondaySession, EpicRoutine.getName());
+
+        Session ThursdaySession = new Session("Thursday session", null, 1, null);
+        Assert.assertEquals(1, dbSessions.update(ThursdaySession, MondaySession.getName(), EpicRoutine.getName()));
+    }
+
+    @Test
+    public void getAllSessions() {
+
+        prepareSession();
+
+        Session MondaySessionPast = new Session(MondaySession.getName(), new Date(System.currentTimeMillis()), MondaySession.getRestDuration(), MondaySession.getExercisesList());
+        Session FridaySession = new Session("Friday session", null, 1, null);
+        Session FridaySessionPast = new Session(FridaySession.getName(), new Date(System.currentTimeMillis()), FridaySession.getRestDuration(), FridaySession.getExercisesList());
+
+        dbSessions = new SessionDAO(appContext);
+        dbSessions.create(MondaySession, EpicRoutine.getName());
+        dbSessions.create(MondaySessionPast, EpicRoutine.getName());
+        dbSessions.create(FridaySession, EpicRoutine.getName());
+        dbSessions.create(FridaySessionPast, EpicRoutine.getName());
+
+        ArrayList<Session> Sessions = dbSessions.getAll(EpicRoutine.getName());
+        Assert.assertEquals(MondaySession.getName(), Sessions.get(0).getName());
+        Assert.assertEquals(MondaySession.getDate(), Sessions.get(0).getDate());
+        Assert.assertEquals(FridaySession.getName(), Sessions.get(1).getName());
+        Assert.assertEquals(FridaySession.getDate(), Sessions.get(1).getDate());
+
+        Session MondaySessionPast1 = new Session(MondaySession.getName(), new Date(System.currentTimeMillis() - 20000), MondaySession.getRestDuration(), MondaySession.getExercisesList());
+        dbSessions.create(MondaySessionPast1, EpicRoutine.getName());
+
+        ArrayList<Session> PastSessions = dbSessions.getAllPast(EpicRoutine.getName(), MondaySession.getName());
+        Assert.assertEquals(MondaySessionPast.getName(), PastSessions.get(0).getName());
+        //Milliseconds error so I compare the Strings for approximate results
+        Assert.assertEquals(MondaySessionPast.getDate().toString(), PastSessions.get(0).getDate().toString());
+        Assert.assertEquals(MondaySessionPast1.getName(), PastSessions.get(1).getName());
+        //Milliseconds error so I compare the Strings for approximate results
+        Assert.assertEquals(MondaySessionPast1.getDate().toString(), PastSessions.get(1).getDate().toString());
     }
 
     //Ignore this test it needs to be updated

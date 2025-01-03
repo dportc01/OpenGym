@@ -5,8 +5,9 @@ public final class OpenGymDbContract {
 
     public static final String SQL_CREATE_USERS_ENTRIES =
             "CREATE TABLE " + UsersTable.TABLE_NAME + " (" +
-                    UsersTable.COLUMN_NAME + " TEXT PRIMARY KEY," +
-                    UsersTable.COLUMN_PASSWORD + " TEXT," +
+                    UsersTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    UsersTable.COLUMN_NAME + " TEXT UNIQUE, " +
+                    UsersTable.COLUMN_PASSWORD + " TEXT, " +
                     UsersTable.COLUMN_PREMIUM + " INTEGER DEFAULT 0);";
 
     public static final String SQL_CREATE_ROUTINES_ENTRIES =
@@ -14,9 +15,9 @@ public final class OpenGymDbContract {
                     RoutinesTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     RoutinesTable.COLUMN_NAME + " TEXT, " +
                     RoutinesTable.COLUMN_DESCRIPTION + " TEXT, " +
-                    RoutinesTable.COLUMN_USERNAME + " TEXT, " +
-                    "FOREIGN KEY (" + RoutinesTable.COLUMN_USERNAME + ") REFERENCES " + UsersTable.TABLE_NAME + "(" + UsersTable.COLUMN_NAME + "));" +
-                    "UNIQUE (" + RoutinesTable.COLUMN_NAME + ", " + RoutinesTable.COLUMN_USERNAME + "));";
+                    RoutinesTable.COLUMN_USERID + " INTEGER, " +
+                    "FOREIGN KEY (" + RoutinesTable.COLUMN_USERID + ") REFERENCES " + UsersTable.TABLE_NAME + "(" + UsersTable.COLUMN_ID + "));" +
+                    "UNIQUE (" + RoutinesTable.COLUMN_NAME + ", " + RoutinesTable.COLUMN_USERID + "));";
 
     public static final String SQL_CREATE_SESSIONS_ENTRIES =
             "CREATE TABLE " + SessionsTable.TABLE_NAME + " (" +
@@ -26,7 +27,7 @@ public final class OpenGymDbContract {
                     SessionsTable.COLUMN_DATE + " TEXT, " +
                     SessionsTable.COLUMN_ROUTINEID + " INTEGER, " +
                     "FOREIGN KEY (" + SessionsTable.COLUMN_ROUTINEID + ") REFERENCES " + RoutinesTable.TABLE_NAME + "(" + RoutinesTable.COLUMN_ID + "));" +
-                    "UNIQUE (" + SessionsTable.COLUMN_NAME + ", " + SessionsTable.COLUMN_ROUTINEID + "));";
+                    "UNIQUE (" + SessionsTable.COLUMN_NAME + ", " + SessionsTable.COLUMN_ROUTINEID + ", " + SessionsTable.COLUMN_DATE + "));";
 
     public static final String SQL_CREATE_STRENGTHEXERCISE_ENTRIES =
             "CREATE TABLE " + StrengthExerciseTable.TABLE_NAME + " (" +
@@ -68,6 +69,7 @@ public final class OpenGymDbContract {
 
         public static final String TABLE_NAME = "users";
 
+        public static final String COLUMN_ID = "id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PASSWORD = "password";
         public static final String COLUMN_PREMIUM = "premium";
@@ -80,7 +82,7 @@ public final class OpenGymDbContract {
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
-        public static final String COLUMN_USERNAME = "userName";
+        public static final String COLUMN_USERID = "userId";
     }
 
     public static class SessionsTable {
