@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.opengym.Model.Entities.User;
 import com.example.opengym.Model.OpenGymDbContract;
@@ -20,9 +21,11 @@ public class UserDAO implements GenericDAO<User>  {
     }
 
     @Override
-    public long create(User entity, String parentId) {
+    public long create(User entity, String parentName) {
 
         db = dbHelper.getWritableDatabase();
+
+        Log.d("UserDAO", "Inserting user: " + entity.getName());
 
         ContentValues values = new ContentValues();
 
@@ -33,17 +36,17 @@ public class UserDAO implements GenericDAO<User>  {
     }
 
     @Override
-    public int delete(String id, String parentId) {
+    public int delete(String name, String parentName) {
 
         String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " LIKE ?";
-        String[] selectionArgs = {id};
+        String[] selectionArgs = {name};
 
         return db.delete(OpenGymDbContract.UsersTable.TABLE_NAME, selection, selectionArgs);
     }
 
     @SuppressLint("Range")
     @Override
-    public User read(String id, String parentId) {
+    public User read(String name, String parentName) {
 
         db = dbHelper.getReadableDatabase();
 
@@ -54,7 +57,7 @@ public class UserDAO implements GenericDAO<User>  {
         };
 
         String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " = ?";
-        String[] selectionArgs = {id};
+        String[] selectionArgs = {name};
 
         Cursor cursor = db.query(
                 OpenGymDbContract.UsersTable.TABLE_NAME,
@@ -66,7 +69,7 @@ public class UserDAO implements GenericDAO<User>  {
                 null
         );
 
-        String name, password;
+        String password;
         int premium;
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -83,10 +86,16 @@ public class UserDAO implements GenericDAO<User>  {
         return new User(name, password, (premium!=0), null);
     }
 
+    /**
+     * @param entity new entity with modified values (name cannot be updated)
+     * @param parentName Foreign key that is used in the primary key,
+     * can be null if it doesn't have it
+     * @return
+     */
     @Override
-    public int update(User entity, String id, String parentId) {
+    public int update(User entity, String name, String parentName) {
 
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db = dbHelper.getWritableDatabase();
 
         int premium;
         if (entity.getPremium()) {
@@ -102,7 +111,7 @@ public class UserDAO implements GenericDAO<User>  {
         values.put(OpenGymDbContract.UsersTable.COLUMN_PREMIUM, premium);
 
         String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " LIKE ?";
-        String[] selectionArgs = {id};
+        String[] selectionArgs = {name};
 
         return db.update(
                 OpenGymDbContract.UsersTable.TABLE_NAME,
