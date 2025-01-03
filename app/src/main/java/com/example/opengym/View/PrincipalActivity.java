@@ -12,14 +12,13 @@ import java.security.Principal;
 import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
-    private PrincipalController principalController;
+    // private PrincipalController principalController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.routine_selector);
-        User user; // TODO Sacar de la base de datos
-        principalController = new PrincipalController(user);
+        // principalController = new PrincipalController(this); // TODO Usar context
     }
 
     // TODO Este metodo se ejecuta al presionar una rutina en especifico
@@ -28,8 +27,10 @@ public class PrincipalActivity extends AppCompatActivity {
         intent.putExtra("routineName", routineName);
         startActivity(intent);
     }
-
+/*
     public List<Routine> getScreenRoutines(){
         return principalController.getUserRoutines();
     }
+
+ */
 }

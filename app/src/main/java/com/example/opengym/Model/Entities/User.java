@@ -3,6 +3,10 @@ package com.example.opengym.Model.Entities;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import com.example.opengym.Model.DAO.UserDAO;
@@ -14,12 +18,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.File;
+import java.util.Objects;
 
 public class User {
     private String name;
     private String password;
     private boolean premium;
-    private List<Routine> routinesList;
+    private ArrayList<Routine> routinesList;
 
 
     public User(String name, String password, boolean premium, ArrayList<Routine> routinesList) {
@@ -60,7 +65,7 @@ public class User {
         return premium;
     }
 
-    public List<Routine> getRoutinesList() {
+    public ArrayList<Routine> getRoutinesList() {
         return routinesList;
     }
 
@@ -139,12 +144,14 @@ public class User {
         }
     }
 
-    /**
+
     public void importUserRoutine(String filePath) {
         File file = new File(filePath);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
             Routine newRoutine;
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
 
             line = reader.readLine();
             if(line == null) {
@@ -154,46 +161,51 @@ public class User {
             String[] parts = line.split(",");
             String routineName = parts[0];
             String routineDescription = parts[1];
-            newRoutine = new Routine(routineName, routineDescription);
+            ArrayList<Session> sessionList = new ArrayList<Session>();
+            newRoutine = new Routine(routineName, routineDescription, sessionList);
             routinesList.add(newRoutine);
 
-            currentSession = parts[2];
+            String currentSession = parts[2];
+            IExercise newExercise = null;
             while(line != null) {
                 parts = line.split(",");
                 currentSession = parts[2];
                 ArrayList<IExercise> exercises = new ArrayList<IExercise>();
-                while(parts[2] == currentSession) {
-                    newExercise = extractExerciseData(reader, newRoutine);
+                while(Objects.equals(parts[2], currentSession)) {
+                    parts = line.split(",");
+                    newExercise = extractExerciseData(parts);
                     exercises.add(newExercise);
                     line = reader.readLine();
                 }
-                Session newSession = new Session(parts[2], parts[3], Integer.parseInt(parts[4]), exercises);
-                newRoutine.add(newSession);
+                Date date = formatter.parse(parts[3]);
+                Session newSession = new Session(parts[2], date, Integer.parseInt(parts[4]), exercises);
+                newRoutine.addSession(newSession);
                 // TODO Crear metodo para crear y añadir sesiones a rutinas
                 line = reader.readLine();
             }  
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             Log.e("User", "Error importing user routine", e);
         }
     }
 
     private IExercise extractExerciseData(String[] dataRow) {
         IExercise newExercise = null;
+        ExerciseFactory exerciseFactory = new ExerciseFactory();
+        
         if (dataRow[7].equals("Strength")) {
-            newExercise = new ExerciseFactory.createExercise(
+            newExercise = exerciseFactory.createExercise(
                 dataRow[6],
                 Integer.parseInt(dataRow[8]),
                 Integer.parseInt(dataRow[9]),
                 Float.parseFloat(dataRow[10])
             );
         } else {
-            newExercise = new ExerciseFactory.createExercise(
+            newExercise = exerciseFactory.createExercise(
                 dataRow[6], 
                 Integer.parseInt(dataRow[11]));
         }
         return newExercise;
     }
-    **/
 
     public void addRoutine(Routine routine) {
         routinesList.add(routine);

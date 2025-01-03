@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Routine {
     private String name;
     private String description;
-    private List<Session> sessionsList;
+    private ArrayList<Session> sessionsList;
 
     public Routine(String name, String description, ArrayList<Session> sessionsList) {
         this.name = name;
@@ -55,7 +55,7 @@ public class Routine {
         this.description = description;
     }
 
-    public List<Session> getSessionsList() {
+    public ArrayList<Session> getSessionsList() {
         return sessionsList;
     }
 }

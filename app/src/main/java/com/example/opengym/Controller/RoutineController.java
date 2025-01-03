@@ -1,12 +1,12 @@
 package com.example.opengym.Controller;
 
 import com.example.opengym.Model.Entities.Routine;
-import com.example.opengym.Model.Entities.Session;
+import com.example.opengym.View.SessionActivity;
 
 import java.util.ArrayList;
 
 public class RoutineController {
-    private Routine controlledRoutine;
+    private final Routine controlledRoutine;
 
     public RoutineController() {
         this.controlledRoutine = new Routine();

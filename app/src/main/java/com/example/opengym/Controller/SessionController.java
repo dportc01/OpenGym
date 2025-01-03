@@ -1,14 +1,16 @@
 package com.example.opengym.Controller;
 
+import android.content.Context;
+
 import com.example.opengym.Model.Entities.IExercise;
 import com.example.opengym.Model.Entities.Session;
 
 import java.util.ArrayList;
 
 public class SessionController {
-    private Session controlledSession;
+    private final Session controlledSession;
 
-    public SessionController() {
+    public SessionController(Context context) {
         this.controlledSession = new Session();
         controlledSession.getInfoDB();
     }

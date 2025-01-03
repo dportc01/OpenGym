@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.opengym.Controller.RoutineController;
 import com.example.opengym.R;
 
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ public class RoutineActivity extends AppCompatActivity {
         Button addRowButton = findViewById(R.id.add_row_button);
 
         String routineName = getIntent().getStringExtra("routineName");
-        Routine routine; // TODO Obtener rutina de la base de datos o del modelo
-        routineController = new RoutineController(routine);
+        // Routine routine; // TODO Obtener rutina de la base de datos o del modelo
+        // routineController = new RoutineController(routine);
 
         // Establecer el OnClickListener usando la sintaxis lambda
         addRowButton.setOnClickListener(v -> showNameInputDialog());
@@ -96,9 +97,11 @@ public class RoutineActivity extends AppCompatActivity {
     }
 
     // Metodo para obtener lista de sesiones
+    /*
     public List<Session> getScreenSessions() {
         return routineController.getRoutineSessions();
     }
+     */
 
     // TODO Misma historia que Principal, boton -> pasar a sesion
     public void onSessionSelection(String sessionName) {
