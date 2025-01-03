@@ -19,7 +19,7 @@ public class User {
     private String name;
     private String password;
     private boolean premium;
-    private ArrayList<Routine> routinesList;
+    private List<Routine> routinesList;
 
 
     public User(String name, String password, boolean premium, ArrayList<Routine> routinesList) {
@@ -58,6 +58,10 @@ public class User {
 
     public boolean getPremium() {
         return premium;
+    }
+
+    public List<Routine> getRoutinesList() {
+        return routinesList;
     }
 
     public void setName(String name) {

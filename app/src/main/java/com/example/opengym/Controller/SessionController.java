@@ -26,7 +26,7 @@ public class SessionController {
     }
 
     /*
-    public ArrayList<IExercise> getSessionExercises() {
+    public List<IExercise> getSessionExercises() {
         controlledSession.getExercisesList();
     }
      */

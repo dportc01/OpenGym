@@ -35,11 +35,7 @@ public class PrincipalController {
         controlledUser.addRoutine(routine);
     }
 
-    public ArrayList<String> getUserRoutinesName() {
-        ArrayList<String> routinesName = new ArrayList<String>();
-        //for(int i = 0; i < controlledUser.getRoutinesList().size(); i++){
-        //    routinesName.add(controlledUser.getRoutinesList().get(i).getName());
-        //}
-        return routinesName;
+    public List<Routine> getUserRoutines() {
+        return controlledUser.getRoutinesList();
     }
 }

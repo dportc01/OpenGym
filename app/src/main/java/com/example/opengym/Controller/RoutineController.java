@@ -21,7 +21,7 @@ public class RoutineController {
         return controlledRoutine.getDescription();
     }
 
-    public ArrayList<Session> getRoutineSessions() {
+    public List<Session> getRoutineSessions() {
         return controlledRoutine.getSessionsList();
     }
 

@@ -8,9 +8,9 @@ public class Session {
     private String name;
     private Date date;
     private int restDuration;
-    private ArrayList<IExercise> exercisesList;
+    private List<IExercise> exercisesList;
 
-    public Session(String name, Date date, int restDuration, ArrayList<IExercise> exercisesList) {
+    public Session(String name, Date date, int restDuration, List<IExercise> exercisesList) {
         this.name = name;
         this.date = date;
         this.restDuration = restDuration;
@@ -36,7 +36,7 @@ public class Session {
         return restDuration;
     }
 
-    public ArrayList<IExercise> getExercisesList() {
+    public List<IExercise> getExercisesList() {
         return exercisesList;
     }
 
