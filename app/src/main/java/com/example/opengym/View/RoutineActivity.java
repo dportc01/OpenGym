@@ -1,5 +1,6 @@
 package com.example.opengym.View;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.opengym.Controller.RoutineController;
 import com.example.opengym.R;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class RoutineActivity extends AppCompatActivity {
 
     private TableLayout tableLayout;
     private List<String> rutinaNames = new ArrayList<>(); // Lista para almacenar los nombres de las rutinas
+    private RoutineController routineController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,9 @@ public class RoutineActivity extends AppCompatActivity {
 
         tableLayout = findViewById(R.id.tableLayout);
         Button addRowButton = findViewById(R.id.add_row_button);
+
+        String routineName = getIntent().getStringExtra("routineName");// TODO Obtener rutina de la base de datos o del modelo
+        routineController = new RoutineController();
 
         // Establecer el OnClickListener usando la sintaxis lambda
         addRowButton.setOnClickListener(v -> showNameInputDialog());
@@ -89,8 +95,18 @@ public class RoutineActivity extends AppCompatActivity {
         tableLayout.addView(newRow);
     }
 
-    // Metodo para obtener lista de rutinas
-    public List<String> getRutinas() {
-        return rutinaNames;  // Devuelve la lista con los nombres de las rutinas
+    /* TODO Puede que lo tenga que recibir de la base de datos
+    // Metodo para obtener lista de sesiones
+    public ArrayList<String> getScreenSessions() {
+        return routineController.getRoutineSessions();
+    }
+
+     */
+
+    // TODO Misma historia que Principal, boton -> pasar a sesion
+    public void onSessionSelection(String sessionName) {
+        Intent intent = new Intent(RoutineActivity.this, SessionActivity.class);
+        intent.putExtra("sessionName", sessionName);
+        startActivity(intent);
     }
 }

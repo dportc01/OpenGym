@@ -1,12 +1,11 @@
 package com.example.opengym.Controller;
 
 import com.example.opengym.Model.Entities.Routine;
-import com.example.opengym.Model.Entities.Session;
 
 import java.util.ArrayList;
 
 public class RoutineController {
-    private Routine controlledRoutine;
+    private final Routine controlledRoutine;
 
     public RoutineController() {
         this.controlledRoutine = new Routine();
@@ -21,15 +20,21 @@ public class RoutineController {
         return controlledRoutine.getDescription();
     }
 
+    /*
     public ArrayList<Session> getRoutineSessions() {
         return controlledRoutine.getSessionsList();
     }
+
+     */
 
     public void removeRoutineSession(String name) {
         controlledRoutine.removeSession(name);
     }
 
+    /* TODO Cambiar para pasar todos los parametros que necesite
     public void addRoutineSession(Session session) {
         controlledRoutine.addSession(session);
     }
+
+     */
 }
