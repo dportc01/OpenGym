@@ -44,7 +44,7 @@ public class Session {
         // TODO implement here
     }
 
-    public void removeExercise() {
+    public void removeExercise(String name) {
         if (exercisesList.isEmpty()){
             return;
         }

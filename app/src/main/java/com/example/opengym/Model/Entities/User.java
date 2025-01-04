@@ -179,7 +179,7 @@ public class User {
                 }
                 Date date = formatter.parse(parts[3]);
                 Session newSession = new Session(parts[2], date, Integer.parseInt(parts[4]), exercises);
-                newRoutine.addSession(newSession);
+                // newRoutine.addSession(newSession); TODO cambiar para pasar parametros en vez de la sesion directa
                 // TODO Crear metodo para crear y añadir sesiones a rutinas
                 line = reader.readLine();
             }  
@@ -207,13 +207,15 @@ public class User {
         return newExercise;
     }
 
-    public void addRoutine(Routine routine) {
-        routinesList.add(routine);
+    public void addRoutine(String routineName, String routineDescription) {
+        ArrayList<Session> routineSessions = new ArrayList<>();
+        Routine newRoutine = new Routine(routineName, routineDescription, routineSessions);
+        routinesList.add(newRoutine);
     }
 
-    public void removeRoutine(Routine routine) {
+    public void removeRoutine(String name) {
         for (Routine r : routinesList) {
-            if (r.getName().equals(routine.getName())) {
+            if (r.getName().equals(name)){
                 routinesList.remove(r);
                 return;
             }

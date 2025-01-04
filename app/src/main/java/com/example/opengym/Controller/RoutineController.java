@@ -1,7 +1,6 @@
 package com.example.opengym.Controller;
 
 import com.example.opengym.Model.Entities.Routine;
-import com.example.opengym.View.SessionActivity;
 
 import java.util.ArrayList;
 
@@ -21,15 +20,21 @@ public class RoutineController {
         return controlledRoutine.getDescription();
     }
 
-    public List<Session> getRoutineSessions() {
+    /*
+    public ArrayList<Session> getRoutineSessions() {
         return controlledRoutine.getSessionsList();
     }
+
+     */
 
     public void removeRoutineSession(String name) {
         controlledRoutine.removeSession(name);
     }
 
+    /* TODO Cambiar para pasar todos los parametros que necesite
     public void addRoutineSession(Session session) {
         controlledRoutine.addSession(session);
     }
+
+     */
 }

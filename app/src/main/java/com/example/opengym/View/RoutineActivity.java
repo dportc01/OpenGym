@@ -31,9 +31,8 @@ public class RoutineActivity extends AppCompatActivity {
         tableLayout = findViewById(R.id.tableLayout);
         Button addRowButton = findViewById(R.id.add_row_button);
 
-        String routineName = getIntent().getStringExtra("routineName");
-        // Routine routine; // TODO Obtener rutina de la base de datos o del modelo
-        // routineController = new RoutineController(routine);
+        String routineName = getIntent().getStringExtra("routineName");// TODO Obtener rutina de la base de datos o del modelo
+        routineController = new RoutineController();
 
         // Establecer el OnClickListener usando la sintaxis lambda
         addRowButton.setOnClickListener(v -> showNameInputDialog());
@@ -96,11 +95,12 @@ public class RoutineActivity extends AppCompatActivity {
         tableLayout.addView(newRow);
     }
 
+    /* TODO Puede que lo tenga que recibir de la base de datos
     // Metodo para obtener lista de sesiones
-    /*
-    public List<Session> getScreenSessions() {
+    public ArrayList<String> getScreenSessions() {
         return routineController.getRoutineSessions();
     }
+
      */
 
     // TODO Misma historia que Principal, boton -> pasar a sesion

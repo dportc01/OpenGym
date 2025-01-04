@@ -1,6 +1,7 @@
 package com.example.opengym.Model.Entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Routine {
     private String name;
@@ -35,7 +36,9 @@ public class Routine {
         }
     }
 
-    public void addSession(Session session) {
+    public void addSession(String sessionName, Date date, int restDuration) {
+        ArrayList<IExercise> exercises = new ArrayList<>();
+        Session session = new Session(sessionName, date, restDuration, exercises);
         sessionsList.add(session);
     }
 

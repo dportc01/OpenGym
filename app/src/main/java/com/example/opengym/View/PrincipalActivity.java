@@ -7,18 +7,19 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.opengym.R; // TODO Cambiar
+import com.example.opengym.Controller.PrincipalController;
 
 import java.security.Principal;
 import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
-    // private PrincipalController principalController;
+    private PrincipalController principalController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.routine_selector);
-        // principalController = new PrincipalController(this); // TODO Usar context
+        principalController = new PrincipalController(this); // TODO Usar context en vez de this
     }
 
     // TODO Este metodo se ejecuta al presionar una rutina en especifico
@@ -27,10 +28,11 @@ public class PrincipalActivity extends AppCompatActivity {
         intent.putExtra("routineName", routineName);
         startActivity(intent);
     }
-/*
-    public List<Routine> getScreenRoutines(){
+
+    /*
+    public ArrayList<String> getScreenRoutines(){ // TODO Esto deberia sacarse de la base de datos
         return principalController.getUserRoutines();
     }
 
- */
+     */
 }
