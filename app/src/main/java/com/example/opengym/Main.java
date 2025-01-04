@@ -24,6 +24,7 @@ public class Main extends AppCompatActivity {
         Intent intent;
         if (userDAO.userExist() != null) {
             intent = new Intent(this, PrincipalActivity.class);
+            intent.putExtra("userName", userDAO.userExist().getName());
         } else {
             intent = new Intent(this, SignUpActivity.class);
         }

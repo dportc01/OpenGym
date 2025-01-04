@@ -1,8 +1,13 @@
 package com.example.opengym.Controller;
 
+import static android.content.Intent.getIntent;
+
 import android.content.Context;
+import android.content.Intent;
+
 import java.util.List;
 
+import com.example.opengym.Model.Entities.Routine;
 import com.example.opengym.Model.Entities.User;
 
 import java.util.ArrayList;
@@ -10,9 +15,9 @@ import java.util.ArrayList;
 public class PrincipalController {
     private final User controlledUser;
 
-    public PrincipalController(Context context) {
+    public PrincipalController(Context context, String userName) {
         this.controlledUser = new User();
-        //controlledUser.getInfoDB();
+        controlledUser.getInfoDB(userName, context);
     }
 
     public String getUserName() {
@@ -35,10 +40,13 @@ public class PrincipalController {
         controlledUser.addRoutine(routineName, routineDescription);
     }
 
-    /* TODO cambiar para transformar la lista de rutinas en strings o dejarlo a la base de datos
     public List<String> getUserRoutines() {
-        return controlledUser.getRoutinesList();
+        ArrayList<Routine> routinesList = controlledUser.getRoutinesList();
+        ArrayList<String> routinesNamesList = new ArrayList<>();
+        for (Routine routine: routinesList) {
+            routinesNamesList.add(routine.getName());
+        }
+        return routinesNamesList;
     }
 
-     */
 }
