@@ -3,7 +3,6 @@ package com.example.opengym.View;
 import com.example.opengym.Controller.SessionController;
 import com.example.opengym.R;
 
-import
 
 import android.os.Bundle;
 import android.content.Intent;
@@ -16,7 +15,7 @@ public class SessionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.session_selector);
+        setContentView(R.layout.session_viewer);
         // Context sessionName = getIntent().getStringExtra("sessionName");// TODO Obtener sesión de la base de datos o del modelo, otra vez
         sessionController = new SessionController(this);
     }

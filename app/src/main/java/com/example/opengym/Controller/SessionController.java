@@ -2,6 +2,7 @@ package com.example.opengym.Controller;
 
 import android.content.Context;
 
+import com.example.opengym.Model.Entities.IExercise;
 import com.example.opengym.Model.Entities.Session;
 
 import java.util.ArrayList;
@@ -30,6 +31,11 @@ public class SessionController {
      */
 
     public ArrayList<String> getSessionExercises() {
-        controlledSession.getExercisesList();
+        ArrayList<IExercise> exerciseList = controlledSession.getExercisesList();
+        ArrayList<String> exerciseNames = new ArrayList<>();
+        for (IExercise exercise : exerciseList) {
+            exerciseNames.add(exercise.getName());
+        }
+        return exerciseNames;
     }
 }
