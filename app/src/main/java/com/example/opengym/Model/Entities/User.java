@@ -27,21 +27,40 @@ public class User {
     private boolean premium;
     private ArrayList<Routine> routinesList;
 
+
+    public User(String name, String password, boolean premium, ArrayList<Routine> routinesList) {
+        this.name = name;
+        this.password = password;
+        this.premium = premium;
+        this.routinesList = routinesList;
+    }
+
     public User(String name, String password, boolean premium, long id) {
         this.name = name;
         this.password = password;
         this.premium = premium;
         this.id = id;
-        this.routinesList = new ArrayList<>();
     }
 
     public User(String name, String password) {
         this.name = name;
         this.password = password;
         this.premium = false;
-        this.routinesList = new ArrayList<>();
+        this.routinesList = new ArrayList<Routine>();
     }
 
+    public User() {
+        this.name = "";
+        this.password = "";
+        this.premium = false;
+        this.routinesList = new ArrayList<Routine>();
+    }
+
+    // Get the user's information from the database
+    public void getInfoDB(String name, Context context) {
+        UserDAO userDAO = new UserDAO(context);
+        userDAO.read(name);
+    }
     public String getName() {
         return name;
     }
@@ -187,35 +206,34 @@ public class User {
     }
 
     private IExercise extractExerciseData(String[] dataRow) {
-        IExercise newExercise;
-
+        IExercise newExercise = null;
+        ExerciseFactory exerciseFactory = new ExerciseFactory();
+        
         if (dataRow[7].equals("Strength")) {
-            newExercise = ExerciseFactory.createExercise(
+            newExercise = exerciseFactory.createExercise(
                 dataRow[6],
                 Integer.parseInt(dataRow[8]),
                 Integer.parseInt(dataRow[9]),
                 Float.parseFloat(dataRow[10])
             );
         } else {
-            newExercise = ExerciseFactory.createExercise(
+            newExercise = exerciseFactory.createExercise(
                 dataRow[6], 
                 Integer.parseInt(dataRow[11]));
         }
         return newExercise;
     }
 
-    public void addRoutine(String routineName, String routineDescription, Context context) {
+    public void addRoutine(String routineName, String routineDescription) {
         ArrayList<Session> routineSessions = new ArrayList<>();
         Routine newRoutine = new Routine(routineName, routineDescription, routineSessions);
         routinesList.add(newRoutine);
-        newRoutine.addRoutineDB(context, this.id);
     }
 
-    public void removeRoutine(String name, Context context) {
+    public void removeRoutine(String name) {
         for (Routine r : routinesList) {
             if (r.getName().equals(name)){
                 routinesList.remove(r);
-                r.removeRoutineDB(context);
                 return;
             }
         }

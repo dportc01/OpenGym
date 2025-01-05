@@ -21,6 +21,7 @@ public class Main extends AppCompatActivity {
         UserDAO userDAO = new UserDAO(this);
 
         Intent intent;
+
         String logInName = userDAO.getLastLogin();
 
         if (logInName != null) {

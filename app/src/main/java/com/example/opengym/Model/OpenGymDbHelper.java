@@ -41,7 +41,6 @@ public class OpenGymDbHelper extends SQLiteOpenHelper {
         db.execSQL("PRAGMA foreign_keys = ON;");
 
         db.execSQL(OpenGymDbContract.SQL_CREATE_USERS_ENTRIES);
-        db.execSQL(OpenGymDbContract.SQL_CREATE_LAST_LOGIN_ENTRIE);
         db.execSQL(OpenGymDbContract.SQL_CREATE_ROUTINES_ENTRIES);
         db.execSQL(OpenGymDbContract.SQL_CREATE_SESSIONS_ENTRIES);
         db.execSQL(OpenGymDbContract.SQL_CREATE_TIMEDEXERCISE_ENTRIES);
@@ -50,7 +49,6 @@ public class OpenGymDbHelper extends SQLiteOpenHelper {
 
     public void sql_delete_entries(SQLiteDatabase db) {
         db.execSQL(OpenGymDbContract.SQL_DELETE_STRENGTHEXERCISE_ENTRIES);
-        db.execSQL(OpenGymDbContract.SQL_DELETE_LAST_LOGIN_ENTRIE);
         db.execSQL(OpenGymDbContract.SQL_DELETE_TIMEDEXERCISE_ENTRIES);
         db.execSQL(OpenGymDbContract.SQL_DELETE_SESSIONS_ENTRIES);
         db.execSQL(OpenGymDbContract.SQL_DELETE_ROUTINES_ENTRIES);
