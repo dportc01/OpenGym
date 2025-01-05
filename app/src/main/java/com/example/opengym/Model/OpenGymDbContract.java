@@ -10,11 +10,6 @@ public final class OpenGymDbContract {
                     UsersTable.COLUMN_PASSWORD + " TEXT, " +
                     UsersTable.COLUMN_PREMIUM + " INTEGER DEFAULT 0);";
 
-    public static final String SQL_CREATE_LAST_LOGIN_ENTRIE =
-            "CREATE TABLE " + LoginTable.TABLE_NAME + " (" +
-                    LoginTable.COLUMN_NAME + " TEXT PRIMARY KEY, " +
-                    "FOREIGN KEY (" + LoginTable.COLUMN_NAME + ") REFERENCES " + UsersTable.TABLE_NAME + "(" + UsersTable.COLUMN_NAME + "));";
-
     public static final String SQL_CREATE_ROUTINES_ENTRIES =
             "CREATE TABLE " + RoutinesTable.TABLE_NAME + " (" +
                     RoutinesTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -56,9 +51,6 @@ public final class OpenGymDbContract {
 
     public static final String SQL_DELETE_USERS_ENTRIES =
             "DROP TABLE IF EXISTS " + UsersTable.TABLE_NAME + ";";
-
-    public static final String SQL_DELETE_LAST_LOGIN_ENTRIE=
-            "DROP TABLE IF EXISTS " + LoginTable.TABLE_NAME + ";";
 
     public static final String SQL_DELETE_ROUTINES_ENTRIES =
             "DROP TABLE IF EXISTS " + RoutinesTable.TABLE_NAME + ";";
@@ -124,12 +116,5 @@ public final class OpenGymDbContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DURATION = "duration";
         public static final String COLUMN_SESSIONID = "sessionId";
-    }
-
-    public static class LoginTable {
-
-        public static final String TABLE_NAME = "lastLogin";
-
-        public static final String COLUMN_NAME = "userName";
     }
 }

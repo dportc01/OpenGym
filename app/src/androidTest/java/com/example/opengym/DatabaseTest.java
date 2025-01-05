@@ -98,7 +98,7 @@ public class DatabaseTest {
         dbUsers = new UserDAO(appContext);
         Juan.setId(dbUsers.create(Juan, -1));
 
-        User JuanAlberto = new User("Juan Alberto", "4321", true,-1 );
+        User JuanAlberto = new User("Juan Alberto", "4321", true, null);
         Assert.assertEquals(1, dbUsers.update(JuanAlberto, Juan.getId()));
 
         User newUser = dbUsers.read(JuanAlberto.getName());

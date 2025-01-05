@@ -22,6 +22,7 @@ import java.util.List;
 public class PrincipalActivity extends AppCompatActivity {
     private PrincipalController principalController;
     private TableLayout tableLayout;
+    private List<String> rutineNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class PrincipalActivity extends AppCompatActivity {
         List<String> existingRoutines = principalController.getUserRoutines();
         for (String routine : existingRoutines) {
             addNewRoutine(routine);
+            rutineNames.add(routine);
         }
     }
 
@@ -83,7 +85,7 @@ public class PrincipalActivity extends AppCompatActivity {
                         Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                     } else {
                         addNewRoutine(routineName);  // Añadir la rutina con el nombre personalizado
-                        principalController.addUserRoutine(routineName, null); // Añadir la rutina a la base de datos
+                        rutineNames.add(routineName); // Agregar el nombre de la rutina a la lista
                     }
                 })
                 .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())

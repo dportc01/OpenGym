@@ -16,11 +16,9 @@ public class UserDAO implements GenericDAO<User>  {
 
     private final OpenGymDbHelper dbHelper;
     private SQLiteDatabase db;
-    private final Context context;
 
     public UserDAO(Context context) {
         dbHelper = OpenGymDbHelper.getInstance(context);
-        this.context = context;
     }
 
     /**
@@ -39,19 +37,8 @@ public class UserDAO implements GenericDAO<User>  {
 
         values.put(OpenGymDbContract.UsersTable.COLUMN_NAME, entity.getName());
         values.put(OpenGymDbContract.UsersTable.COLUMN_PASSWORD, entity.getPassword());
-        long id = db.insertOrThrow(OpenGymDbContract.UsersTable.TABLE_NAME, null, values);
-        createLastLogin(entity.getName());
-        entity.setId(id);
-        return id;
-    }
 
-    private void createLastLogin(String id) {
-        db = dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(OpenGymDbContract.LoginTable.COLUMN_NAME, id);
-        db.insertOrThrow(OpenGymDbContract.LoginTable.TABLE_NAME, null, values);
+        return db.insertOrThrow(OpenGymDbContract.UsersTable.TABLE_NAME, null, values);
     }
 
     @Override
@@ -60,41 +47,9 @@ public class UserDAO implements GenericDAO<User>  {
         String selection = OpenGymDbContract.UsersTable.COLUMN_ID + " LIKE ?";
         String[] selectionArgs = {String.valueOf(id)};
 
-        db.delete(OpenGymDbContract.LoginTable.TABLE_NAME, null, null );
-
         return db.delete(OpenGymDbContract.UsersTable.TABLE_NAME, selection, selectionArgs);
     }
 
-    @SuppressLint("Range")
-    public String getLastLogin() {
-        db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                OpenGymDbContract.LoginTable.COLUMN_NAME
-        };
-
-        Cursor cursor = db.query(
-                OpenGymDbContract.LoginTable.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
-
-        String name = null;
-
-        if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.LoginTable.COLUMN_NAME));
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-
-        return name;
-    }
     /**
      * Does nothing since Users doesn't implement any foreign key
      */
@@ -130,6 +85,43 @@ public class UserDAO implements GenericDAO<User>  {
                 values,
                 selection,
                 selectionArgs);
+    }
+
+    @SuppressLint("Range")
+    public User userExist() {
+
+        db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                OpenGymDbContract.UsersTable.COLUMN_NAME,
+                OpenGymDbContract.UsersTable.COLUMN_PASSWORD,
+                OpenGymDbContract.UsersTable.COLUMN_PREMIUM
+        };
+
+        Cursor cursor = db.query(
+                OpenGymDbContract.UsersTable.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        String name, password;
+        int premium;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_NAME));
+            password = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PASSWORD));
+            premium = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_PREMIUM));
+
+            cursor.close();
+
+            return new User(name, password, (premium!=0), null);
+        }
+
+        return null;
     }
 
     @Override
