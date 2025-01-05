@@ -20,10 +20,20 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         UserDAO userDAO = new UserDAO(this);
 
-        // Redirect based on user existence
         Intent intent;
-        intent = new Intent(this, SignUpActivity.class);
+        String logInName = userDAO.getLastLogin();
+
+        if (logInName != null) {
+            intent = new Intent(this, PrincipalActivity.class);
+            intent.putExtra("userName", logInName);
+
+        }
+        else {
+            intent = new Intent(this, SignUpActivity.class);
+        }
+
         userDAO.closeConnection();
         startActivity(intent);
         finish();
-    }}
+    }
+}

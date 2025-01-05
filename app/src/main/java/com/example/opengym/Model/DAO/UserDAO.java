@@ -39,9 +39,12 @@ public class UserDAO implements GenericDAO<User>  {
 
         values.put(OpenGymDbContract.UsersTable.COLUMN_NAME, entity.getName());
         values.put(OpenGymDbContract.UsersTable.COLUMN_PASSWORD, entity.getPassword());
+
         long id = db.insertOrThrow(OpenGymDbContract.UsersTable.TABLE_NAME, null, values);
+
         createLastLogin(entity.getName());
         entity.setId(id);
+
         return id;
     }
 

@@ -26,19 +26,39 @@ public class SignUpActivity extends AppCompatActivity {
 
         supabutton.setOnClickListener(v -> {
 
+            SignUpController signUpController = new SignUpController();
+
             String username = enterUsr.getText().toString();
             String password = enterPass.getText().toString();
 
             if (username.isEmpty() || password.isEmpty()) {
+
                 Toast.makeText(SignUpActivity.this, "Por favor ingrese todos los campos", Toast.LENGTH_SHORT).show();
             } else {
 
-                SignUpController signUpController = new SignUpController();
-                signUpController.signUp(username, password, SignUpActivity.this);
-                Toast.makeText(SignUpActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SignUpActivity.this, PrincipalActivity.class);
-                startActivity(intent);
-                finish();
+                Intent intent;
+
+                switch (signUpController.checkUser(this ,username, password)) {
+                    case -1:
+                        signUpController.signUp(username, password, SignUpActivity.this);
+                        Toast.makeText(SignUpActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
+
+                        intent = new Intent(SignUpActivity.this, PrincipalActivity.class);
+                        intent.putExtra("userName", username);
+                        startActivity(intent);
+                        finish();
+
+                        break;
+
+                    case 0:
+                        Toast.makeText(SignUpActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case 1:
+                        intent = new Intent(SignUpActivity.this, PrincipalActivity.class);
+                        intent.putExtra("userName", username);
+                        startActivity(intent);
+                }
             }
         });
 

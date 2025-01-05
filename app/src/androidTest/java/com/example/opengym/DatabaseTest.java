@@ -92,6 +92,8 @@ public class DatabaseTest {
         Assert.assertNull(dbUsers.read(Juan.getName()));
     }
 
+    //We do not plan to update user
+    /*
     @Test
     public void updateUser() {
 
@@ -107,6 +109,8 @@ public class DatabaseTest {
         Assert.assertEquals(JuanAlberto.getPassword(), newUser.getPassword());
         Assert.assertTrue(newUser.getPremium());
     }
+
+     */
 
 
     @Test (expected = android.database.sqlite.SQLiteException.class)
@@ -181,8 +185,6 @@ public class DatabaseTest {
         MisteriousRoutine.setId(dbRoutines.create(MisteriousRoutine, Juan.getId()));
 
         ArrayList<Routine> Routines = dbRoutines.readAll(Juan.getId());
-
-        boolean found;
 
         Assert.assertEquals(Routines.get(0).getName(), EpicRoutine.getName());
         Assert.assertEquals(Routines.get(0).getId(), EpicRoutine.getId());
