@@ -43,7 +43,6 @@ public class RoutineActivity extends AppCompatActivity {
 
         // Set listener for "Añadir Sesión" button
         btnAddSession.setOnClickListener(v -> addSessionTable());
-
     }
 
     // Method to add session table dynamically
@@ -58,8 +57,15 @@ public class RoutineActivity extends AppCompatActivity {
         tableLayout.addView(tableRow);
 
         // Add the "Añadir Ejercicio" row dynamically
+        addAddExerciseRow();
+    }
+
+    // Method to add the "Añadir Ejercicio" buttons row
+    private void addAddExerciseRow() {
+        LayoutInflater inflater = LayoutInflater.from(this);
         View addExerciseRow = inflater.inflate(R.layout.add_exercise, null);
-        tableRow = new TableRow(this);
+
+        TableRow tableRow = new TableRow(this);
         tableRow.addView(addExerciseRow);
         tableLayout.addView(tableRow);
 
@@ -67,14 +73,19 @@ public class RoutineActivity extends AppCompatActivity {
         Button btnAddStrength = addExerciseRow.findViewById(R.id.btn_add_strength);
         Button btnAddDuration = addExerciseRow.findViewById(R.id.btn_add_duration);
 
-        btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow(addExerciseRow));
-        btnAddDuration.setOnClickListener(v -> addDurationExerciseRow(addExerciseRow));
+        btnAddStrength.setOnClickListener(v -> {
+            addStrengthExerciseRow(addExerciseRow);
+        });
+
+        btnAddDuration.setOnClickListener(v -> {
+            addDurationExerciseRow(addExerciseRow);
+        });
     }
 
     // Method to add strength exercise row
     private void addStrengthExerciseRow(View addExerciseRow) {
-        // Hide the add exercise buttons
-        addExerciseRow.setVisibility(View.GONE);
+        // Remove the current "Añadir Ejercicio" row
+        tableLayout.removeView((View) addExerciseRow.getParent());
 
         // Inflate the strength exercise row layout
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -85,13 +96,14 @@ public class RoutineActivity extends AppCompatActivity {
         tableRow.addView(strengthExerciseRow);
         tableLayout.addView(tableRow);
 
-        // Optionally, add further behavior for handling input in strengthExerciseRow
+        // Add the "Añadir Ejercicio" buttons row again
+        addAddExerciseRow();
     }
 
     // Method to add duration exercise row
     private void addDurationExerciseRow(View addExerciseRow) {
-        // Hide the add exercise buttons
-        addExerciseRow.setVisibility(View.GONE);
+        // Remove the current "Añadir Ejercicio" row
+        tableLayout.removeView((View) addExerciseRow.getParent());
 
         // Inflate the duration exercise row layout
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -101,6 +113,9 @@ public class RoutineActivity extends AppCompatActivity {
         TableRow tableRow = new TableRow(this);
         tableRow.addView(durationExerciseRow);
         tableLayout.addView(tableRow);
+
+        // Add the "Añadir Ejercicio" buttons row again
+        addAddExerciseRow();
     }
 
     /* TODO Puede que lo tenga que recibir de la base de datos
