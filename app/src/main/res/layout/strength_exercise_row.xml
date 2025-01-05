@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/strength_exercise"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- Nombre -->
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="@string/nombre"
+        android:textColor="@android:color/black"
+        android:inputType="text" />
+
+    <!-- Series -->
+    <EditText
+        android:id="@+id/et_series"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="@string/series"
+        android:textColor="@android:color/black"
+        android:inputType="number" />
+
+    <!-- Reps -->
+    <EditText
+        android:id="@+id/et_reps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="@string/reps"
+        android:textColor="@android:color/black"
+        android:inputType="number" />
+
+    <!-- Peso -->
+    <EditText
+        android:id="@+id/et_weight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="@string/peso"
+        android:textColor="@android:color/black"
+        android:inputType="number" />
+</LinearLayout>
