@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:hint="Nombre"
+        android:hint="@string/nombre"
         android:textColor="@android:color/black"
         android:inputType="text" />
 
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:hint="Series"
+        android:hint="@string/series"
         android:textColor="@android:color/black"
         android:inputType="number" />
 
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:hint="Reps"
+        android:hint="@string/reps"
         android:textColor="@android:color/black"
         android:inputType="number" />
 
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:hint="Peso"
+        android:hint="@string/peso"
         android:textColor="@android:color/black"
-        android:inputType="text" />
+        android:inputType="number" />
 </LinearLayout>

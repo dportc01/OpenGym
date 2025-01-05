@@ -15,7 +15,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:text="Nombre" />
+        android:text="@string/nombre" />
 
     <!-- Series -->
     <TextView
@@ -25,7 +25,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:text="Series" />
+        android:text="@string/series" />
 
     <!-- Reps -->
     <TextView
@@ -35,7 +35,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:text="Reps" />
+        android:text="@string/reps" />
 
     <!-- Peso -->
     <TextView
@@ -45,5 +45,5 @@
         android:layout_weight="1"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:text="Peso" />
+        android:text="@string/peso" />
 </LinearLayout>

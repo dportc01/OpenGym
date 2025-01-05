@@ -32,7 +32,7 @@
             android:layout_margin="8dp"
             android:background="@drawable/circle_background"
             android:gravity="center"
-            android:text="i"
+            android:text="@string/i"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:elevation="4dp" />

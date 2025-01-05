@@ -7,4 +7,13 @@
     <string name="rutina1">Rutina 1</string>
     <string name="acceder">Acceder</string>
     <string name="nuevarutina">Añadir rutina</string>
+    <string name="añadir_fuerza">Añadir Ejercicio de Fuerza</string>
+    <string name="añadir_duracion">Añadir Ejercicio de Duración</string>
+    <string name="nombre">Nombre</string>
+    <string name="series">Series</string>
+    <string name="reps">Reps</string>
+    <string name="peso">Peso</string>
+    <string name="duracion">Duración</string>
+    <string name="add_sesion">Añadir Sesión</string>
+    <string name="i">i</string>
 </resources>
