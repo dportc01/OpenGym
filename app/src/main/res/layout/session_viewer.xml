@@ -6,16 +6,16 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- RecyclerView para gestionar sesiones y ejercicios -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_session_viewer"
+    <!-- TableLayout to manage session table and add exercise -->
+    <TableLayout
+        android:id="@+id/table_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="8dp" />
+        android:paddingBottom="8dp"
+        android:clipToPadding="false" />
 
-    <!-- Botón para añadir una sesión -->
+    <!-- Button to add a session -->
     <Button
         android:id="@+id/btn_add_session"
         android:layout_width="match_parent"
@@ -24,5 +24,4 @@
         android:backgroundTint="@color/black"
         android:textColor="@android:color/white"
         android:layout_marginTop="16dp" />
-
 </LinearLayout>
