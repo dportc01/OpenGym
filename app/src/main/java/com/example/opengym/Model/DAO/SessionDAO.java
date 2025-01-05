@@ -30,12 +30,12 @@ public class SessionDAO implements GenericDAO<Session> {
     /**
      * Create a session (independent of date)
      * @param entity new entity to add to the database
-     * @param parentName name of the parent entity that contains the entity to be updated
+     * @param parentId id of the parent entity that contains the entity to be updated
      * can be <code>null</code> if it doesn't have it
      * @return row ID or -1 if an error curred
      */
     @Override
-    public long create(Session entity, String parentName) {
+    public long create(Session entity, long parentId) {
 
         db = dbHelper.getWritableDatabase();
 
@@ -49,117 +49,34 @@ public class SessionDAO implements GenericDAO<Session> {
             values.put(OpenGymDbContract.SessionsTable.COLUMN_DATE, entity.getDate().toString());
         }
         values.put(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION, entity.getRestDuration());
-        values.put(OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID, getRoutineId(parentName));
+        values.put(OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID, parentId);
 
         return db.insertOrThrow(OpenGymDbContract.SessionsTable.TABLE_NAME, null, values);
     }
 
     /**
      * Deletes all the entries for a specific session name (independent of date)
-     * @param name primary key of the entry
-     * @param parentName Foreign key that is used in the primary key,
-     * can be <code>null</code> if it doesn't have it
+     * @param id of the entry to delete
      * @return numbers of rows affected by the operation
      */
     @Override
-    public int delete(String name, String parentName) {
+    public int delete(long id) {
 
-        String selection = OpenGymDbContract.SessionsTable.COLUMN_NAME + " LIKE ? AND " +
-                OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID + " LIKE ?";
+        String selection = OpenGymDbContract.SessionsTable.COLUMN_ID + " LIKE ?";
 
-        String[] selectionArgs = {name, String.valueOf(getRoutineId(parentName))};
+        String[] selectionArgs = {String.valueOf(id)};
 
         return db.delete(OpenGymDbContract.SessionsTable.TABLE_NAME, selection, selectionArgs);
     }
 
     /**
-     * Return the session for the no date entry
-     * @param name primary key of the entry
-     * @param parentName Foreign key that is used in the primary key,
-     * can be null if it doesn't have it
-     * @return the entry as a Session object or <code>null</code> if the entry doesn't exist
+     * Read all the no date entries that have the id as a foreign key
+     * @param parentId id that is used as a foreign key in the entries of another table
+     * @return a list of entries
      */
+    @Override
     @SuppressLint("Range")
-    @Override
-    public Session read(String name, String parentName) {
-
-        db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                OpenGymDbContract.SessionsTable.COLUMN_NAME,
-                OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION
-        };
-
-        String selection = OpenGymDbContract.SessionsTable.COLUMN_NAME + " LIKE ? AND " +
-                OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID + " LIKE ? AND " +
-                OpenGymDbContract.SessionsTable.COLUMN_DATE + " LIKE ?";
-
-        String[] selectionArgs = {name, String.valueOf(getRoutineId(parentName)), NullDate};
-
-        Cursor cursor = db.query(
-                OpenGymDbContract.SessionsTable.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        int restDuration;
-
-        if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_NAME));
-            restDuration = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION));
-        }
-        else {
-            return null;
-        }
-
-        cursor.close();
-
-        return new Session(name, null, restDuration, null);
-    }
-
-    /**
-     * Update all the entries
-     * @param entity new entity with modified values
-     * @param parentName Foreign key that is used in the primary key,
-     * can be null if it doesn't have it
-     * @return number of rows affected by the operation
-     */
-    @Override
-    public int update(Session entity, String name, String parentName) {
-
-        db = dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(OpenGymDbContract.SessionsTable.COLUMN_NAME, entity.getName());
-        values.put(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION, entity.getRestDuration());
-
-        String selection = OpenGymDbContract.SessionsTable.COLUMN_NAME + " LIKE ? AND " +
-                OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID + " LIKE ?";
-
-        String[] selectionArgs = {name, String.valueOf(getRoutineId(parentName))};
-
-        return db.update(
-                OpenGymDbContract.SessionsTable.TABLE_NAME,
-                values,
-                selection,
-                selectionArgs);
-    }
-
-    @Override
-    public void closeConnection() {
-        dbHelper.close();
-    }
-
-    /**
-     * @param parentName
-     * @return Return all the no date sessions
-     */
-    @SuppressLint("Range")
-    public ArrayList<Session> getAll(String parentName) {
+    public ArrayList<Session> readAll(long parentId) {
 
         db = dbHelper.getReadableDatabase();
 
@@ -171,7 +88,7 @@ public class SessionDAO implements GenericDAO<Session> {
         String selection = OpenGymDbContract.SessionsTable.COLUMN_DATE + " LIKE ? AND " +
                 OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID + " LIKE ?";
 
-        String[] selectionArgs = {NullDate ,String.valueOf(getRoutineId(parentName))};
+        String[] selectionArgs = {NullDate ,String.valueOf(parentId)};
 
         Cursor cursor = db.query(
                 OpenGymDbContract.SessionsTable.TABLE_NAME,
@@ -195,13 +112,124 @@ public class SessionDAO implements GenericDAO<Session> {
         return SessionList;
     }
 
+
     /**
-     * @param parentName name of the parent routine
-     * @param name name of the session
-     * @return Return all the date sessions for a session name
+     * Update all the entries with the data from entity
+     * @param entity new entity with modified values, but same id
+     * @param id of the entry to be updated
+     * @return number of rows affected by the operation
+     */
+    @Override
+    public int update(Session entity, long id) {
+
+        db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(OpenGymDbContract.SessionsTable.COLUMN_NAME, entity.getName());
+        values.put(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION, entity.getRestDuration());
+
+        String selection = OpenGymDbContract.SessionsTable.COLUMN_ID + " LIKE ?";
+
+        String[] selectionArgs = {String.valueOf(id)};
+
+        return  db.update(
+                OpenGymDbContract.SessionsTable.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs)
+                + updateDateEntries(entity, id);
+    }
+
+    /**
+     *
+     * @param id of the no date entry
+     * @return that contains the entry name on 0, and the parentId on 1
      */
     @SuppressLint("Range")
-    public ArrayList<Session> getAllPast(String parentName, String name) {
+    private ArrayList<String> getInfoForDateEntries(long id) {
+
+        //Get the name and routineId to identify the group of sessions
+
+        db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                OpenGymDbContract.SessionsTable.COLUMN_NAME,
+                OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID
+        };
+
+        String selection = OpenGymDbContract.SessionsTable.COLUMN_ID + " LIKE ?";
+
+        String[] selectionArgs = {String.valueOf(id)};
+
+        Cursor cursor = db.query(
+                OpenGymDbContract.SessionsTable.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        ArrayList<String> strings = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            strings.add(cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_NAME)));
+            strings.add(String.valueOf(cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID))));
+        }
+        else {
+            return null;
+        }
+
+        cursor.close();
+
+        return strings;
+    }
+
+    private int updateDateEntries(Session entity, long id) {
+
+        ArrayList<String> info = getInfoForDateEntries(id);
+
+        if (info == null) {
+            return 0;
+        }
+
+        db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(OpenGymDbContract.SessionsTable.COLUMN_NAME, entity.getName());
+        values.put(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION, entity.getRestDuration());
+
+        String selectionUpdate = OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID + " LIKE ? AND " +
+                OpenGymDbContract.SessionsTable.COLUMN_NAME + " LIKE ? AND " +
+                OpenGymDbContract.SessionsTable.COLUMN_DATE + " NOT LIKE ?";
+
+        String[] selectionArgsUpdate = {info.get(1), info.get(0), NullDate};
+
+        return  db.update(
+                OpenGymDbContract.SessionsTable.TABLE_NAME,
+                values,
+                selectionUpdate,
+                selectionArgsUpdate);
+    }
+
+    @Override
+    public void closeConnection() {
+        dbHelper.close();
+    }
+
+    /**
+     * @param id of the session with NoDate
+     * @return Return all the date sessions for a session name or <code>null<code/> if they don't exist
+     */
+    @SuppressLint("Range")
+    public ArrayList<Session> getAllPast(long id) {
+
+        ArrayList<String> info = getInfoForDateEntries(id);
+
+        if (info == null) {
+            return null;
+        }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
 
@@ -218,7 +246,7 @@ public class SessionDAO implements GenericDAO<Session> {
                 OpenGymDbContract.SessionsTable.COLUMN_DATE + " NOT LIKE ?";
 
 
-        String[] selectionArgs = {name ,String.valueOf(getRoutineId(parentName)), NullDate};
+        String[] selectionArgs = {info.get(0) ,info.get(1), NullDate};
 
         Cursor cursor = db.query(
                 OpenGymDbContract.SessionsTable.TABLE_NAME,
@@ -233,7 +261,7 @@ public class SessionDAO implements GenericDAO<Session> {
         ArrayList<Session> SessionList = new ArrayList<>();
         while (cursor.moveToNext()) {
             try {
-                name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_NAME));
+                String name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_NAME));
                 int restDuration = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION));
                 Date date = dateFormat.parse(cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_DATE)));
                 SessionList.add(new Session(name, date, restDuration, null));
@@ -245,39 +273,6 @@ public class SessionDAO implements GenericDAO<Session> {
         cursor.close();
 
         return SessionList;
-    }
-
-    @SuppressLint("Range")
-    private int getRoutineId(String routineName) {
-
-        db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                OpenGymDbContract.RoutinesTable.COLUMN_ID
-        };
-
-        String selection = OpenGymDbContract.RoutinesTable.COLUMN_NAME + " LIKE ?";
-
-        String[] selectionArgs = {routineName};
-
-        Cursor cursor = db.query(
-                OpenGymDbContract.RoutinesTable.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_ID));
-            cursor.close();
-            return id;
-        }
-        else {
-            return -1;
-        }
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Routine {
+    private long id;
     private String name;
     private String description;
     private ArrayList<Session> sessionsList;
@@ -12,6 +13,12 @@ public class Routine {
         this.name = name;
         this.description = description;
         this.sessionsList = sessionsList;
+    }
+
+    public Routine(String name, String description, long id) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
     }
 
     public Routine() {
@@ -60,5 +67,15 @@ public class Routine {
 
     public ArrayList<Session> getSessionsList() {
         return sessionsList;
+    }
+
+    public void setId(long id) {
+
+        this.id = id;
+    }
+
+    public long getId() {
+
+        return this.id;
     }
 }

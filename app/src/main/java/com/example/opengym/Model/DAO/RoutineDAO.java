@@ -14,15 +14,15 @@ import java.util.ArrayList;
 
 public class RoutineDAO implements GenericDAO<Routine> {
 
-    OpenGymDbHelper dbHelper;
-    SQLiteDatabase db;
+    private final OpenGymDbHelper dbHelper;
+    private SQLiteDatabase db;
 
     public RoutineDAO(Context context) {
         dbHelper = OpenGymDbHelper.getInstance(context);
     }
 
     @Override
-    public long create(Routine entity, String parentName) {
+    public long create(Routine entity, long parentId) {
 
         db = dbHelper.getWritableDatabase();
 
@@ -30,101 +30,35 @@ public class RoutineDAO implements GenericDAO<Routine> {
 
         values.put(OpenGymDbContract.RoutinesTable.COLUMN_NAME, entity.getName());
         values.put(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION, entity.getDescription());
-        values.put(OpenGymDbContract.RoutinesTable.COLUMN_USERID, getUserId(parentName));
+        values.put(OpenGymDbContract.RoutinesTable.COLUMN_USERID, parentId);
 
         return db.insertOrThrow(OpenGymDbContract.RoutinesTable.TABLE_NAME, null, values);
     }
 
     @Override
-    public int delete(String name, String parentName) {
+    public int delete(long id) {
 
-        String selection = OpenGymDbContract.RoutinesTable.COLUMN_NAME + " LIKE ? AND " +
-                           OpenGymDbContract.RoutinesTable.COLUMN_ID + " LIKE ?";
+        String selection = OpenGymDbContract.RoutinesTable.COLUMN_ID + " LIKE ?";
 
-        String[] selectionArgs = {name, String.valueOf(getUserId(parentName))};
+        String[] selectionArgs = {String.valueOf(id)};
 
         return db.delete(OpenGymDbContract.RoutinesTable.TABLE_NAME, selection, selectionArgs);
     }
 
     @SuppressLint("Range")
     @Override
-    public Routine read(String name, String parentName) {
+    public ArrayList<Routine> readAll(long parentId) {
 
         db = dbHelper.getReadableDatabase();
 
         String[] projection = {
                 OpenGymDbContract.RoutinesTable.COLUMN_NAME,
-                OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION
-        };
-
-        String selection = OpenGymDbContract.RoutinesTable.COLUMN_NAME + " LIKE ? AND " +
-                           OpenGymDbContract.RoutinesTable.COLUMN_ID + " LIKE ?";
-
-        String[] selectionArgs = {name, String.valueOf(getUserId(parentName))};
-
-        Cursor cursor = db.query(
-                OpenGymDbContract.RoutinesTable.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        String description;
-
-        if (cursor != null && cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_NAME));
-            description = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION));
-        }
-        else {
-            return null;
-        }
-
-        cursor.close();
-
-        return new Routine(name, description, null);
-    }
-
-    @Override
-    public int update(Routine entity, String name, String parentName) {
-
-        db = dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(OpenGymDbContract.RoutinesTable.COLUMN_NAME, entity.getName());
-        values.put(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION, entity.getDescription());
-
-        String selection = OpenGymDbContract.RoutinesTable.COLUMN_NAME + " LIKE ? AND " +
-                           OpenGymDbContract.RoutinesTable.COLUMN_USERID + " LIKE ?";
-
-        String[] selectionArgs = {name, String.valueOf(getUserId(parentName))};
-
-        return db.update(
-                OpenGymDbContract.RoutinesTable.TABLE_NAME,
-                values,
-                selection,
-                selectionArgs);
-    }
-
-    @Override
-    public void closeConnection() {
-        dbHelper.close();
-    }
-
-    @SuppressLint("Range")
-    public ArrayList<Routine> getAll(String parentName) {
-
-        db = dbHelper.getReadableDatabase();
-
-        String[] projection = {
-                OpenGymDbContract.RoutinesTable.COLUMN_NAME,
-                OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION
+                OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION,
+                OpenGymDbContract.RoutinesTable.COLUMN_ID
         };
 
         String selection = OpenGymDbContract.RoutinesTable.COLUMN_USERID + " = ?";
-        String[] selectionArgs = {String.valueOf(getUserId(parentName))};
+        String[] selectionArgs = {String.valueOf(parentId)};
 
         Cursor cursor = db.query(
                 OpenGymDbContract.RoutinesTable.TABLE_NAME,
@@ -140,7 +74,8 @@ public class RoutineDAO implements GenericDAO<Routine> {
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_NAME));
             String description = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION));
-            RoutineList.add(new Routine(name, description, null));
+            int id = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_ID));
+            RoutineList.add(new Routine(name, description, id));
         }
 
         cursor.close();
@@ -148,36 +83,28 @@ public class RoutineDAO implements GenericDAO<Routine> {
         return RoutineList;
     }
 
-    @SuppressLint("Range")
-    private int getUserId(String userName) {
+    @Override
+    public int update(Routine entity, long id) {
 
-        db = dbHelper.getReadableDatabase();
+        db = dbHelper.getWritableDatabase();
 
-        String[] projection = {
-                OpenGymDbContract.UsersTable.COLUMN_ID
-        };
+        ContentValues values = new ContentValues();
+        values.put(OpenGymDbContract.RoutinesTable.COLUMN_NAME, entity.getName());
+        values.put(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION, entity.getDescription());
 
-        String selection = OpenGymDbContract.UsersTable.COLUMN_NAME + " LIKE ?";
+        String selection = OpenGymDbContract.RoutinesTable.COLUMN_ID + " LIKE ?";
 
-        String[] selectionArgs = {userName};
+        String[] selectionArgs = {String.valueOf(id)};
 
-        Cursor cursor = db.query(
-                OpenGymDbContract.UsersTable.TABLE_NAME,
-                projection,
+        return db.update(
+                OpenGymDbContract.RoutinesTable.TABLE_NAME,
+                values,
                 selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
+                selectionArgs);
+    }
 
-        if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_ID));
-            cursor.close();
-            return id;
-        }
-        else {
-            return -1;
-        }
+    @Override
+    public void closeConnection() {
+        dbHelper.close();
     }
 }
