@@ -82,7 +82,8 @@ public class SessionDAO implements GenericDAO<Session> {
 
         String[] projection = {
                 OpenGymDbContract.SessionsTable.COLUMN_NAME,
-                OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION
+                OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION,
+                OpenGymDbContract.SessionsTable.COLUMN_ID
         };
 
         String selection = OpenGymDbContract.SessionsTable.COLUMN_DATE + " LIKE ? AND " +
@@ -104,7 +105,8 @@ public class SessionDAO implements GenericDAO<Session> {
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_NAME));
             int restDuration = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION));
-            SessionList.add(new Session(name, null, restDuration, null));
+            int id = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_ID));
+            SessionList.add(new Session(name, null, restDuration, id));
         }
 
         cursor.close();
@@ -238,7 +240,8 @@ public class SessionDAO implements GenericDAO<Session> {
         String[] projection = {
                 OpenGymDbContract.SessionsTable.COLUMN_NAME,
                 OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION,
-                OpenGymDbContract.SessionsTable.COLUMN_DATE
+                OpenGymDbContract.SessionsTable.COLUMN_DATE,
+                OpenGymDbContract.SessionsTable.COLUMN_ID
         };
 
         String selection = OpenGymDbContract.SessionsTable.COLUMN_NAME + " LIKE ? AND " +
@@ -264,7 +267,8 @@ public class SessionDAO implements GenericDAO<Session> {
                 String name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_NAME));
                 int restDuration = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION));
                 Date date = dateFormat.parse(cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_DATE)));
-                SessionList.add(new Session(name, date, restDuration, null));
+                id = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_ID));
+                SessionList.add(new Session(name, date, restDuration, id));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
