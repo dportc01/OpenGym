@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.Objects;
 
 public class User {
+    private long id;
     private String name;
     private String password;
     private boolean premium;
@@ -32,6 +33,13 @@ public class User {
         this.password = password;
         this.premium = premium;
         this.routinesList = routinesList;
+    }
+
+    public User(String name, String password, boolean premium, long id) {
+        this.name = name;
+        this.password = password;
+        this.premium = premium;
+        this.id = id;
     }
 
     public User(String name, String password) {
@@ -49,9 +57,9 @@ public class User {
     }
 
     // Get the user's information from the database
-    public void getInfoDB(String id, Context context) {
+    public void getInfoDB(String name, Context context) {
         UserDAO userDAO = new UserDAO(context);
-        userDAO.read(id, null);
+        userDAO.read(name);
     }
     public String getName() {
         return name;
@@ -81,6 +89,15 @@ public class User {
         this.premium = premium;
     }
 
+    public void setId(long id) {
+
+        this.id = id;
+    }
+
+    public long getId() {
+
+        return this.id;
+    }
 
     public void exportUserRoutine(String name) {
         Routine routine = null;

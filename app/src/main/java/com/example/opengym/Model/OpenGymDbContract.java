@@ -35,7 +35,7 @@ public final class OpenGymDbContract {
                     StrengthExerciseTable.COLUMN_NAME + " TEXT, " +
                     StrengthExerciseTable.COLUMN_SETS + " INTEGER, " +
                     StrengthExerciseTable.COLUMN_REPETITIONS + " INTEGER, " +
-                    StrengthExerciseTable.COLUMN_WEIGHT + " INTEGER, " +
+                    StrengthExerciseTable.COLUMN_WEIGHT + " REAL, " +
                     StrengthExerciseTable.COLUMN_SESSIONID + " INTEGER, " +
                     "FOREIGN KEY (" + StrengthExerciseTable.COLUMN_SESSIONID + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_ID + "));" +
                     "UNIQUE (" + StrengthExerciseTable.COLUMN_NAME + ", " + StrengthExerciseTable.COLUMN_SESSIONID + "));";

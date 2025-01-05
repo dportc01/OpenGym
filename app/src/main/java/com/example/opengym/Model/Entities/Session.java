@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Session {
 
+    private long id;
     private String name;
     private Date date;
     private int restDuration;
@@ -15,6 +16,13 @@ public class Session {
         this.date = date;
         this.restDuration = restDuration;
         this.exercisesList = exercisesList;
+    }
+
+    public Session(String name, Date date, int restDuration, long id) {
+        this.name = name;
+        this.date = date;
+        this.restDuration = restDuration;
+        this.id = id;
     }
 
     public Session() {
@@ -38,6 +46,16 @@ public class Session {
 
     public ArrayList<IExercise> getExercisesList() {
         return exercisesList;
+    }
+
+    public void setId(long id) {
+
+        this.id = id;
+    }
+
+    public long getId() {
+
+        return this.id;
     }
 
     public void getInfoDB() {

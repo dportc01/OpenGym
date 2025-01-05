@@ -2,6 +2,7 @@ package com.example.opengym.Model.Entities;
 
 public class StrengthExercise implements IExercise {
 
+    private long id;
     private int numOfReps;
     private int numOfSets;
     private float weight;
@@ -12,6 +13,14 @@ public class StrengthExercise implements IExercise {
         this.numOfReps = numOfReps;
         this.numOfSets = numOfSets;
         this.weight = weight;
+    }
+
+    public StrengthExercise(String name, int numOfReps, int numOfSets, float weight, long id) {
+        this.name = name;
+        this.numOfReps = numOfReps;
+        this.numOfSets = numOfSets;
+        this.weight = weight;
+        this.id = id;
     }
 
     public StrengthExercise() {
@@ -55,5 +64,15 @@ public class StrengthExercise implements IExercise {
 
     public void setWeight(float weight) {
         this.weight = weight;
+    }
+
+    public void setId(long id) {
+
+        this.id = id;
+    }
+
+    public long getId() {
+
+        return this.id;
     }
 }
