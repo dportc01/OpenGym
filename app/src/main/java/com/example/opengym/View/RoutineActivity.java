@@ -12,22 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import android.os.Bundle;
+
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.opengym.Controller.RoutineController;
 import com.example.opengym.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RoutineActivity extends AppCompatActivity {
 
