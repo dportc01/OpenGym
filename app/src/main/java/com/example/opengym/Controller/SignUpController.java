@@ -22,12 +22,16 @@ public class SignUpController {
         UserDAO userDAO = new UserDAO(context);
         User readUser = userDAO.read(name);
         if (readUser == null) {
+            userDAO.closeConnection();
             return -1;
         }
         else {
             if (readUser.getPassword().equals(password)) {
+                userDAO.updateLastLogIn(name);
+                userDAO.closeConnection();
                 return 1;
             }
+            userDAO.closeConnection();
             return 0;
         }
     }

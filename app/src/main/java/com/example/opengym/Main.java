@@ -3,11 +3,7 @@ package com.example.opengym;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.opengym.Model.DAO.UserDAO;
 import com.example.opengym.View.PrincipalActivity;
@@ -21,7 +17,7 @@ public class Main extends AppCompatActivity {
         UserDAO userDAO = new UserDAO(this);
 
         Intent intent;
-        String logInName = userDAO.getLastLogin();
+        String logInName = userDAO.readLastLogin();
 
         if (logInName != null) {
             intent = new Intent(this, PrincipalActivity.class);

@@ -4,12 +4,12 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.example.opengym.Model.DAO.RoutineDAO;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import com.example.opengym.Model.DAO.UserDAO;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -55,7 +55,7 @@ public class User {
     }
 
     public ArrayList<Routine> getRoutinesList() {
-        return routinesList;
+        return this.routinesList;
     }
 
     public void setName(String name) {
@@ -78,6 +78,12 @@ public class User {
     public long getId() {
 
         return this.id;
+    }
+
+    public ArrayList<Routine> getRoutinesDB(Context context) {
+        RoutineDAO routineDAO = new RoutineDAO(context);
+        this.routinesList = routineDAO.readAll(this.id);
+        return this.routinesList;
     }
 
     public void exportUserRoutine(String name) {
@@ -204,11 +210,26 @@ public class User {
         return newExercise;
     }
 
-    public void addRoutine(String routineName, String routineDescription, Context context) {
+    public long addRoutine(String routineName, String routineDescription, Context context) {
+
         ArrayList<Session> routineSessions = new ArrayList<>();
         Routine newRoutine = new Routine(routineName, routineDescription, routineSessions);
-        routinesList.add(newRoutine);
-        newRoutine.addRoutineDB(context, this.id);
+
+        RoutineDAO routineDAO = new RoutineDAO(context);
+
+        try {
+            long id = routineDAO.create(newRoutine, this.id);
+
+            if (id == -1) {
+                return -1;
+            }
+
+            this.setId(id);
+            return id;
+        }
+        catch (Exception e) {
+            return -1;
+        }
     }
 
     public void removeRoutine(String name, Context context) {

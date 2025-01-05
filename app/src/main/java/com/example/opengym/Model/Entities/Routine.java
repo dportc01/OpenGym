@@ -53,10 +53,25 @@ public class Routine {
         sessionsList.add(session);
     }
 
-    public void addRoutineDB(Context context, long userID) {
-        RoutineDAO routineDAO = new RoutineDAO(context);
-        routineDAO.create(this, userID);
-    }
+    // Moví este metodo a Users ya que users necesita RoutineDAO para getRoutinesDB sry UwU
+//    public long addRoutineDB(Context context, long userID) {
+//        RoutineDAO routineDAO = new RoutineDAO(context);
+//
+//        try {
+//            long id = routineDAO.create(this, userID);
+//
+//            if (id == -1) {
+//                return -1;
+//            }
+//
+//            this.setId(id);
+//            return id;
+//        }
+//        catch (Exception e) {
+//            return -1;
+//        }
+
+//    }
 
     public void removeRoutineDB(Context context) {
         RoutineDAO routineDAO = new RoutineDAO(context);

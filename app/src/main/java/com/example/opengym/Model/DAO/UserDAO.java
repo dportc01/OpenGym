@@ -48,28 +48,30 @@ public class UserDAO implements GenericDAO<User>  {
         return id;
     }
 
-    private void createLastLogin(String id) {
+    private void createLastLogin(String name) {
+
         db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(OpenGymDbContract.LoginTable.COLUMN_NAME, id);
+        values.put(OpenGymDbContract.LoginTable.COLUMN_NAME, name);
         db.insertOrThrow(OpenGymDbContract.LoginTable.TABLE_NAME, null, values);
     }
 
     @Override
     public int delete(long id) {
 
+        // delete entries from LoginTable to make sure there are no foreign key references
+        db.delete(OpenGymDbContract.LoginTable.TABLE_NAME, null, null);
+
         String selection = OpenGymDbContract.UsersTable.COLUMN_ID + " LIKE ?";
         String[] selectionArgs = {String.valueOf(id)};
-
-        db.delete(OpenGymDbContract.LoginTable.TABLE_NAME, null, null );
 
         return db.delete(OpenGymDbContract.UsersTable.TABLE_NAME, selection, selectionArgs);
     }
 
     @SuppressLint("Range")
-    public String getLastLogin() {
+    public String readLastLogin() {
         db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -98,6 +100,14 @@ public class UserDAO implements GenericDAO<User>  {
 
         return name;
     }
+
+    public void updateLastLogIn(String name) {
+
+        db.delete(OpenGymDbContract.LoginTable.TABLE_NAME, null, null);
+
+        createLastLogin(name);
+    }
+
     /**
      * Does nothing since Users doesn't implement any foreign key
      */

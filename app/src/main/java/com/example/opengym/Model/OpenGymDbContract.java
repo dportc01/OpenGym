@@ -21,7 +21,7 @@ public final class OpenGymDbContract {
                     RoutinesTable.COLUMN_NAME + " TEXT, " +
                     RoutinesTable.COLUMN_DESCRIPTION + " TEXT, " +
                     RoutinesTable.COLUMN_USERID + " INTEGER, " +
-                    "FOREIGN KEY (" + RoutinesTable.COLUMN_USERID + ") REFERENCES " + UsersTable.TABLE_NAME + "(" + UsersTable.COLUMN_ID + "));" +
+                    "FOREIGN KEY (" + RoutinesTable.COLUMN_USERID + ") REFERENCES " + UsersTable.TABLE_NAME + "(" + UsersTable.COLUMN_ID + ")," +
                     "UNIQUE (" + RoutinesTable.COLUMN_NAME + ", " + RoutinesTable.COLUMN_USERID + "));";
 
     public static final String SQL_CREATE_SESSIONS_ENTRIES =

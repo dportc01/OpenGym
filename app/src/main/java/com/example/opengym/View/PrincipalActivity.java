@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.opengym.R; // TODO Cambiar
 import com.example.opengym.Controller.PrincipalController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PrincipalActivity extends AppCompatActivity {
@@ -45,7 +44,7 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 
     private void loadExistingRoutines() {
-        List<String> existingRoutines = principalController.getUserRoutines();
+        List<String> existingRoutines = principalController.getUserRoutines(this);
         for (String routine : existingRoutines) {
             addNewRoutine(routine);
         }
@@ -82,8 +81,12 @@ public class PrincipalActivity extends AppCompatActivity {
                     if (routineName.isEmpty()) {
                         Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                     } else {
-                        addNewRoutine(routineName);  // Añadir la rutina con el nombre personalizado
-                        principalController.addUserRoutine(routineName, null); // Añadir la rutina a la base de datos
+                        if (principalController.addUserRoutine(this, routineName, null) == -1) { // Añadir la rutina a la base de datos
+                            Toast.makeText(this, "Ya existe una rutina con ese nombre", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            addNewRoutine(routineName); // Añadir la rutina con el nombre personalizado
+                        }
                     }
                 })
                 .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
