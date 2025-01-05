@@ -7,13 +7,34 @@
     cardview:cardCornerRadius="12dp"
     cardview:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/routine_name"
+    <!-- Usamos un FrameLayout para superponer elementos -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="50dp"
-        android:textColor="@android:color/white"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:background="@color/black" />
+        android:layout_height="wrap_content">
+
+        <!-- Texto principal -->
+        <TextView
+            android:id="@+id/routine_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="50dp"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:background="@color/black" />
+
+        <!-- Botón circular -->
+        <TextView
+            android:id="@+id/info_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/circle_background"
+            android:gravity="center"
+            android:text="i"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:elevation="4dp" />
+    </FrameLayout>
 </androidx.cardview.widget.CardView>
