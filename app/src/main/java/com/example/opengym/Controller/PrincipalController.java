@@ -7,17 +7,20 @@ import android.content.Intent;
 
 import java.util.List;
 
+import com.example.opengym.Model.DAO.UserDAO;
 import com.example.opengym.Model.Entities.Routine;
 import com.example.opengym.Model.Entities.User;
 
 import java.util.ArrayList;
 
 public class PrincipalController {
-    private final User controlledUser;
+    private User controlledUser;
+    Context context;
 
     public PrincipalController(Context context, String userName) {
-        this.controlledUser = new User();
-        controlledUser.getInfoDB(userName, context);
+        this.context = context;
+        UserDAO userDAO = new UserDAO(context);
+        controlledUser = userDAO.read(userName);
     }
 
     public String getUserName() {
@@ -33,11 +36,11 @@ public class PrincipalController {
     }
 
     public void removeUserRoutine(String routineName) {
-        controlledUser.removeRoutine(routineName);
+        controlledUser.removeRoutine(routineName, context);
     }
 
     public void addUserRoutine(String routineName, String routineDescription) {
-        controlledUser.addRoutine(routineName, routineDescription);
+        controlledUser.addRoutine(routineName, routineDescription, context);
     }
 
     public List<String> getUserRoutines() {

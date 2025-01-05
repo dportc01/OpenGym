@@ -1,5 +1,9 @@
 package com.example.opengym.Model.Entities;
 
+import android.content.Context;
+
+import com.example.opengym.Model.DAO.RoutineDAO;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -47,6 +51,16 @@ public class Routine {
         ArrayList<IExercise> exercises = new ArrayList<>();
         Session session = new Session(sessionName, date, restDuration, exercises);
         sessionsList.add(session);
+    }
+
+    public void addRoutineDB(Context context, long userID) {
+        RoutineDAO routineDAO = new RoutineDAO(context);
+        routineDAO.create(this, userID);
+    }
+
+    public void removeRoutineDB(Context context) {
+        RoutineDAO routineDAO = new RoutineDAO(context);
+        routineDAO.delete(this.id);
     }
 
     public String getName() {

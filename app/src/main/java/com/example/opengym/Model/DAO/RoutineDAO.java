@@ -32,7 +32,9 @@ public class RoutineDAO implements GenericDAO<Routine> {
         values.put(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION, entity.getDescription());
         values.put(OpenGymDbContract.RoutinesTable.COLUMN_USERID, parentId);
 
-        return db.insertOrThrow(OpenGymDbContract.RoutinesTable.TABLE_NAME, null, values);
+        long id = db.insertOrThrow(OpenGymDbContract.RoutinesTable.TABLE_NAME, null, values);
+        entity.setId(id);
+        return id;
     }
 
     @Override
