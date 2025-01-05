@@ -116,13 +116,9 @@ public class RoutineActivity extends AppCompatActivity {
         Button btnAddStrength = addExerciseRow.findViewById(R.id.btn_add_strength);
         Button btnAddDuration = addExerciseRow.findViewById(R.id.btn_add_duration);
 
-        btnAddStrength.setOnClickListener(v -> {
-            addStrengthExerciseRow(addExerciseRow);
-        });
+        btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow(addExerciseRow));
 
-        btnAddDuration.setOnClickListener(v -> {
-            addDurationExerciseRow(addExerciseRow);
-        });
+        btnAddDuration.setOnClickListener(v -> addDurationExerciseRow(addExerciseRow));
     }
 
     // Method to add strength exercise row
