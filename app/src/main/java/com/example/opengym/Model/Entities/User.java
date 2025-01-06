@@ -232,13 +232,16 @@ public class User {
         }
     }
 
-    public void removeRoutine(String name, Context context) {
-        for (Routine r : routinesList) {
-            if (r.getName().equals(name)){
-                routinesList.remove(r);
-                r.removeRoutineDB(context);
-                return;
+    public long removeRoutine(Context context) {
+        RoutineDAO routineDAO = new RoutineDAO(context);
+        try{
+            long id = routineDAO.delete(this.id);
+            if (id == -1) {
+                return -1;
             }
+            return id;
+        } catch (Exception e) {
+            return -1;
         }
     }
 }
