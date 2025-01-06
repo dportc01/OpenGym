@@ -23,6 +23,7 @@ public class RoutineActivity extends AppCompatActivity {
 
     private TableLayout tableLayout;
     private Button btnAddSession;
+    private Button btnCloseRoutine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +33,11 @@ public class RoutineActivity extends AppCompatActivity {
         // Initialize views
         tableLayout = findViewById(R.id.table_layout);
         btnAddSession = findViewById(R.id.btn_add_session);
+        btnCloseRoutine = findViewById(R.id.btn_close_session);
 
         // Set listener for "Añadir Sesión" button
         btnAddSession.setOnClickListener(v -> promptForSessionDetails());
+        btnCloseRoutine.setOnClickListener(v -> closeRoutine());
     }
 
     // Prompt the user to enter session name and rest duration
@@ -169,6 +172,11 @@ public class RoutineActivity extends AppCompatActivity {
     public void onSessionSelection(String sessionName) {
         Intent intent = new Intent(RoutineActivity.this, SessionActivity.class);
         intent.putExtra("sessionName", sessionName);
+        startActivity(intent);
+    }
+
+    private void closeRoutine() {
+        Intent intent = new Intent(RoutineActivity.this, PrincipalActivity.class);
         startActivity(intent);
     }
 }

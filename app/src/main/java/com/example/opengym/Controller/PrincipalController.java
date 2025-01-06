@@ -33,8 +33,8 @@ public class PrincipalController {
         //controlledUser.importRoutine(filePath);
     }
 
-    public void removeUserRoutine(String routineName, Context context) {
-        controlledUser.removeRoutine(routineName, context);
+    public long removeUserRoutine(Context context) {
+        return controlledUser.removeRoutine(context);
     }
 
     public long addUserRoutine(Context context, String routineName, String routineDescription) {
@@ -45,7 +45,7 @@ public class PrincipalController {
         ArrayList<Routine> routinesList = controlledUser.getRoutinesDB(context);
         ArrayList<String> routinesNamesList = new ArrayList<>();
         for (Routine routine: routinesList) {
-            routinesNamesList.add(routine.getName());
+            routinesNamesList.add(routine.getName() + "," + routine.getDescription());
         }
         return routinesNamesList;
     }
