@@ -32,12 +32,14 @@ public class PrincipalActivity extends AppCompatActivity {
 
         tableLayout = findViewById(R.id.tableLayout);
         Button addRowButton = findViewById(R.id.add_row_button);
+        Button logOutButton = findViewById(R.id.logout_button);
 
         principalController = new PrincipalController(this, getIntent().getStringExtra("userName"));
 
         loadExistingRoutines();
 
         addRowButton.setOnClickListener(v -> showNameInputDialog());
+        logOutButton.setOnClickListener(v -> logOut());
     }
 
     public void onRoutineSelection(String routineName) {
@@ -62,21 +64,23 @@ public class PrincipalActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void askRemove(){
+    private void askRemove(View cardView){
         AlertDialog.Builder removePopUp = new AlertDialog.Builder(this);
         removePopUp.setTitle("Eliminar rutina")
                 .setMessage("¿Estás seguro de que quieres eliminar esta rutina?")
-                .setPositiveButton("Sí", (dialog, which) -> { removeRoutine(); })
+                .setPositiveButton("Sí", (dialog, which) -> { removeRoutine(cardView); })
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
-    private void removeRoutine(){//TODO
+    private void removeRoutine(View cardView){//TODO
         if (principalController.removeUserRoutine(this) == -1) {
             Toast.makeText(this, "No se ha podido eliminar la rutina", Toast.LENGTH_SHORT).show();
             
         } else {
             Toast.makeText(this, "Rutina eliminada", Toast.LENGTH_SHORT).show();
+            LinearLayout container = cardView.findViewById(R.id.delete_button);
+            container.removeView(cardView);
         }
     }
 
@@ -89,24 +93,7 @@ public class PrincipalActivity extends AppCompatActivity {
         TextView routineInfo = cardView.findViewById(R.id.info_button);
         routineInfo.setOnClickListener(v -> showRoutineDescription(routineDescription));
         TextView routineRemove = cardView.findViewById(R.id.delete_button);
-        routineRemove.setOnClickListener(v -> askRemove());
-
-        // Set click listener on the card
-        cardView.setOnClickListener(v -> {
-            Toast.makeText(this, "Rutina seleccionada: " + routineName, Toast.LENGTH_SHORT).show();
-            onRoutineSelection(routineName); // Navigate to the selected routine
-        });
-
-        // Add the card to the container
-        tableLayout.addView(cardView);
-    }
-
-    private void addNewRoutine(String routineName) {
-        // Inflate the card from the XML template
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View cardView = inflater.inflate(R.layout.routine_card, tableLayout, false);
-        TextView routineTextView = cardView.findViewById(R.id.routine_name);
-        routineTextView.setText(routineName);
+        routineRemove.setOnClickListener(v -> askRemove(cardView));
 
         // Set click listener on the card
         cardView.setOnClickListener(v -> {
@@ -148,11 +135,23 @@ public class PrincipalActivity extends AppCompatActivity {
                             Toast.makeText(this, "Ya existe una rutina con ese nombre", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            addNewRoutine(routineName); // Añadir la rutina con el nombre personalizado
+                            addNewRoutine(routineName, routineDescription); // Añadir la rutina con el nombre personalizado
                         }
                     }
                 })
                 .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void logOut() {
+        AlertDialog.Builder logOutPopUp = new AlertDialog.Builder(this);
+        logOutPopUp.setTitle("¿Quieres cerrar tu sesión?")
+                .setPositiveButton("Sí", (dialog, which) -> { 
+                    Intent intent = new Intent(PrincipalActivity.this, SignUpActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

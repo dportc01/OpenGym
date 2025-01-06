@@ -43,4 +43,6 @@ public class SignUpController {
             throw new IllegalArgumentException("Error creating user");
         }
     }
+
+    
 }
