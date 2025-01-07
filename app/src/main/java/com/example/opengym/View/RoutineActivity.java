@@ -19,14 +19,11 @@ import android.view.View;
 import com.example.opengym.Controller.RoutineController;
 import com.example.opengym.R;
 
-import java.util.ArrayList;
-
 public class RoutineActivity extends AppCompatActivity {
 
     private RoutineController controller;
     private TableLayout tableLayout;
     private Button btnAddSession;
-    private Button btnCloseRoutine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +33,9 @@ public class RoutineActivity extends AppCompatActivity {
         // Initialize views
         tableLayout = findViewById(R.id.table_layout);
         btnAddSession = findViewById(R.id.btn_add_session);
-        btnCloseRoutine = findViewById(R.id.btn_close_session);
 
         // Set listener for "Añadir Sesión" button
         btnAddSession.setOnClickListener(v -> promptForSessionDetails());
-        btnCloseRoutine.setOnClickListener(v -> closeRoutine());
 
         controller = new RoutineController(getIntent().getParcelableExtra("routine"));
 
@@ -112,10 +107,9 @@ public class RoutineActivity extends AppCompatActivity {
         builder.show();
     }
 
-    // Method to add session table dynamically with session details
-    private void addSessionTable(String sessionName, String restDuration) {
 
-        // Add the session details as a TextView
+    private void addSessionTable(String sessionName, String restDuration) {
+        // Add the session name and rest duration row
         TableRow sessionDetailsRow = new TableRow(this);
         TextView sessionDetailsText = new TextView(this);
         sessionDetailsText.setText(String.format("Sesión: %s | Descanso: %s minutos", sessionName, restDuration));
@@ -124,70 +118,79 @@ public class RoutineActivity extends AppCompatActivity {
         sessionDetailsRow.addView(sessionDetailsText);
         tableLayout.addView(sessionDetailsRow);
 
-        // Inflate the session table row layout
+        // Add the session table row below the session details row
         LayoutInflater inflater = LayoutInflater.from(this);
         View sessionTableRow = inflater.inflate(R.layout.session_table, null);
         TableRow tableRow = new TableRow(this);
         tableRow.addView(sessionTableRow);
         tableLayout.addView(tableRow);
 
-        // Add the "Añadir Ejercicio" row dynamically
-        addAddExerciseRow();
+        // Add the "Añadir Ejercicio" button row below the session table row
+        addAddExerciseRow(sessionDetailsRow);  // Pass the session row to add exercises below it
     }
 
-    // Method to add the "Añadir Ejercicio" buttons row
-    private void addAddExerciseRow() {
+
+    private void addAddExerciseRow(TableRow sessionDetailsRow) {
+        // Inflate the "Añadir Ejercicio" row layout with buttons
         LayoutInflater inflater = LayoutInflater.from(this);
         View addExerciseRow = inflater.inflate(R.layout.add_exercise, null);
 
+        // Create a TableRow to hold the "Añadir Ejercicio" buttons
         TableRow tableRow = new TableRow(this);
         tableRow.addView(addExerciseRow);
-        tableLayout.addView(tableRow);
 
-        // Set button listeners inside "Añadir Ejercicio"
+        // Add the exercise row below the session row
+        int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to place it after both the session and session table rows
+        tableLayout.addView(tableRow, index);
+
+        // Set button listeners for adding strength or duration exercises
         Button btnAddStrength = addExerciseRow.findViewById(R.id.btn_add_strength);
         Button btnAddDuration = addExerciseRow.findViewById(R.id.btn_add_duration);
 
-        btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow(addExerciseRow));
-
-        btnAddDuration.setOnClickListener(v -> addDurationExerciseRow(addExerciseRow));
+        btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow(addExerciseRow, sessionDetailsRow));
+        btnAddDuration.setOnClickListener(v -> addDurationExerciseRow(addExerciseRow, sessionDetailsRow));
     }
 
-    // Method to add strength exercise row
-    private void addStrengthExerciseRow(View addExerciseRow) {
-        // Remove the current "Añadir Ejercicio" row
+    private void addStrengthExerciseRow(View addExerciseRow, TableRow sessionDetailsRow) {
+        // Remove the "Añadir Ejercicio" row (which was clicked)
         tableLayout.removeView((View) addExerciseRow.getParent());
 
         // Inflate the strength exercise row layout
         LayoutInflater inflater = LayoutInflater.from(this);
         View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, null);
 
-        // Add the strength exercise row to the TableLayout
+        // Create a TableRow for the strength exercise
         TableRow tableRow = new TableRow(this);
         tableRow.addView(strengthExerciseRow);
-        tableLayout.addView(tableRow);
 
-        // Add the "Añadir Ejercicio" buttons row again
-        addAddExerciseRow();
+        // Add the exercise row below the sessionDetailsRow
+        int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to insert below session and session table
+        tableLayout.addView(tableRow, index);
+
+        // Add the "Añadir Ejercicio" buttons row again below the newly added exercise
+        addAddExerciseRow(sessionDetailsRow);
     }
 
-    // Method to add duration exercise row
-    private void addDurationExerciseRow(View addExerciseRow) {
-        // Remove the current "Añadir Ejercicio" row
+    private void addDurationExerciseRow(View addExerciseRow, TableRow sessionDetailsRow) {
+        // Remove the "Añadir Ejercicio" row (which was clicked)
         tableLayout.removeView((View) addExerciseRow.getParent());
 
         // Inflate the duration exercise row layout
         LayoutInflater inflater = LayoutInflater.from(this);
         View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_row, null);
 
-        // Add the duration exercise row to the TableLayout
+        // Create a TableRow for the duration exercise
         TableRow tableRow = new TableRow(this);
         tableRow.addView(durationExerciseRow);
-        tableLayout.addView(tableRow);
 
-        // Add the "Añadir Ejercicio" buttons row again
-        addAddExerciseRow();
+        // Add the exercise row below the sessionDetailsRow
+        int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to insert below session and session table
+        tableLayout.addView(tableRow, index);
+
+        // Add the "Añadir Ejercicio" buttons row again below the newly added exercise
+        addAddExerciseRow(sessionDetailsRow);
     }
+
 
     /* TODO Puede que lo tenga que recibir de la base de datos
     // Metodo para obtener lista de sesiones
@@ -202,9 +205,5 @@ public class RoutineActivity extends AppCompatActivity {
         Intent intent = new Intent(RoutineActivity.this, SessionActivity.class);
         intent.putExtra("sessionName", sessionName);
         startActivity(intent);
-    }
-
-    private void closeRoutine() {
-        finish();
     }
 }
