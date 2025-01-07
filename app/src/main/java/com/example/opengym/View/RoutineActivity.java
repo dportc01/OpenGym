@@ -92,6 +92,11 @@ public class RoutineActivity extends AppCompatActivity {
             if (sessionName.isEmpty() || restDuration.isEmpty()) {
                 Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
             } else {
+                // Add the session to the Routine session list
+                if (controller.addSession(this, sessionName, restDuration) == -1) {
+                    Toast.makeText(this, "Error al insertar, porfavor compruebe que el nombre no se repita", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 addSessionTable(sessionName, restDuration);
             }
         });
