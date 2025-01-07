@@ -50,4 +50,18 @@ public class PrincipalController {
         return routinesNamesList;
     }
 
+    /**
+     * Works by calling on <code>controlledUser</code>
+     * @param name routine name
+     * @return id of routine with the same name
+     */
+    public Routine getRoutine(String name) {
+        ArrayList<Routine> RoutineList = controlledUser.getRoutinesList();
+        for (Routine routine: RoutineList) {
+            if (routine.getName().equals(name)) {
+                return routine;
+            }
+        }
+        return null;
+    }
 }
