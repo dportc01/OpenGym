@@ -88,8 +88,7 @@ public class PrincipalActivity extends AppCompatActivity {
             
         } else {
             Toast.makeText(this, "Rutina eliminada", Toast.LENGTH_SHORT).show();
-            LinearLayout container = cardView.findViewById(R.id.delete_button);
-            container.removeView(cardView);
+            tableLayout.removeView(cardView);
         }
     }
 
