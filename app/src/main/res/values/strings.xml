@@ -17,4 +17,5 @@
     <string name="add_sesion">Añadir Sesión</string>
     <string name="sign_out">Cerrar Sesión</string>
     <string name="i">i</string>
+    <string name="cerrar_rutina">Cerrar Rutina</string>
 </resources>

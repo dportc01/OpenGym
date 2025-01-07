@@ -44,7 +44,7 @@
             android:layout_weight="2"
             android:backgroundTint="@color/black"
             android:padding="12dp"
-            android:text="Añadir Sesión"
+            android:text="@string/add_sesion"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
@@ -56,7 +56,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/black"
             android:padding="12dp"
-            android:text="Cerrar Rutina"
+            android:text="@string/cerrar_rutina"
             android:textColor="@color/white"
             android:textStyle="bold" />
     </LinearLayout>
