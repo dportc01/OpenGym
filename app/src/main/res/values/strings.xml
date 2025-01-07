@@ -15,5 +15,6 @@
     <string name="peso">Peso</string>
     <string name="duracion">Duración</string>
     <string name="add_sesion">Añadir Sesión</string>
+    <string name="sign_out">Cerrar Sesión</string>
     <string name="i">i</string>
 </resources>

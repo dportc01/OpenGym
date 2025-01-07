@@ -128,6 +128,9 @@ public class PrincipalActivity extends AppCompatActivity {
                 .setPositiveButton("Aceptar", (dialog, which) -> {
                     String routineName = nameInput.getText().toString().trim();
                     String routineDescription = descriptionInput.getText().toString().trim();
+                    if(routineDescription.isEmpty()){
+                        routineDescription = "No hay descripción";
+                    }
                     if (routineName.isEmpty()) {
                         Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                     } else {
