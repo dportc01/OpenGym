@@ -1,11 +1,7 @@
 package com.example.opengym.View;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +22,6 @@ import com.example.opengym.Controller.PrincipalController;
 
 import java.util.List;
 
-import androidx.appcompat.widget.Toolbar;
-
 public class PrincipalActivity extends AppCompatActivity {
     private PrincipalController principalController;
     private TableLayout tableLayout;
@@ -36,9 +30,6 @@ public class PrincipalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.routine_selector);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         tableLayout = findViewById(R.id.tableLayout);
         Button addRowButton = findViewById(R.id.add_row_button);
@@ -169,10 +160,7 @@ public class PrincipalActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_overflow, menu);
-        MenuItem item = menu.findItem(R.id.sign_out);
-        SpannableString title = new SpannableString(item.getTitle());
-        title.setSpan(new ForegroundColorSpan(Color.WHITE), 0, title.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        item.setTitle(title);
+
         return true;
     }
 
