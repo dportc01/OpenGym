@@ -16,11 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.example.opengym.Controller.RoutineController;
 import com.example.opengym.R;
+
+import java.util.ArrayList;
 
 public class RoutineActivity extends AppCompatActivity {
 
-
+    private RoutineController controller;
     private TableLayout tableLayout;
     private Button btnAddSession;
     private Button btnCloseRoutine;
@@ -38,6 +41,26 @@ public class RoutineActivity extends AppCompatActivity {
         // Set listener for "Añadir Sesión" button
         btnAddSession.setOnClickListener(v -> promptForSessionDetails());
         btnCloseRoutine.setOnClickListener(v -> closeRoutine());
+
+        controller = new RoutineController(getIntent().getParcelableExtra("routine"));
+
+        loadSessions();
+    }
+
+    private void loadSessions() {
+
+        controller.loadSessions(this);
+
+        int i = 0;
+        String sessionName = controller.getSessionName(i);
+        String sessionRest = controller.getSessionRest(i);
+
+        while (sessionName != null & sessionRest != null) {
+            addSessionTable(sessionName, sessionRest);
+            i++;
+            sessionName = controller.getSessionName(i);
+            sessionRest = controller.getSessionName(i);
+        }
     }
 
     // Prompt the user to enter session name and rest duration
@@ -176,7 +199,6 @@ public class RoutineActivity extends AppCompatActivity {
     }
 
     private void closeRoutine() {
-        Intent intent = new Intent(RoutineActivity.this, PrincipalActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

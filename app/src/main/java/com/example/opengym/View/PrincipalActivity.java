@@ -44,7 +44,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
     public void onRoutineSelection(String routineName) {
         Intent intent = new Intent(PrincipalActivity.this, RoutineActivity.class);
-        intent.putExtra("routineName", routineName);
+        intent.putExtra("routine", principalController.getRoutine(routineName));
         startActivity(intent);
     }
 

@@ -1,13 +1,18 @@
 package com.example.opengym.Model.Entities;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 
 import com.example.opengym.Model.DAO.RoutineDAO;
+import com.example.opengym.Model.DAO.SessionDAO;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Routine {
+public class Routine implements Parcelable {
     private long id;
     private String name;
     private String description;
@@ -31,9 +36,30 @@ public class Routine {
         this.sessionsList = new ArrayList<Session>();
     }
 
-    public void getInfoDB() {
-        // TODO implement here
+    protected Routine(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        description = in.readString();
     }
+
+    public static final Creator<Routine> CREATOR = new Creator<Routine>() {
+        @Override
+        public Routine createFromParcel(Parcel in) {
+            return new Routine(in);
+        }
+
+        @Override
+        public Routine[] newArray(int size) {
+            return new Routine[size];
+        }
+    };
+
+
+    public void setInfoDB(Context context, long id) {
+        SessionDAO sessionTable = new SessionDAO(context);
+        this.sessionsList = sessionTable.readAll(id);
+    }
+
 
     public void removeSession(String name) {
         if (sessionsList.isEmpty()){
@@ -106,5 +132,17 @@ public class Routine {
     public long getId() {
 
         return this.id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(description);
     }
 }
