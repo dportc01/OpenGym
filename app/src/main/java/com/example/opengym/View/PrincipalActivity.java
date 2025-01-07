@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.opengym.R; // TODO Cambiar
+import com.example.opengym.R;
 import com.example.opengym.Controller.PrincipalController;
 
 import java.util.List;
@@ -160,7 +160,6 @@ public class PrincipalActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_overflow, menu);
-
         return true;
     }
 
@@ -169,7 +168,4 @@ public class PrincipalActivity extends AppCompatActivity {
         logOut();
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }

@@ -2,34 +2,38 @@ package com.example.opengym.Controller;
 
 import android.content.Context;
 
+import com.example.opengym.Model.DAO.UserDAO;
 import com.example.opengym.Model.Entities.IExercise;
 import com.example.opengym.Model.Entities.Session;
+import com.example.opengym.Model.Entities.ExerciseFactory;
+import com.example.opengym.Model.DAO.SessionDAO;
+
+
 
 import java.util.ArrayList;
+
 
 public class SessionController {
     private final Session controlledSession;
 
-    public SessionController(Context context) {
-        this.controlledSession = new Session();
-        controlledSession.getInfoDB();
+    public SessionController(Context context , String sessionName) {
+        SessionDAO sessionDAO = new SessionDAO(context);
+        controlledSession = new Session();
+        // controlledSession = sessionDAO.read(sessionNAme);
     }
 
-    public String getSessionName() {
-        return controlledSession.getName();
+    public long addStrenghExercise(Context context, String exerciseName, int sets, int reps, float weight) {
+        ExerciseFactory factory = new ExerciseFactory();
+        IExercise exercise = factory.createExercise(exerciseName, sets, reps, weight);
+        return controlledSession.addStrengthExercise(exercise);
     }
 
-    public void removeSessionExercise(String name) {
-        controlledSession.removeExercise(name);
+    public long addTimedExercise(Context context, String exerciseName, int duration) {
+        ExerciseFactory factory = new ExerciseFactory();
+        IExercise exercise = factory.createExercise(exerciseName, duration);
+        return controlledSession.addTimedExercise(exercise);
     }
-
-    /* TODO No puede recibir ejercicios
-    public void addSessionExercise(IExercise exercise) {
-        controlledSession.addExercise(exercise);
-    }
-
-     */
-
+    
     public ArrayList<String> getSessionExercises() {
         ArrayList<IExercise> exerciseList = controlledSession.getExercisesList();
         ArrayList<String> exerciseNames = new ArrayList<>();

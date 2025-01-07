@@ -1,8 +1,11 @@
 package com.example.opengym.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -10,6 +13,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.opengym.Controller.RoutineController;
+import com.example.opengym.Controller.SessionController;
 import com.example.opengym.R;
 
 public class RoutineActivity extends AppCompatActivity {
@@ -51,6 +57,7 @@ public class RoutineActivity extends AppCompatActivity {
         String sessionRest = controller.getSessionRest(i);
 
         while (sessionName != null & sessionRest != null) {
+            SessionController sessionController = new SessionController(this, sessionName);
             addSessionTable(sessionName, sessionRest);
             i++;
             sessionName = controller.getSessionName(i);
@@ -124,13 +131,13 @@ public class RoutineActivity extends AppCompatActivity {
         TableRow tableRow = new TableRow(this);
         tableRow.addView(sessionTableRow);
         tableLayout.addView(tableRow);
-
+        SessionController sesscontroller = new SessionController(this, sessionName);
         // Add the "Añadir Ejercicio" button row below the session table row
-        addAddExerciseRow(sessionDetailsRow);  // Pass the session row to add exercises below it
+        addAddExerciseRow(sessionDetailsRow, sesscontroller);  // Pass the session row to add exercises below it
     }
 
 
-    private void addAddExerciseRow(TableRow sessionDetailsRow) {
+    private void addAddExerciseRow(TableRow sessionDetailsRow, SessionController sesscontroller) {
         // Inflate the "Añadir Ejercicio" row layout with buttons
         LayoutInflater inflater = LayoutInflater.from(this);
         View addExerciseRow = inflater.inflate(R.layout.add_exercise, null);
@@ -147,31 +154,11 @@ public class RoutineActivity extends AppCompatActivity {
         Button btnAddStrength = addExerciseRow.findViewById(R.id.btn_add_strength);
         Button btnAddDuration = addExerciseRow.findViewById(R.id.btn_add_duration);
 
-        btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow(addExerciseRow, sessionDetailsRow));
-        btnAddDuration.setOnClickListener(v -> addDurationExerciseRow(addExerciseRow, sessionDetailsRow));
+        btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow(addExerciseRow, sessionDetailsRow, sesscontroller));
+        btnAddDuration.setOnClickListener(v -> addDurationExerciseRow(addExerciseRow, sessionDetailsRow, sesscontroller));
     }
 
-    private void addStrengthExerciseRow(View addExerciseRow, TableRow sessionDetailsRow) {
-        // Remove the "Añadir Ejercicio" row (which was clicked)
-        tableLayout.removeView((View) addExerciseRow.getParent());
-
-        // Inflate the strength exercise row layout
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, null);
-
-        // Create a TableRow for the strength exercise
-        TableRow tableRow = new TableRow(this);
-        tableRow.addView(strengthExerciseRow);
-
-        // Add the exercise row below the sessionDetailsRow
-        int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to insert below session and session table
-        tableLayout.addView(tableRow, index);
-
-        // Add the "Añadir Ejercicio" buttons row again below the newly added exercise
-        addAddExerciseRow(sessionDetailsRow);
-    }
-
-    private void addDurationExerciseRow(View addExerciseRow, TableRow sessionDetailsRow) {
+    private void addDurationExerciseRow(View addExerciseRow, TableRow sessionDetailsRow, SessionController sesscontroller) {
         // Remove the "Añadir Ejercicio" row (which was clicked)
         tableLayout.removeView((View) addExerciseRow.getParent());
 
@@ -187,8 +174,80 @@ public class RoutineActivity extends AppCompatActivity {
         int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to insert below session and session table
         tableLayout.addView(tableRow, index);
 
+        addDurationExerciseDB(this, durationExerciseRow, sesscontroller);
+
         // Add the "Añadir Ejercicio" buttons row again below the newly added exercise
-        addAddExerciseRow(sessionDetailsRow);
+        addAddExerciseRow(sessionDetailsRow, sesscontroller);
+    }
+
+    private void addDurationExerciseDB(Context context, View durationExerciseRow, SessionController sesscontroller) {
+        EditText etName = durationExerciseRow.findViewById(R.id.et_name);
+        EditText etDuration = durationExerciseRow.findViewById(R.id.et_duration);
+
+        String name = etName.getText().toString().trim();
+        String durationTI = etDuration.getText().toString().trim();
+
+        if (name.isEmpty() || durationTI.isEmpty()) {
+            Toast.makeText(context, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            int duration = Integer.parseInt(durationTI);
+            sesscontroller.addTimedExercise(context, name, duration);
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(context, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void addStrengthExerciseRow(View addExerciseRow, TableRow sessionDetailsRow, SessionController sesscontroller) {
+        // Remove the "Añadir Ejercicio" row (which was clicked)
+        tableLayout.removeView((View) addExerciseRow.getParent());
+
+        // Inflate the strength exercise row layout
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, null);
+
+        // Create a TableRow for the strength exercise
+        TableRow tableRow = new TableRow(this);
+        tableRow.addView(strengthExerciseRow);
+
+        // Add the exercise row below the sessionDetailsRow
+        int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to insert below session and session table
+        tableLayout.addView(tableRow, index);
+
+        addStrengthExerciseDB(this, strengthExerciseRow, sesscontroller);
+
+        // Add the "Añadir Ejercicio" buttons row again below the newly added exercise
+        addAddExerciseRow(sessionDetailsRow, sesscontroller);
+    }
+
+    public void addStrengthExerciseDB(Context context, View strengthExerciseRow, SessionController sesscontroller) {
+        EditText etName = strengthExerciseRow.findViewById(R.id.et_name);
+        EditText etSeries = strengthExerciseRow.findViewById(R.id.et_series);
+        EditText etReps = strengthExerciseRow.findViewById(R.id.et_reps);
+        EditText etWeight = strengthExerciseRow.findViewById(R.id.et_weight);
+
+        String name = etName.getText().toString().trim();
+        String seriesStr = etSeries.getText().toString().trim();
+        String repsStr = etReps.getText().toString().trim();
+        String weightStr = etWeight.getText().toString().trim();
+
+        if (name.isEmpty() || seriesStr.isEmpty() || repsStr.isEmpty() || weightStr.isEmpty()) {
+            Toast.makeText(context, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            int series = Integer.parseInt(seriesStr);
+            int reps = Integer.parseInt(repsStr);
+            int weight = Integer.parseInt(weightStr);
+            sesscontroller.addStrenghExercise(context, name, series, reps, weight);
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(context, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -201,9 +260,82 @@ public class RoutineActivity extends AppCompatActivity {
      */
 
     // TODO Misma historia que Principal, boton -> pasar a sesion
-    public void onSessionSelection(String sessionName) {
+    public void onSessionSelection (String sessionName){
         Intent intent = new Intent(RoutineActivity.this, SessionActivity.class);
         intent.putExtra("sessionName", sessionName);
         startActivity(intent);
+    }
+
+    private void closeRoutine () {
+        Intent intent = new Intent(RoutineActivity.this, PrincipalActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void removeSessionPopUp () {
+        final EditText nameInput = new EditText(this);
+        nameInput.setHint("Escribe el nombre de la sesion");
+
+        AlertDialog.Builder removePopUp = new AlertDialog.Builder(this);
+        removePopUp.setTitle("¿Que sesion quieres borrar?")
+                .setView(nameInput)
+                .setPositiveButton("Aceptar", (dialog, which) -> {
+                    String sessionName = nameInput.getText().toString().trim();
+                    if (sessionName.isEmpty()) {
+                        Toast.makeText(this, "Introduce el nombre de una sesion", Toast.LENGTH_SHORT).show();
+                    } else {
+                        deleteSessionByName(sessionName);
+                    }
+                })
+                .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void deleteSessionByName (String sessionName)
+    { // TODO borra las sesiones despues de cambiar pestaña
+        boolean sessionFound = false;
+        for (int i = 0; i < tableLayout.getChildCount(); i++) {
+            View child = tableLayout.getChildAt(i);
+            if (child instanceof TableRow) {
+                TableRow row = (TableRow) child;
+                TextView sessionDetailsText = (TextView) row.getChildAt(0);
+                String displayedName = sessionDetailsText.getText().toString();
+                if (displayedName.contains(sessionName)) {
+                    tableLayout.removeView(row); // Borra siempre la primera linea de la primera sesion
+                    sessionFound = true;
+                    break;
+                }
+            }
+        }
+        if (sessionFound) {
+            if (controller.removeRoutineSession(sessionName, this) == -1) {
+                Toast.makeText(this, "No se pudo eliminar la sesion", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Sesión eliminada: " + sessionName, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Sesión no encontrada", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        getMenuInflater().inflate(R.menu.menu_routine, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected (@NonNull MenuItem item){
+        int id = item.getItemId();
+        if (id == R.id.close_routine) {
+            closeRoutine();
+            return true;
+        } else if (id == R.id.remove_routine) {
+            removeSessionPopUp();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

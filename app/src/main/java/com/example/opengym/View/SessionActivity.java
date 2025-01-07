@@ -17,7 +17,7 @@ public class SessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.session_viewer);
         // Context sessionName = getIntent().getStringExtra("sessionName");// TODO Obtener sesión de la base de datos o del modelo, otra vez
-        sessionController = new SessionController(this);
+        sessionController = new SessionController(this, "Borrar");
     }
 
     public ArrayList<String> getScreenExercises(){

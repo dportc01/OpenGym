@@ -78,4 +78,15 @@ public class Session {
         exercisesList.add(exercise);
     }
 
+    public long addStrengthExercise(IExercise STexercise){
+        exercisesList.add(STexercise);
+        return 0; // TODO cambiar lo que devuelve cuando funcione con el DAO
+    }
+
+
+    public long addTimedExercise(IExercise TIexercise){
+        exercisesList.add(TIexercise);
+        return 0; // TODO cambiar cuando funcione con el DAO
+    }
+
 }
