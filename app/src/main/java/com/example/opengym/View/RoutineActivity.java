@@ -3,6 +3,8 @@ package com.example.opengym.View;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -10,6 +12,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -205,5 +209,55 @@ public class RoutineActivity extends AppCompatActivity {
         Intent intent = new Intent(RoutineActivity.this, SessionActivity.class);
         intent.putExtra("sessionName", sessionName);
         startActivity(intent);
+    }
+
+    private void closeRoutine(){
+        Intent intent = new Intent(RoutineActivity.this, PrincipalActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void removeSessionPopUp(){
+        final EditText nameInput = new EditText(this);
+        nameInput.setHint("Escribe el nombre de la sesion");
+
+        AlertDialog.Builder removePopUp = new AlertDialog.Builder(this);
+        removePopUp.setTitle("¿Que sesion quieres borrar?")
+                .setPositiveButton("Aceptar", (dialog, which) -> {
+                    String routineName = nameInput.getText().toString().trim();
+                    if (routineName.isEmpty()) {
+                        Toast.makeText(this, "Introduce el nombre de una sesion", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (controller.removeRoutineSession(routineName, this) == -1) { // Añadir la rutina a la base de datos
+                            Toast.makeText(this, "No existe la sesion que quieres borrar", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(this, "Sesion eliminada", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_routine, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.close_routine:
+                closeRoutine();
+                return true;
+            case R.id.remove_routine:
+                removeSessionPopUp();
+                return true;
+            default:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

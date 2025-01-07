@@ -3,6 +3,7 @@ package com.example.opengym.Model.Entities;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -61,16 +62,26 @@ public class Routine implements Parcelable {
     }
 
 
-    public void removeSession(String name) {
+    public long removeSession(String name, Context context) {
+        SessionDAO sessionDAO = new SessionDAO(context);
         if (sessionsList.isEmpty()){
-            return;
+            return -1;
         }
-        for (Session session : sessionsList) {
-            if (session.getName().equals(name)) {
-                sessionsList.remove(session);
-                return;
+        try {
+            for (Session session : sessionsList) {
+                if (session.getName().equals(name)) {
+                    long id = sessionDAO.delete(session.getId());
+                    if (id == -1) {
+                        return -1;
+                    }
+                    sessionsList.remove(session);
+                }
             }
+        }    catch (Exception e) {
+            Log.e("User", e.getMessage(), e);
+            return -1;
         }
+        return 0;
     }
 
     public long addSession(Context context, String sessionName, Date date, int restDuration) {

@@ -50,8 +50,8 @@ public class RoutineController {
         return controlledRoutine.getSessionsList();
     }
 
-    public void removeRoutineSession(String name) {
-        controlledRoutine.removeSession(name);
+    public long removeRoutineSession(String name, Context context) {
+        return controlledRoutine.removeSession(name, context);
     }
 
     /* TODO Cambiar para pasar todos los parametros que necesite

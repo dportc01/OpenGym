@@ -61,6 +61,7 @@ public class SessionDAO implements GenericDAO<Session> {
      */
     @Override
     public int delete(long id) {
+        db = dbHelper.getWritableDatabase();
 
         String selection = OpenGymDbContract.SessionsTable.COLUMN_ID + " LIKE ?";
 
