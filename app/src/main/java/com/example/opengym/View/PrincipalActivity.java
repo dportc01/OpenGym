@@ -37,9 +37,6 @@ public class PrincipalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.routine_selector);
 
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
         tableLayout = findViewById(R.id.tableLayout);
         Button addRowButton = findViewById(R.id.add_row_button);
 
