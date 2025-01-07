@@ -1,8 +1,14 @@
 package com.example.opengym.View;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.content.Intent;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +17,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,7 +26,7 @@ import com.example.opengym.Controller.PrincipalController;
 
 import java.util.List;
 
-import org.w3c.dom.Text;
+import androidx.appcompat.widget.Toolbar;
 
 public class PrincipalActivity extends AppCompatActivity {
     private PrincipalController principalController;
@@ -30,16 +37,17 @@ public class PrincipalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.routine_selector);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         tableLayout = findViewById(R.id.tableLayout);
         Button addRowButton = findViewById(R.id.add_row_button);
-        Button logOutButton = findViewById(R.id.logout_button);
 
         principalController = new PrincipalController(this, getIntent().getStringExtra("userName"));
 
         loadExistingRoutines();
 
         addRowButton.setOnClickListener(v -> showNameInputDialog());
-        logOutButton.setOnClickListener(v -> logOut());
     }
 
     public void onRoutineSelection(String routineName) {
@@ -157,4 +165,23 @@ public class PrincipalActivity extends AppCompatActivity {
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_overflow, menu);
+        MenuItem item = menu.findItem(R.id.sign_out);
+        SpannableString title = new SpannableString(item.getTitle());
+        title.setSpan(new ForegroundColorSpan(Color.WHITE), 0, title.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        item.setTitle(title);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        logOut();
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
 }

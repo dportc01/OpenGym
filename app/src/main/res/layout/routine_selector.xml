@@ -1,77 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp"
-    android:id="@+id/routine_selector"
     android:background="@color/white">
 
-    <!-- Scrollable Table -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/purple"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Tus rutinas"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/add_row_button"
-        android:layout_marginBottom="16dp">
-
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="8dp">
         <TableLayout
             android:id="@+id/tableLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:stretchColumns="0">
-
-            <!-- Header Row -->
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/purple"
-                android:padding="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/rutinas"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="8dp"
-                    android:textColor="@color/white"
-                    android:gravity="center" />
-            </TableRow>
-
         </TableLayout>
     </ScrollView>
 
-    <!-- Button to Add Rows -->
-
-    <!-- Button to Logout -->
-
     <Button
         android:id="@+id/add_row_button"
-        android:layout_width="212dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="51dp"
-        android:layout_marginBottom="16dp"
-        android:layout_toStartOf="@+id/logout_button"
-        android:layout_weight="1"
-        android:backgroundTint="@color/black"
-        android:padding="12dp"
         android:text="@string/nuevarutina"
-        android:textColor="@color/white"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/logout_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/black"
-        android:padding="12dp"
-        android:text="Cerrar Sesión"
         android:textColor="@color/white"
-        android:textStyle="bold" />
-</RelativeLayout>
+        android:padding="12dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+</LinearLayout>
