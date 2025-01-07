@@ -2,8 +2,10 @@ package com.example.opengym.Controller;
 
 import android.content.Context;
 
+import com.example.opengym.Model.Entities.IExercise;
 import com.example.opengym.Model.Entities.Routine;
 import com.example.opengym.Model.Entities.Session;
+import com.example.opengym.Model.Entities.ExerciseFactory;
 
 import java.util.ArrayList;
 
@@ -21,6 +23,7 @@ public class RoutineController {
     public long addSession(Context context, String sessionName, String restDuration) {
         return controlledRoutine.addSession(context, sessionName, null, Integer.parseInt(restDuration));
     }
+
 
     public String getSessionName(int position) {
         try {
