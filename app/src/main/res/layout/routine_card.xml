@@ -37,6 +37,7 @@
             android:textStyle="bold"
             android:elevation="4dp" />
 
+
         <TextView 
             android:id="@+id/delete_button"
             android:layout_width="32dp"

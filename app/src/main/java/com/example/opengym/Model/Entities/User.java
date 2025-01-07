@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.example.opengym.Model.DAO.RoutineDAO;
+import com.example.opengym.Model.DAO.UserDAO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -224,24 +225,31 @@ public class User {
                 return -1;
             }
 
-            this.setId(id);
+            routinesList.add(newRoutine);
+            newRoutine.setId(id);
             return id;
         }
         catch (Exception e) {
+            Log.e("User", e.getMessage(), e);
             return -1;
         }
     }
 
-    public long removeRoutine(Context context) {
+    public long removeRoutine(String routineName, Context context) {
         RoutineDAO routineDAO = new RoutineDAO(context);
         try{
-            long id = routineDAO.delete(this.id);
-            if (id == -1) {
-                return -1;
+            for (Routine routine : routinesList) {
+                if (routine.getName().equals(routineName)) {
+                    long id = routineDAO.delete(routine.getId());
+                    if (id == -1) {
+                        return -1;
+                    }
+                    routinesList.remove(routine);
+                }
             }
-            return id;
         } catch (Exception e) {
             return -1;
         }
+        return id;
     }
 }

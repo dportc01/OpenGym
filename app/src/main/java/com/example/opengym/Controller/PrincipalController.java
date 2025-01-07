@@ -33,8 +33,8 @@ public class PrincipalController {
         //controlledUser.importRoutine(filePath);
     }
 
-    public long removeUserRoutine(Context context) {
-        return controlledUser.removeRoutine(context);
+    public long removeUserRoutine(String routineName, Context context) {
+        return controlledUser.removeRoutine(routineName ,context);
     }
 
     public long addUserRoutine(Context context, String routineName, String routineDescription) {
