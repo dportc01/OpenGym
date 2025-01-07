@@ -40,6 +40,8 @@ public class RoutineDAO implements GenericDAO<Routine> {
     @Override
     public int delete(long id) {
 
+        db = dbHelper.getWritableDatabase();
+
         String selection = OpenGymDbContract.RoutinesTable.COLUMN_ID + " LIKE ?";
 
         String[] selectionArgs = {String.valueOf(id)};

@@ -248,6 +248,7 @@ public class User {
                 }
             }
         } catch (Exception e) {
+            Log.e("User", e.getMessage(), e);
             return -1;
         }
         return id;
