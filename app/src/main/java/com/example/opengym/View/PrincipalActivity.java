@@ -82,7 +82,8 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 
     private void removeRoutine(View cardView){//TODO
-        if (principalController.removeUserRoutine(this) == -1) {
+        TextView routineNameTextView = cardView.findViewById(R.id.routine_name);
+        if (principalController.removeUserRoutine(routineNameTextView.toString(),this) == -1) {
             Toast.makeText(this, "No se ha podido eliminar la rutina", Toast.LENGTH_SHORT).show();
             
         } else {
