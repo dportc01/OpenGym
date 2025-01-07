@@ -31,8 +31,8 @@ public final class OpenGymDbContract {
                     SessionsTable.COLUMN_RESTDURATION + " INTEGER, " +
                     SessionsTable.COLUMN_DATE + " TEXT, " +
                     SessionsTable.COLUMN_ROUTINEID + " INTEGER, " +
-                    "FOREIGN KEY (" + SessionsTable.COLUMN_ROUTINEID + ") REFERENCES " + RoutinesTable.TABLE_NAME + "(" + RoutinesTable.COLUMN_ID + "));" +
-                    "UNIQUE (" + SessionsTable.COLUMN_NAME + ", " + SessionsTable.COLUMN_ROUTINEID + ", " + SessionsTable.COLUMN_DATE + "));";
+                    "FOREIGN KEY (" + SessionsTable.COLUMN_ROUTINEID + ") REFERENCES " + RoutinesTable.TABLE_NAME + "(" + RoutinesTable.COLUMN_ID + "), " +
+                    "UNIQUE (" + SessionsTable.COLUMN_NAME + ", " + SessionsTable.COLUMN_DATE + ", " + SessionsTable.COLUMN_ROUTINEID + "));";
 
     public static final String SQL_CREATE_STRENGTHEXERCISE_ENTRIES =
             "CREATE TABLE " + StrengthExerciseTable.TABLE_NAME + " (" +

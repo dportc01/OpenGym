@@ -82,7 +82,7 @@ public class Routine implements Parcelable {
         try {
             long sessionId = sessionTable.create(session, this.id);
 
-            if (id == -1) {
+            if (sessionId == -1) {
                 return -1;
             }
 
