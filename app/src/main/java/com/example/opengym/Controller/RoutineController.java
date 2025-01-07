@@ -18,6 +18,10 @@ public class RoutineController {
         controlledRoutine.setInfoDB(context, controlledRoutine.getId());
     }
 
+    public long addSession(Context context, String sessionName, String restDuration) {
+        return controlledRoutine.addSession(context, sessionName, null, Integer.parseInt(restDuration));
+    }
+
     public String getSessionName(int position) {
         try {
             return controlledRoutine.getSessionsList().get(position).getName();
