@@ -81,7 +81,7 @@ public class Routine implements Parcelable {
             Log.e("User", e.getMessage(), e);
             return -1;
         }
-        return 0;
+        return -1;
     }
 
     public long addSession(Context context, String sessionName, Date date, int restDuration) {

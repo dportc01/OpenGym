@@ -1,5 +1,6 @@
 package com.example.opengym.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -223,22 +224,45 @@ public class RoutineActivity extends AppCompatActivity {
 
         AlertDialog.Builder removePopUp = new AlertDialog.Builder(this);
         removePopUp.setTitle("¿Que sesion quieres borrar?")
+                .setView(nameInput)
                 .setPositiveButton("Aceptar", (dialog, which) -> {
-                    String routineName = nameInput.getText().toString().trim();
-                    if (routineName.isEmpty()) {
+                    String sessionName = nameInput.getText().toString().trim();
+                    if (sessionName.isEmpty()) {
                         Toast.makeText(this, "Introduce el nombre de una sesion", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (controller.removeRoutineSession(routineName, this) == -1) { // Añadir la rutina a la base de datos
-                            Toast.makeText(this, "No existe la sesion que quieres borrar", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(this, "Sesion eliminada", Toast.LENGTH_SHORT).show();
-                        }
+                        deleteSessionByName(sessionName);
                     }
                 })
                 .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
                 .show();
     }
+
+    private void deleteSessionByName(String sessionName) { // TODO borra las sesiones despues de cambiar pestaña
+        boolean sessionFound = false;
+        for (int i = 0; i < tableLayout.getChildCount(); i++) {
+            View child = tableLayout.getChildAt(i);
+            if (child instanceof TableRow) {
+                TableRow row = (TableRow) child;
+                TextView sessionDetailsText = (TextView) row.getChildAt(0);
+                String displayedName = sessionDetailsText.getText().toString();
+                if (displayedName.contains(sessionName)) {
+                    tableLayout.removeView(row); // Borra siempre la primera linea de la primera sesion
+                    sessionFound = true;
+                    break;
+                }
+            }
+        }
+        if (sessionFound) {
+            if(controller.removeRoutineSession(sessionName, this) == -1){
+                Toast.makeText(this, "No se pudo eliminar la sesion", Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(this, "Sesión eliminada: " + sessionName, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Sesión no encontrada", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -248,16 +272,15 @@ public class RoutineActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.close_routine:
-                closeRoutine();
-                return true;
-            case R.id.remove_routine:
-                removeSessionPopUp();
-                return true;
-            default:
-                return true;
+        int id = item.getItemId();
+        if (id == R.id.close_routine) {
+            closeRoutine();
+            return true;
+        } else if (id == R.id.remove_routine) {
+            removeSessionPopUp();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }
