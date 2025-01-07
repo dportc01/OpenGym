@@ -73,10 +73,27 @@ public class Routine implements Parcelable {
         }
     }
 
-    public void addSession(String sessionName, Date date, int restDuration) {
+    public long addSession(Context context, String sessionName, Date date, int restDuration) {
+
         ArrayList<IExercise> exercises = new ArrayList<>();
         Session session = new Session(sessionName, date, restDuration, exercises);
-        sessionsList.add(session);
+        SessionDAO sessionTable = new SessionDAO(context);
+
+        try {
+            long sessionId = sessionTable.create(session, this.id);
+
+            if (sessionId == -1) {
+                return -1;
+            }
+
+            session.setId(sessionId);
+
+            sessionsList.add(session);
+            return sessionId;
+        }
+        catch (Exception e) {
+            return -1;
+        }
     }
 
     // Moví este metodo a Users ya que users necesita RoutineDAO para getRoutinesDB sry UwU
