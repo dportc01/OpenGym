@@ -18,4 +18,6 @@
     <string name="sign_out">Cerrar Sesión</string>
     <string name="i">i</string>
     <string name="cerrar_rutina">Cerrar Rutina</string>
+    <string name="guardar">Guardar</string>
+    <string name="x">X</string>
 </resources>

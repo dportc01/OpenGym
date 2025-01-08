@@ -25,6 +25,7 @@
         <activity android:name=".View.SignUpActivity" />
         <activity android:name=".View.PrincipalActivity" />
         <activity android:name=".View.RoutineActivity" />
+        <activity android:name=".View.SessionEditorActivity" />
     </application>
 
 </manifest>

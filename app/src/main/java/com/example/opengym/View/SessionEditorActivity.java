@@ -1,7 +1,8 @@
 package com.example.opengym.View;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -10,9 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.LayoutInflater;
-import android.view.View;
 
 import com.example.opengym.Controller.SessionController;
 import com.example.opengym.R;
@@ -27,121 +25,78 @@ public class SessionEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.session_editor);
 
-        // Initialize views
+        // Inicializar variables y vistas
+        initViews();
+
+        // Obtener los datos de la sesión
+        String sessionName = getIntent().getStringExtra("session_name");
+        String restDuration = getIntent().getStringExtra("rest_duration");
+        long sessionId = getIntent().getLongExtra("session_id", -1);
+
+        // Crear controlador para la sesión
+        sessionController = new SessionController(this, sessionId);
+
+        // Mostrar la tabla inicial con los detalles de la sesión
+        addSessionTable(sessionName, restDuration);
+    }
+
+    // Inicialización de vistas y configuración de listeners
+    private void initViews() {
         tableLayout = findViewById(R.id.table_layout_editor);
 
+        Button btnAddStrength = findViewById(R.id.btn_add_strength);
+        Button btnAddDuration = findViewById(R.id.btn_add_duration);
 
+        btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow());
+        btnAddDuration.setOnClickListener(v -> addDurationExerciseRow());
     }
 
-    //private void addSessionTable(String sessionName, String restDuration) {
-    //    // Add the session name and rest duration row
-    //    TableRow sessionDetailsRow = new TableRow(this);
-    //    TextView sessionDetailsText = new TextView(this);
-    //    sessionDetailsText.setText(String.format("Sesión: %s | Descanso: %s minutos", sessionName, restDuration));
-    //    sessionDetailsText.setTextSize(16);
-    //    sessionDetailsText.setPadding(8, 8, 8, 8);
-    //    sessionDetailsRow.addView(sessionDetailsText);
-    //    tableLayout.addView(sessionDetailsRow);
+    // Agregar la fila inicial con los detalles de la sesión
+    private void addSessionTable(String sessionName, String restDuration) {
+        TableRow sessionRow = new TableRow(this);
+        TextView sessionDetails = new TextView(this);
+        sessionDetails.setText(String.format("Sesión: %s | Descanso: %s minutos", sessionName, restDuration));
+        sessionDetails.setPadding(8, 8, 8, 8);
+        sessionRow.addView(sessionDetails);
 
-    //    // Add the session table row below the session details row
-    //    LayoutInflater inflater = LayoutInflater.from(this);
-    //    View sessionTableRow = inflater.inflate(R.layout.session_table, null);
-    //    TableRow tableRow = new TableRow(this);
-    //    tableRow.addView(sessionTableRow);
-    //    tableLayout.addView(tableRow);
-    //    SessionController sesscontroller = new SessionController(this, sessionName);
-    //    // Add the "Añadir Ejercicio" button row below the session table row
-    //    addAddExerciseRow(sessionDetailsRow, sesscontroller);  // Pass the session row to add exercises below it
-    //}
+        tableLayout.addView(sessionRow);
+    }
 
-
-    //private void addAddExerciseRow(TableRow sessionDetailsRow, SessionController sesscontroller) {
-    //    // Inflate the "Añadir Ejercicio" row layout with buttons
-    //    LayoutInflater inflater = LayoutInflater.from(this);
-    //    View addExerciseRow = inflater.inflate(R.layout.add_exercise, null);
-
-    //    // Create a TableRow to hold the "Añadir Ejercicio" buttons
-    //    TableRow tableRow = new TableRow(this);
-    //    tableRow.addView(addExerciseRow);
-
-    //    // Add the exercise row below the session row
-    //    int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to place it after both the session and session table rows
-    //    tableLayout.addView(tableRow, index);
-
-    //    // Set button listeners for adding strength or duration exercises
-    //    Button btnAddStrength = addExerciseRow.findViewById(R.id.btn_add_strength);
-    //    Button btnAddDuration = addExerciseRow.findViewById(R.id.btn_add_duration);
-
-    //    btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow(addExerciseRow, sessionDetailsRow, sesscontroller));
-    //    btnAddDuration.setOnClickListener(v -> addDurationExerciseRow(addExerciseRow, sessionDetailsRow, sesscontroller));
-    //}
-
-    private void addDurationExerciseRow(View addExerciseRow, TableRow sessionDetailsRow, SessionController sesscontroller) {
-        // Remove the "Añadir Ejercicio" row (which was clicked)
-        tableLayout.removeView((View) addExerciseRow.getParent());
-
-        // Inflate the duration exercise row layout
+    // Métodos para agregar filas de ejercicios
+    private void addStrengthExerciseRow() {
+        // Inflar el diseño para una fila de ejercicio de fuerza
         LayoutInflater inflater = LayoutInflater.from(this);
-        View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_row, null);
+        View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
 
-        // Create a TableRow for the duration exercise
-        TableRow tableRow = new TableRow(this);
-        tableRow.addView(durationExerciseRow);
+        // Configurar el botón "X" para eliminar la fila
+        Button btnRemove = strengthExerciseRow.findViewById(R.id.btn_remove);
+        btnRemove.setOnClickListener(v -> tableLayout.removeView(strengthExerciseRow));
 
-        // Add the exercise row below the sessionDetailsRow
-        int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to insert below session and session table
-        tableLayout.addView(tableRow, index);
+        // Añadir la fila a la tabla
+        tableLayout.addView(strengthExerciseRow);
 
-        addDurationExerciseDB(this, durationExerciseRow, sesscontroller);
-
-        // Add the "Añadir Ejercicio" buttons row again below the newly added exercise
-    //    addAddExerciseRow(sessionDetailsRow, sesscontroller);
+        // Guardar los datos en la base de datos al confirmar
+        saveStrengthExercise(strengthExerciseRow);
     }
 
-    private void addDurationExerciseDB(Context context, View durationExerciseRow, SessionController sesscontroller) {
-        EditText etName = durationExerciseRow.findViewById(R.id.et_name);
-        EditText etDuration = durationExerciseRow.findViewById(R.id.et_duration);
-
-        String name = etName.getText().toString().trim();
-        String durationTI = etDuration.getText().toString().trim();
-
-        if (name.isEmpty() || durationTI.isEmpty()) {
-            Toast.makeText(context, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        try {
-            int duration = Integer.parseInt(durationTI);
-            sesscontroller.addTimedExercise(context, name, duration);
-
-        } catch (NumberFormatException e) {
-            Toast.makeText(context, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void addStrengthExerciseRow(View addExerciseRow, TableRow sessionDetailsRow, SessionController sesscontroller) {
-        // Remove the "Añadir Ejercicio" row (which was clicked)
-        tableLayout.removeView((View) addExerciseRow.getParent());
-
-        // Inflate the strength exercise row layout
+    private void addDurationExerciseRow() {
+        // Inflar el diseño para una fila de ejercicio de duración
         LayoutInflater inflater = LayoutInflater.from(this);
-        View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, null);
+        View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
 
-        // Create a TableRow for the strength exercise
-        TableRow tableRow = new TableRow(this);
-        tableRow.addView(strengthExerciseRow);
+        // Configurar el botón "X" para eliminar la fila
+        Button btnRemove = durationExerciseRow.findViewById(R.id.btn_remove);
+        btnRemove.setOnClickListener(v -> tableLayout.removeView(durationExerciseRow));
 
-        // Add the exercise row below the sessionDetailsRow
-        int index = tableLayout.indexOfChild(sessionDetailsRow) + 2;  // Add 2 to insert below session and session table
-        tableLayout.addView(tableRow, index);
+        // Añadir la fila a la tabla
+        tableLayout.addView(durationExerciseRow);
 
-        addStrengthExerciseDB(this, strengthExerciseRow, sesscontroller);
-
-        // Add the "Añadir Ejercicio" buttons row again below the newly added exercise
-    //    addAddExerciseRow(sessionDetailsRow, sesscontroller);
+        // Guardar los datos en la base de datos al confirmar
+        saveDurationExercise(durationExerciseRow);
     }
 
-    public void addStrengthExerciseDB(Context context, View strengthExerciseRow, SessionController sesscontroller) {
+    // Métodos auxiliares para guardar datos en la base de datos
+    private void saveStrengthExercise(View strengthExerciseRow) {
         EditText etName = strengthExerciseRow.findViewById(R.id.et_name);
         EditText etSeries = strengthExerciseRow.findViewById(R.id.et_series);
         EditText etReps = strengthExerciseRow.findViewById(R.id.et_reps);
@@ -153,7 +108,7 @@ public class SessionEditorActivity extends AppCompatActivity {
         String weightStr = etWeight.getText().toString().trim();
 
         if (name.isEmpty() || seriesStr.isEmpty() || repsStr.isEmpty() || weightStr.isEmpty()) {
-            Toast.makeText(context, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -161,10 +116,29 @@ public class SessionEditorActivity extends AppCompatActivity {
             int series = Integer.parseInt(seriesStr);
             int reps = Integer.parseInt(repsStr);
             int weight = Integer.parseInt(weightStr);
-            sesscontroller.addStrenghExercise(context, name, series, reps, weight);
-
+            sessionController.addStrenghExercise(this, name, series, reps, weight);
         } catch (NumberFormatException e) {
-            Toast.makeText(context, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveDurationExercise(View durationExerciseRow) {
+        EditText etName = durationExerciseRow.findViewById(R.id.et_name);
+        EditText etDuration = durationExerciseRow.findViewById(R.id.et_duration);
+
+        String name = etName.getText().toString().trim();
+        String durationStr = etDuration.getText().toString().trim();
+
+        if (name.isEmpty() || durationStr.isEmpty()) {
+            Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            int duration = Integer.parseInt(durationStr);
+            sessionController.addTimedExercise(this, name, duration);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
         }
     }
 }
