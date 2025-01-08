@@ -138,6 +138,8 @@ public class UserDAO implements GenericDAO<User>  {
         String selection = OpenGymDbContract.UsersTable.COLUMN_ID + " LIKE ?";
         String[] selectionArgs = {String.valueOf(id)};
 
+        entity.setId(id);
+
         return db.update(
                 OpenGymDbContract.UsersTable.TABLE_NAME,
                 values,
