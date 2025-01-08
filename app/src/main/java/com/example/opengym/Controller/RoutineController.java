@@ -2,18 +2,15 @@ package com.example.opengym.Controller;
 
 import android.content.Context;
 
-import com.example.opengym.Model.Entities.IExercise;
+import com.example.opengym.Model.DAO.RoutineDAO;
 import com.example.opengym.Model.Entities.Routine;
-import com.example.opengym.Model.Entities.Session;
-import com.example.opengym.Model.Entities.ExerciseFactory;
-
-import java.util.ArrayList;
 
 public class RoutineController {
     private final Routine controlledRoutine;
 
-    public RoutineController(Routine routine) {
-        this.controlledRoutine = routine;
+    public RoutineController(Context context, long id) {
+        RoutineDAO routineDAO = new RoutineDAO(context);
+        this.controlledRoutine = routineDAO.read(id);
     }
 
     public void loadSessions(Context context) {
@@ -41,26 +38,8 @@ public class RoutineController {
         }
     }
 
-    public String getRoutineName() {
-        return controlledRoutine.getName();
-    }
-
-    public String getRoutineDescription() {
-        return controlledRoutine.getDescription();
-    }
-
-    public ArrayList<Session> getRoutineSessions() {
-        return controlledRoutine.getSessionsList();
-    }
-
     public long removeRoutineSession(String name, Context context) {
         return controlledRoutine.removeSession(name, context);
     }
 
-    /* TODO Cambiar para pasar todos los parametros que necesite
-    public void addRoutineSession(Session session) {
-        controlledRoutine.addSession(session);
-    }
-
-     */
 }

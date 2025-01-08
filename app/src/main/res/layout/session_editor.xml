@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- ScrollView for scrollable content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Content inside ScrollView -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- TableLayout to manage session table and add exercise -->
+            <TableLayout
+                android:id="@+id/table_layout_editor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Fixed buttons at the bottom -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_add_strength"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/añadir_fuerza"
+            android:backgroundTint="@color/grey"
+            android:textColor="@android:color/white"
+            android:padding="2dp"
+            android:textSize="13sp"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btn_add_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/añadir_duracion"
+            android:backgroundTint="@color/grey"
+            android:textColor="@android:color/white"
+            android:padding="2dp"
+            android:textSize="13sp"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+</LinearLayout>

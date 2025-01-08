@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.opengym.Model.Entities.Session;
 import com.example.opengym.Model.OpenGymDbContract;
@@ -14,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class SessionDAO implements GenericDAO<Session> {
@@ -284,6 +286,48 @@ public class SessionDAO implements GenericDAO<Session> {
         cursor.close();
 
         return SessionList;
+    }
+
+    @SuppressLint("Range")
+    public Session read(long id) {
+        db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                OpenGymDbContract.SessionsTable.COLUMN_NAME,
+                OpenGymDbContract.SessionsTable.COLUMN_DATE,
+                OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION
+        };
+
+        String selection = OpenGymDbContract.SessionsTable.COLUMN_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        Cursor cursor = db.query(
+                OpenGymDbContract.SessionsTable.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        String name;
+        int rest;
+        Date date = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_NAME));
+            rest = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION));
+            try {
+              date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("es", "ES")).parse(cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_DATE)));
+            } catch (ParseException e) {
+                Log.e("Session", e.getMessage(), e);
+            }
+        } else {
+            return null;
+        }
+        cursor.close();
+
+        return new Session(name, date, rest, id);
     }
 
 }

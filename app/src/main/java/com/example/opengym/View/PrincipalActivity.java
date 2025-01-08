@@ -41,9 +41,9 @@ public class PrincipalActivity extends AppCompatActivity {
         addRowButton.setOnClickListener(v -> showNameInputDialog());
     }
 
-    public void onRoutineSelection(String routineName) {
+    public void onRoutineSelection(long id) {
         Intent intent = new Intent(PrincipalActivity.this, RoutineActivity.class);
-        intent.putExtra("routine", principalController.getRoutine(routineName));
+        intent.putExtra("routine", id);
         startActivity(intent);
     }
 
@@ -97,7 +97,7 @@ public class PrincipalActivity extends AppCompatActivity {
         // Set click listener on the card
         cardView.setOnClickListener(v -> {
             Toast.makeText(this, "Rutina seleccionada: " + routineName, Toast.LENGTH_SHORT).show();
-            onRoutineSelection(routineName); // Navigate to the selected routine
+            onRoutineSelection(principalController.getRoutineId(routineName)); // Navigate to the selected routine
         });
 
         // Add the card to the container

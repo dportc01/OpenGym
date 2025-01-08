@@ -21,10 +21,6 @@ public class PrincipalController {
         controlledUser = userDAO.read(userName);
     }
 
-    public String getUserName() {
-        return controlledUser.getName();
-    }
-
     public void exportUserRoutine(String routineName) {
         controlledUser.exportUserRoutine(routineName);
     }
@@ -50,18 +46,15 @@ public class PrincipalController {
         return routinesNamesList;
     }
 
-    /**
-     * Works by calling on <code>controlledUser</code>
-     * @param name routine name
-     * @return id of routine with the same name
-     */
-    public Routine getRoutine(String name) {
-        ArrayList<Routine> RoutineList = controlledUser.getRoutinesList();
-        for (Routine routine: RoutineList) {
-            if (routine.getName().equals(name)) {
-                return routine;
+    public long getRoutineId(String routineName) {
+        ArrayList<Routine> routines = controlledUser.getRoutinesList();
+        long id = -1;
+        for (Routine routine: routines) {
+            if (routine.getName().equals(routineName)) {
+                id = routine.getId();
+                break;
             }
         }
-        return null;
+        return id;
     }
 }

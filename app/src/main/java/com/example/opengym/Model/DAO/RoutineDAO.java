@@ -86,7 +86,37 @@ public class RoutineDAO implements GenericDAO<Routine> {
 
         return RoutineList;
     }
+    @SuppressLint("Range")
+    public Routine read(long id) {
 
+        db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                OpenGymDbContract.RoutinesTable.COLUMN_NAME,
+                OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION
+        };
+
+        String selection = OpenGymDbContract.RoutinesTable.COLUMN_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        Cursor cursor = db.query(
+                OpenGymDbContract.RoutinesTable.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        String name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_NAME));
+        String description = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION));
+        Routine routine = new Routine(name, description, id);
+
+        cursor.close();
+
+        return routine;
+    }
     @Override
     public int update(Routine entity, long id) {
 
