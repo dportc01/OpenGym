@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
         loadExistingRoutines();
 
-        addRowButton.setOnClickListener(v -> showNameInputDialog());
+        addRowButton.setOnClickListener(v -> showNameInputDialog(null));
     }
 
     public void onRoutineSelection(long id) {
@@ -85,15 +86,22 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 
     private void addNewRoutine(String routineName, String routineDescription) {
+
         // Inflate the card from the XML template
         LayoutInflater inflater = LayoutInflater.from(this);
         View cardView = inflater.inflate(R.layout.routine_card, tableLayout, false);
+
         TextView routineTextView = cardView.findViewById(R.id.routine_name);
         routineTextView.setText(routineName);
+
         TextView routineInfo = cardView.findViewById(R.id.info_button);
         routineInfo.setOnClickListener(v -> showRoutineDescription(routineDescription));
+
         TextView routineRemove = cardView.findViewById(R.id.delete_button);
         routineRemove.setOnClickListener(v -> askRemove(cardView));
+
+        ImageView routineEdit = cardView.findViewById(R.id.edit_button);
+        routineEdit.setOnClickListener(v -> showNameInputDialog(cardView));
 
         // Set click listener on the card
         cardView.setOnClickListener(v -> {
@@ -105,7 +113,28 @@ public class PrincipalActivity extends AppCompatActivity {
         tableLayout.addView(cardView);
     }
 
-    private void showNameInputDialog() {
+    private void updateRoutine(String routineName, String routineDescription, View edit) {
+
+        //voler a poner los botones porque si no la view coge el antiguo routine na,e
+
+        TextView routineText = edit.findViewById(R.id.routine_name);
+        routineText.setText(routineName);
+
+        TextView routineInfo = edit.findViewById(R.id.info_button);
+        routineInfo.setOnClickListener(v -> showRoutineDescription(routineDescription));
+
+        edit.setOnClickListener(v -> {
+            Toast.makeText(this, "Rutina seleccionada: " + routineName, Toast.LENGTH_SHORT).show();
+            onRoutineSelection(principalController.getRoutineId(routineName)); // Navigate to the selected routine
+        });
+    }
+
+    /**
+     * Creates a new view or modifies an already existing one if
+     * provided with the parameter
+     * @param edit view of the entry to be modified
+     */
+    private void showNameInputDialog(View edit) {
         // Primero crear un LinearLayout que contenga los 2 campos de nombre y descripcion
         LinearLayout routineLayout = new LinearLayout(this);
         routineLayout.setOrientation(LinearLayout.VERTICAL);
@@ -134,11 +163,23 @@ public class PrincipalActivity extends AppCompatActivity {
                     if (routineName.isEmpty()) {
                         Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (principalController.addUserRoutine(this, routineName, routineDescription) == -1) { // Añadir la rutina a la base de datos
-                            Toast.makeText(this, "Ya existe una rutina con ese nombre", Toast.LENGTH_SHORT).show();
+                        if (edit == null) { // Añadir la rutina a la base de datos
+                            if (principalController.addUserRoutine(this, routineName, routineDescription) == -1) { // Añadir la rutina a la base de datos
+                                Toast.makeText(this, "Ya existe una rutina con ese nombre", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            addNewRoutine(routineName, routineDescription);
                         }
                         else {
-                            addNewRoutine(routineName, routineDescription); // Añadir la rutina con el nombre personalizado
+
+                            TextView routineText = edit.findViewById(R.id.routine_name);
+                            String oldName = routineText.getText().toString();
+
+                            if (principalController.updateRoutine(this, routineName, routineDescription, oldName) <= 0) {
+                                Toast.makeText(this, "Error al insertar, compruebe el nombre", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            updateRoutine(routineName, routineDescription, edit);
                         }
                     }
                 })

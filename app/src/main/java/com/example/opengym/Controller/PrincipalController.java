@@ -1,7 +1,5 @@
 package com.example.opengym.Controller;
 
-import static android.content.Intent.getIntent;
-
 import android.content.Context;
 
 import java.util.List;
@@ -56,5 +54,17 @@ public class PrincipalController {
             }
         }
         return id;
+    }
+
+    public long updateRoutine(Context context, String routineName, String routineDescription, String oldName) {
+
+        long id = getRoutineId(oldName);
+
+         if (id == -1) {
+            return 0;
+         }
+         else {
+            return controlledUser.updateRoutine(id, context, routineName, routineDescription);
+         }
     }
 }
