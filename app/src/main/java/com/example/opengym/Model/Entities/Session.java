@@ -23,13 +23,14 @@ public class Session {
         this.date = date;
         this.restDuration = restDuration;
         this.id = id;
+        this.exercisesList = new ArrayList<>();
     }
 
     public Session() {
         this.name = "";
         this.date = new Date();
         this.restDuration = 0;
-        this.exercisesList = new ArrayList<IExercise>();
+        this.exercisesList = new ArrayList<>();
     }
 
     public String getName() {

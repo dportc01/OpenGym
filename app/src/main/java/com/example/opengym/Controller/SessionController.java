@@ -16,21 +16,18 @@ import java.util.ArrayList;
 public class SessionController {
     private final Session controlledSession;
 
-    public SessionController(Context context , String sessionName) {
+    public SessionController(Context context , long id) {
         SessionDAO sessionDAO = new SessionDAO(context);
-        controlledSession = new Session();
-        // controlledSession = sessionDAO.read(sessionNAme);
+        controlledSession = sessionDAO.read(id);
     }
 
     public long addStrenghExercise(Context context, String exerciseName, int sets, int reps, float weight) {
-        ExerciseFactory factory = new ExerciseFactory();
-        IExercise exercise = factory.createExercise(exerciseName, sets, reps, weight);
+        IExercise exercise = ExerciseFactory.createExercise(exerciseName, sets, reps, weight);
         return controlledSession.addStrengthExercise(exercise);
     }
 
     public long addTimedExercise(Context context, String exerciseName, int duration) {
-        ExerciseFactory factory = new ExerciseFactory();
-        IExercise exercise = factory.createExercise(exerciseName, duration);
+        IExercise exercise = ExerciseFactory.createExercise(exerciseName, duration);
         return controlledSession.addTimedExercise(exercise);
     }
     
