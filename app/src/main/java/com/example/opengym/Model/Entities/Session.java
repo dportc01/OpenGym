@@ -1,5 +1,10 @@
 package com.example.opengym.Model.Entities;
 
+import android.content.Context;
+
+import com.example.opengym.Model.DAO.StrengthExerciseDAO;
+import com.example.opengym.Model.DAO.TimedExerciseDAO;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,6 +42,17 @@ public class Session {
         return name;
     }
 
+    public void setInfoDB(Context context, long id) {
+        StrengthExerciseDAO strengthExerciseTable = new StrengthExerciseDAO(context);
+        TimedExerciseDAO timedExerciseTable = new TimedExerciseDAO(context);
+        
+        ArrayList<IExercise> exercisesTable = new ArrayList<>();
+        exercisesTable.addAll(strengthExerciseTable.readAll(id));
+        exercisesTable.addAll(timedExerciseTable.readAll(id));
+        
+        this.exercisesList = exercisesTable;
+    }
+    
     public Date getDate() {
         return date;
     }

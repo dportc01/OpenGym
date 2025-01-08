@@ -1,11 +1,14 @@
 package com.example.opengym.View;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -125,13 +128,69 @@ public class RoutineActivity extends AppCompatActivity {
         sessionDetailsText.setTextSize(16);
         sessionDetailsText.setPadding(8, 8, 8, 8);
         sessionDetailsRow.addView(sessionDetailsText);
+    
+        /// Add the options button
+        ImageButton optionsButton = new ImageButton(this);
+        optionsButton.setImageResource(R.drawable.ic_more_vert); // Asegúrate de tener un ícono de tres puntos verticales en drawable
+        optionsButton.setBackgroundColor(Color.TRANSPARENT); // Hacer el fondo transparente
+        optionsButton.setOnClickListener(v -> sessionOptionMenu(v, sessionName, restDuration, sessionDetailsRow));
+        optionsButton.setLayoutParams(new TableRow.LayoutParams(
+            TableRow.LayoutParams.WRAP_CONTENT,
+            TableRow.LayoutParams.WRAP_CONTENT));
+        optionsButton.setPadding(8, 8, 8, 8);
+        sessionDetailsRow.addView(optionsButton);
+    
         tableLayout.addView(sessionDetailsRow);
-
+    
         // Add the session table row below the session details row
         LayoutInflater inflater = LayoutInflater.from(this);
         View sessionTableRow = inflater.inflate(R.layout.session_table, tableLayout, false);
         TableRow tableRow = new TableRow(this);
         tableRow.addView(sessionTableRow);
         tableLayout.addView(tableRow);
+    }
+    
+    private void sessionOptionMenu(View view, String sessionName, String restDuration, TableRow sessionRow) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.session_options_menu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.start_session) {
+                startSession(sessionName, restDuration);
+                return true;
+            } else if (item.getItemId() == R.id.edit_session) {
+                editSession(sessionName, restDuration);
+                return true;
+            } else if (item.getItemId() == R.id.delete_session) {
+                deleteSession(sessionRow, sessionName);
+                return true;
+            } else {
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
+    
+    private void startSession(String sessionName, String restDuration) {
+        Intent intent = new Intent(RoutineActivity.this, WorkoutActivity.class);
+        intent.putExtra("session_name", sessionName);
+        intent.putExtra("rest_duration", restDuration);
+        intent.putExtra("session_id", controller.getSessionId(sessionName));
+        startActivity(intent);
+    }
+    
+    private void editSession(String sessionName, String restDuration) {
+        Intent intent = new Intent(RoutineActivity.this, SessionEditorActivity.class);
+        intent.putExtra("session_name", sessionName);
+        intent.putExtra("rest_duration", restDuration);
+        intent.putExtra("session_id", controller.getSessionId(sessionName));
+        startActivity(intent);
+    }
+    
+    private void deleteSession(TableRow sessionRow, String sessionName) {
+        tableLayout.removeView(sessionRow);
+    
+        // TODO Borrar sesion de la base de datos
+        // long sessionId = controller.getSessionId(sessionName);
+        // controller.deleteSessionFromDatabase(sessionId);
     }
 }

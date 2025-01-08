@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.opengym.Model.DAO.RoutineDAO;
 import com.example.opengym.Model.Entities.Routine;
+import com.example.opengym.Model.Entities.Session;
+
+import java.util.ArrayList;
 
 public class RoutineController {
     private final Routine controlledRoutine;
@@ -42,4 +45,15 @@ public class RoutineController {
         return controlledRoutine.removeSession(name, context);
     }
 
+    public long getSessionId(String routineName) {
+        ArrayList<Session> sessions = controlledRoutine.getSessionsList();
+        long id = -1;
+        for (Session session : sessions) {
+            if (session.getName().equals(routineName)) {
+                id = session.getId();
+                break;
+            }
+        }
+        return id;
+    }
 }
