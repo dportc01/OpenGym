@@ -109,10 +109,14 @@ public class RoutineDAO implements GenericDAO<Routine> {
                 null
         );
 
-        String name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_NAME));
-        String description = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION));
-        Routine routine = new Routine(name, description, id);
-
+        Routine routine;
+        if (cursor != null && cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_NAME));
+            String description = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION));
+            routine = new Routine(name, description, id);
+        } else {
+            return null;
+        }
         cursor.close();
 
         return routine;

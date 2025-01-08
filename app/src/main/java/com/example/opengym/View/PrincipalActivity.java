@@ -1,5 +1,6 @@
 package com.example.opengym.View;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -165,7 +166,20 @@ public class PrincipalActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        logOut();
+        if (item.getItemId() == R.id.sign_out) {
+            logOut();
+            return true;
+        } else if (item.getItemId() == R.id.github_link) {
+            openGitHub();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openGitHub(){
+        String url = "https://github.com/dportc01/OpenGym";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 }
