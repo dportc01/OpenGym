@@ -1,5 +1,6 @@
 package com.example.opengym.View;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.Button;
@@ -91,14 +92,23 @@ public class RoutineActivity extends AppCompatActivity {
             if (sessionName.isEmpty() || restDuration.isEmpty()) {
                 Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
             } else {
-                // Add the session to the Routine session list
-                if (controller.addSession(this, sessionName, restDuration) == -1) {
-                    Toast.makeText(this, "Error al insertar, porfavor compruebe que el nombre no se repita", Toast.LENGTH_SHORT).show();
+                long sessionId = controller.addSession(this, sessionName, restDuration);
+                if (sessionId == -1) {
+                    Toast.makeText(this, "Error al insertar, por favor compruebe que el nombre no se repita", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 addSessionTable(sessionName, restDuration);
+
+                // Inicia SessionEditorActivity con los detalles de la sesión
+                Intent intent = new Intent(this, SessionEditorActivity.class);
+                intent.putExtra("session_name", sessionName);
+                intent.putExtra("rest_duration", restDuration);
+                intent.putExtra("session_id", sessionId);
+                startActivity(intent);
             }
         });
+
 
         builder.setNegativeButton("Cancelar", null);
 

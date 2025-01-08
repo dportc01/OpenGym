@@ -57,6 +57,17 @@
             android:textColor="@android:color/white"
             android:padding="2dp"
             android:textSize="13sp"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/purple"
+            android:text="Guardar" />
+
     </LinearLayout>
 </LinearLayout>
