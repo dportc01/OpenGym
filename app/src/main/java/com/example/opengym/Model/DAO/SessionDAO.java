@@ -51,7 +51,10 @@ public class SessionDAO implements GenericDAO<Session> {
         values.put(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION, entity.getRestDuration());
         values.put(OpenGymDbContract.SessionsTable.COLUMN_ROUTINEID, parentId);
 
-        return db.insertOrThrow(OpenGymDbContract.SessionsTable.TABLE_NAME, null, values);
+        long entityId = db.insertOrThrow(OpenGymDbContract.SessionsTable.TABLE_NAME, null, values);
+        entity.setId(entityId);
+
+        return entityId;
     }
 
     /**
@@ -118,7 +121,8 @@ public class SessionDAO implements GenericDAO<Session> {
 
     /**
      * Update all the entries with the data from entity
-     * @param entity new entity with modified values, but same id
+     * and assign the new entity the id
+     * @param entity new entity with modified values
      * @param id of the entry to be updated
      * @return number of rows affected by the operation
      */
@@ -134,6 +138,8 @@ public class SessionDAO implements GenericDAO<Session> {
         String selection = OpenGymDbContract.SessionsTable.COLUMN_ID + " LIKE ?";
 
         String[] selectionArgs = {String.valueOf(id)};
+
+        entity.setId(id);
 
         return  db.update(
                 OpenGymDbContract.SessionsTable.TABLE_NAME,

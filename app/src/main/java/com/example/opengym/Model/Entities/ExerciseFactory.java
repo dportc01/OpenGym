@@ -6,8 +6,16 @@ public class ExerciseFactory {
         return new TimedExercise(nombre, duracion);
     }
 
+    public static IExercise createExercise(String nombre, int duracion, long id) {
+        return new TimedExercise(nombre, duracion, id);
+    }
+
     public static IExercise createExercise(String nombre, int sets, int reps, float weight) {
         return new StrengthExercise(nombre, sets, reps, weight);
+    }
+
+    public static IExercise createExercise(String nombre, int sets, int reps, float weight, long id) {
+        return new StrengthExercise(nombre, sets, reps, weight, id);
     }
 
     public static IExercise createExercise(String tipo) {

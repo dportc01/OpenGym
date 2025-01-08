@@ -93,12 +93,15 @@ public class RoutineDAO implements GenericDAO<Routine> {
         db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+
         values.put(OpenGymDbContract.RoutinesTable.COLUMN_NAME, entity.getName());
         values.put(OpenGymDbContract.RoutinesTable.COLUMN_DESCRIPTION, entity.getDescription());
 
         String selection = OpenGymDbContract.RoutinesTable.COLUMN_ID + " LIKE ?";
 
         String[] selectionArgs = {String.valueOf(id)};
+
+        entity.setId(id);
 
         return db.update(
                 OpenGymDbContract.RoutinesTable.TABLE_NAME,

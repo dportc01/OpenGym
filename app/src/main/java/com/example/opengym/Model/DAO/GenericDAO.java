@@ -28,8 +28,8 @@ public interface GenericDAO<T> {
     ArrayList<T> readAll(long parentId);
 
     /**
-     * Update an entry from the database
-     * @param entity new entity with modified values, but same id
+     * Update an entry from the database and assign it the id
+     * @param entity new entity with modified values
      * @param id of the entry to be updated
      * @return number of rows affected by the operation
      */
