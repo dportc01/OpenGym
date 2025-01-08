@@ -69,22 +69,4 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void openGitHub(){
-        String url = "https://github.com/dportc01/OpenGym";
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        startActivity(intent);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_signup, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        openGitHub();
-        return super.onOptionsItemSelected(item);
-    }
 }
