@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/start_session"
+        android:title="Empezar sesión" />
+    <item
+        android:id="@+id/edit_session"
+        android:title="Editar sesión" />
+    <item
+        android:id="@+id/delete_session"
+        android:title="Borrar sesión" />
+</menu>

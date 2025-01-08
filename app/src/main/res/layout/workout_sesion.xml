@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_session_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sesión: "
+        android:textSize="18sp"
+        android:paddingBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tv_rest_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descanso: "
+        android:textSize="18sp"
+        android:paddingBottom="16dp" />
+
+    <TableLayout
+        android:id="@+id/table_layout_tracker"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:stretchColumns="1" />
+
+    <Button
+        android:id="@+id/btn_save_session"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar Sesión" />
+</LinearLayout>

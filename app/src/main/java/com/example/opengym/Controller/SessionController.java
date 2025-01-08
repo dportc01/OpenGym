@@ -6,6 +6,8 @@ import com.example.opengym.Model.DAO.UserDAO;
 import com.example.opengym.Model.Entities.IExercise;
 import com.example.opengym.Model.Entities.Session;
 import com.example.opengym.Model.Entities.ExerciseFactory;
+import com.example.opengym.Model.Entities.StrengthExercise;
+import com.example.opengym.Model.Entities.TimedExercise;
 import com.example.opengym.Model.DAO.SessionDAO;
 
 
@@ -19,6 +21,56 @@ public class SessionController {
     public SessionController(Context context , long id) {
         SessionDAO sessionDAO = new SessionDAO(context);
         controlledSession = sessionDAO.read(id);
+    }
+
+    public void loadExercises(Context context){
+        controlledSession.setInfoDB(context, controlledSession.getId());
+    }
+
+    public String getExerciseName(int position){
+        try{
+            return controlledSession.getExercisesList().get(position).getName();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getExerciseType(int position){
+        try{
+            return controlledSession.getExercisesList().get(position).getType();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public ArrayList<String> getPreviousStrengthValues(int position) {
+        try {
+            IExercise exercise = controlledSession.getExercisesList().get(position);
+            if (exercise instanceof StrengthExercise) {
+                StrengthExercise strengthExercise = (StrengthExercise) exercise;
+                ArrayList<String> pastValues = new ArrayList<>();
+                pastValues.add(String.valueOf(strengthExercise.getNumOfReps()));
+                pastValues.add(String.valueOf(strengthExercise.getNumOfSets()));
+                pastValues.add(String.valueOf(strengthExercise.getWeight()));
+                return pastValues;
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getPreviousDurationValues(int position) {
+        try {
+            IExercise exercise = controlledSession.getExercisesList().get(position);
+            if (exercise instanceof TimedExercise) {
+                TimedExercise timedExercise = (TimedExercise) exercise;
+                return String.valueOf(timedExercise.getTime());
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public long addStrenghExercise(Context context, String exerciseName, int sets, int reps, float weight) {
