@@ -34,6 +34,7 @@ public class StrengthExerciseDAO implements GenericDAO<StrengthExercise> {
         values.put(OpenGymDbContract.StrengthExerciseTable.COLUMN_REPETITIONS, entity.getNumOfReps());
         values.put(OpenGymDbContract.StrengthExerciseTable.COLUMN_SETS, entity.getNumOfSets());
         values.put(OpenGymDbContract.StrengthExerciseTable.COLUMN_WEIGHT, entity.getWeight());
+        values.put(OpenGymDbContract.StrengthExerciseTable.COLUMN_SESSIONID, parentId);
 
         long id = db.insertOrThrow(OpenGymDbContract.StrengthExerciseTable.TABLE_NAME, null, values);
         entity.setId(id);
