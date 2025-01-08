@@ -5,7 +5,6 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.example.opengym.Model.DAO.RoutineDAO;
-import com.example.opengym.Model.DAO.UserDAO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -252,5 +251,27 @@ public class User {
             return -1;
         }
         return id;
+    }
+
+    public int updateRoutine(long routineId, Context context, String routineName, String routineDescription) {
+
+        RoutineDAO routineTable = new RoutineDAO(context);
+
+        try {
+            Routine updatedRoutine = new Routine(routineName, routineDescription, new ArrayList<>());
+
+            int affected = routineTable.update(updatedRoutine, routineId);
+
+            if (affected > 0) {
+
+                routinesList.removeIf(routine -> routine.getId() == routineId);
+                routinesList.add(updatedRoutine);
+            }
+
+            return affected;
+        } catch (Exception e) {
+            Log.e("Database", "Exception occurred", e);
+            return -1;
+        }
     }
 }

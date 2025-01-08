@@ -7,7 +7,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.opengym.Model.DAO.RoutineDAO;
 import com.example.opengym.Model.DAO.SessionDAO;
 
 import java.util.ArrayList;
@@ -105,11 +104,6 @@ public class Routine implements Parcelable {
         catch (Exception e) {
             return -1;
         }
-    }
-
-    public void removeRoutineDB(Context context) {
-        RoutineDAO routineDAO = new RoutineDAO(context);
-        routineDAO.delete(this.id);
     }
 
     public String getName() {
