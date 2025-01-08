@@ -54,7 +54,7 @@ public class RoutineActivity extends AppCompatActivity {
             addSessionTable(sessionName, sessionRest);
             i++;
             sessionName = controller.getSessionName(i);
-            sessionRest = controller.getSessionName(i);
+            sessionRest = controller.getSessionRest(i);
         }
     }
 
