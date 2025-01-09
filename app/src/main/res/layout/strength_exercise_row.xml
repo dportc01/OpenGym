@@ -15,7 +15,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:hint="@string/nombre"
-        android:textColor="@android:color/black"
+        android:textColor="@color/puntos"
         android:inputType="text" />
 
     <!-- Series -->
@@ -26,7 +26,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:hint="@string/series"
-        android:textColor="@android:color/black"
+        android:textColor="@color/puntos"
         android:inputType="number" />
 
     <!-- Reps -->
@@ -37,7 +37,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:hint="@string/reps"
-        android:textColor="@android:color/black"
+        android:textColor="@color/puntos"
         android:inputType="number" />
 
     <!-- Peso -->
@@ -48,7 +48,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:hint="@string/peso"
-        android:textColor="@android:color/black"
+        android:textColor="@color/puntos"
         android:inputType="number" />
 
     <Button
@@ -56,7 +56,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:text="@string/x"
-        android:textColor="@android:color/white"
+        android:textColor="@color/x"
         android:padding="2dp"
         android:textSize="13sp"
         android:layout_marginStart="8dp"
