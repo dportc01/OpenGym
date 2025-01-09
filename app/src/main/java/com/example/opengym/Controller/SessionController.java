@@ -80,7 +80,7 @@ public class SessionController {
 
     public void addTimedExercise(Context context, String exerciseName, int duration) {
         IExercise exercise = ExerciseFactory.createExercise(exerciseName, duration);
-        controlledSession.addTimedExercise(exercise, context);
+        controlledSession.addTimedExercise(exercise, controlledSession.getId(), context);
     }
     
     public ArrayList<String> getSessionExercises() {

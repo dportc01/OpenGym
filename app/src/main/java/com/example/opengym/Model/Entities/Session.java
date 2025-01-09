@@ -107,10 +107,20 @@ public class Session {
     }
 
 
-    public long addTimedExercise(IExercise TIexercise, Context context){
-        exercisesList.add(TIexercise);
-        TimedExerciseDAO timedExerciseTable = new TimedExerciseDAO(context);
-        return timedExerciseTable.create((TimedExercise) TIexercise, ((TimedExercise)TIexercise).getId());
+    public long addTimedExercise(IExercise TIexercise, Long parentID, Context context) {
+        try {
+            TimedExerciseDAO timedExerciseTable = new TimedExerciseDAO(context);
+            long exerciseID = timedExerciseTable.create((TimedExercise) TIexercise, parentID);
+            if (exerciseID != -1) {
+                exercisesList.add(TIexercise);
+            }
+            return exerciseID;
+
+        } catch (Exception e) {
+            Log.e("Session", e.getMessage(), e);
+            return -1;
+        }
     }
+
 
 }
