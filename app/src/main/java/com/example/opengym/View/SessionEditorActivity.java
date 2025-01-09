@@ -38,6 +38,8 @@ public class SessionEditorActivity extends AppCompatActivity {
 
         // Mostrar la tabla inicial con los detalles de la sesión
         addSessionTable(sessionName, restDuration);
+
+        loadExercisesView();
     }
 
     // Inicialización de vistas y configuración de listeners
@@ -172,6 +174,10 @@ public class SessionEditorActivity extends AppCompatActivity {
         }
 
         finish();
+    }
+
+    private void loadExercisesView() {
+
     }
 
     private boolean checkExerciseLimit() {
