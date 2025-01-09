@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.ViewParent;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -56,7 +57,7 @@ public class RoutineActivity extends AppCompatActivity {
         String sessionName = routineController.getSessionName(i);
         String sessionRest = routineController.getSessionRest(i);
 
-        while (sessionName != null & sessionRest != null) {
+        while (sessionName != null && sessionRest != null) {
             addSessionTable(sessionName, sessionRest);
             i++;
             sessionName = routineController.getSessionName(i);
@@ -154,26 +155,99 @@ public class RoutineActivity extends AppCompatActivity {
 
     private void loadSessionExercises() {
 
-        TableRow strExerciseRow = new TableRow(this);
+        int i = 0;
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View exerciseRow;
 
-        TextView exerciseName = new TextView(this);
-        exerciseName.setText("Nombre: ");
-        exerciseName.setPadding(8, 0, 0, 0);
+        ArrayList<ArrayList<String>> exercisesList = controller.returnExercises(i);
 
-        TextView exerciseSets = new TextView(this);
-        exerciseName.setText("sets: ");
+        while (exercisesList != null) {
+            for (int j = 0; j < exercisesList.size(); j++) {
+                if (exercisesList.get(j).get(0).equals("Strength")) {
 
-        TextView exerciseReps = new TextView(this);
-        exerciseName.setText("repeticiones: ");
+                    exerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
+                    prepareViewStrengthExercise(exerciseRow, exercisesList.get(j).get(1), exercisesList.get(j).get(2), exercisesList.get(j).get(3), exercisesList.get(j).get(4));
+                }
+                else {
 
-        TextView exerciseWeight = new TextView(this);
-        exerciseName.setText("peso: ");
+                    exerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
+                    prepareViewTimed(exerciseRow, exercisesList.get(j).get(1), exercisesList.get(j).get(2));
+                }
+            }
 
-        strExerciseRow.addView(exerciseName);
+            i++;
+            exercisesList =  controller.returnExercises(i);
+        }
 
-        tableLayout.addView(strExerciseRow);
     }
-    
+
+    private void prepareViewTimed(View view, String exerName, String exerDuration) {
+
+        view.findViewById(R.id.btn_remove).setVisibility(View.GONE);
+
+        EditText name = view.findViewById(R.id.et_name);
+        name.setFocusable(false);
+        name.setFocusable(false);
+        name.setFocusableInTouchMode(false);
+        name.setClickable(false);
+        name.setTextIsSelectable(false);
+        name.setBackgroundColor(Color.TRANSPARENT);
+        name.setText(exerName);
+
+        EditText duration = view.findViewById(R.id.et_duration);
+        duration.setFocusable(false);
+        duration.setFocusable(false);
+        duration.setFocusableInTouchMode(false);
+        duration.setClickable(false);
+        duration.setTextIsSelectable(false);
+        duration.setBackgroundColor(Color.TRANSPARENT);
+        duration.setText(exerDuration);
+
+        tableLayout.addView(view);
+    }
+
+    private void prepareViewStrengthExercise(View view, String exerName, String exerSets, String exerReps, String exerWeight) {
+        view.findViewById(R.id.btn_remove).setVisibility(View.GONE);
+
+        EditText name = view.findViewById(R.id.et_name);
+        name.setFocusable(false);
+        name.setFocusable(false);
+        name.setFocusableInTouchMode(false);
+        name.setClickable(false);
+        name.setTextIsSelectable(false);
+        name.setBackgroundColor(Color.TRANSPARENT);
+        name.setText(exerName);
+
+        EditText sets = view.findViewById(R.id.et_series);
+        sets.setFocusable(false);
+        sets.setFocusable(false);
+        sets.setFocusableInTouchMode(false);
+        sets.setClickable(false);
+        sets.setTextIsSelectable(false);
+        sets.setBackgroundColor(Color.TRANSPARENT);
+        sets.setText(exerSets);
+
+        EditText reps = view.findViewById(R.id.et_reps);
+        reps.setFocusable(false);
+        reps.setFocusable(false);
+        reps.setFocusableInTouchMode(false);
+        reps.setClickable(false);
+        reps.setTextIsSelectable(false);
+        reps.setBackgroundColor(Color.TRANSPARENT);
+        reps.setText(exerReps);
+
+        EditText peso = view.findViewById(R.id.et_weight);
+        peso.setFocusable(false);
+        peso.setFocusable(false);
+        peso.setFocusableInTouchMode(false);
+        peso.setClickable(false);
+        peso.setTextIsSelectable(false);
+        peso.setBackgroundColor(Color.TRANSPARENT);
+        peso.setText(exerWeight);
+
+        tableLayout.addView(view);
+    }
+
     private void sessionOptionMenu(View view, String sessionName, String restDuration, TableRow sessionRow) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.session_options_menu, popupMenu.getMenu());

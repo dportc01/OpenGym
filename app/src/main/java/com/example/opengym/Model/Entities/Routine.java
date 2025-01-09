@@ -58,6 +58,9 @@ public class Routine implements Parcelable {
     public void setInfoDB(Context context, long id) {
         SessionDAO sessionTable = new SessionDAO(context);
         this.sessionsList = sessionTable.readAll(id);
+        for (Session session: sessionsList) {
+            session.setInfoDB(context, session.getId());
+        }
     }
 
 
