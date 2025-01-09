@@ -118,7 +118,9 @@ public class SessionEditorActivity extends AppCompatActivity {
             int series = Integer.parseInt(seriesStr);
             int reps = Integer.parseInt(repsStr);
             int weight = Integer.parseInt(weightStr);
-            sessionController.addStrenghExercise(this, name, series, reps, weight);
+            if (sessionController.addStrenghExercise(this, name, series, reps, weight) == -1) {
+                Toast.makeText(this, "Error al insertar compruebe el nombre", Toast.LENGTH_SHORT).show();
+            }
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
             return -1;

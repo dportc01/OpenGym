@@ -73,9 +73,9 @@ public class SessionController {
         }
     }
 
-    public void addStrenghExercise(Context context, String exerciseName, int sets, int reps, float weight) {
+    public long addStrenghExercise(Context context, String exerciseName, int sets, int reps, float weight) {
         IExercise exercise = ExerciseFactory.createExercise(exerciseName, sets, reps, weight);
-        controlledSession.addStrengthExercise(exercise, context);
+        return controlledSession.addStrengthExercise(exercise, controlledSession.getId(), context);
     }
 
     public void addTimedExercise(Context context, String exerciseName, int duration) {

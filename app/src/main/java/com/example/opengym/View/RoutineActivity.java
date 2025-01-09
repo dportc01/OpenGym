@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,6 +23,8 @@ import android.view.View;
 
 import com.example.opengym.Controller.RoutineController;
 import com.example.opengym.R;
+
+import java.util.ArrayList;
 
 public class RoutineActivity extends AppCompatActivity {
 
@@ -141,13 +144,30 @@ public class RoutineActivity extends AppCompatActivity {
         sessionDetailsRow.addView(optionsButton);
     
         tableLayout.addView(sessionDetailsRow);
-    
-        // Add the session table row below the session details row
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View sessionTableRow = inflater.inflate(R.layout.session_table, tableLayout, false);
-        TableRow tableRow = new TableRow(this);
-        tableRow.addView(sessionTableRow);
-        tableLayout.addView(tableRow);
+
+        loadSessionExercises();
+    }
+
+    private void loadSessionExercises() {
+
+        TableRow strExerciseRow = new TableRow(this);
+
+        TextView exerciseName = new TextView(this);
+        exerciseName.setText("Nombre: ");
+        exerciseName.setPadding(8, 0, 0, 0);
+
+        TextView exerciseSets = new TextView(this);
+        exerciseName.setText("sets: ");
+
+        TextView exerciseReps = new TextView(this);
+        exerciseName.setText("repeticiones: ");
+
+        TextView exerciseWeight = new TextView(this);
+        exerciseName.setText("peso: ");
+
+        strExerciseRow.addView(exerciseName);
+
+        tableLayout.addView(strExerciseRow);
     }
     
     private void sessionOptionMenu(View view, String sessionName, String restDuration, TableRow sessionRow) {
