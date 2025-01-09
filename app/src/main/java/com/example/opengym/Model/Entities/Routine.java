@@ -77,7 +77,7 @@ public class Routine implements Parcelable {
                 }
             }
         }    catch (Exception e) {
-            Log.e("User", e.getMessage(), e);
+            Log.e("Routine", e.getMessage(), e);
             return -1;
         }
         return -1;

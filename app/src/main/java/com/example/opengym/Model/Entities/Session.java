@@ -1,6 +1,7 @@
 package com.example.opengym.Model.Entities;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.opengym.Model.DAO.StrengthExerciseDAO;
 import com.example.opengym.Model.DAO.TimedExerciseDAO;
@@ -88,10 +89,21 @@ public class Session {
         }
     }
 
-    public long addStrengthExercise(IExercise STexercise, Context context){
-        exercisesList.add(STexercise);
-        StrengthExerciseDAO strengthExerciseTable = new StrengthExerciseDAO(context);
-        return strengthExerciseTable.create((StrengthExercise) STexercise, ((StrengthExercise) STexercise).getId());
+    public long addStrengthExercise(IExercise STexercise, Long parentID ,Context context){
+
+        try {
+            StrengthExerciseDAO strengthExerciseTable = new StrengthExerciseDAO(context);
+            long exerciseID = strengthExerciseTable.create((StrengthExercise) STexercise, parentID);
+            if (exerciseID != -1) {
+                exercisesList.add(STexercise);
+            }
+            return exerciseID;
+
+        } catch (Exception e) {
+            Log.e("Session", e.getMessage(), e);
+            return -1;
+        }
+
     }
 
 

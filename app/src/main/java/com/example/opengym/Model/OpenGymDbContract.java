@@ -42,16 +42,16 @@ public final class OpenGymDbContract {
                     StrengthExerciseTable.COLUMN_REPETITIONS + " INTEGER, " +
                     StrengthExerciseTable.COLUMN_WEIGHT + " REAL, " +
                     StrengthExerciseTable.COLUMN_SESSIONID + " INTEGER, " +
-                    "FOREIGN KEY (" + StrengthExerciseTable.COLUMN_SESSIONID + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_ID + ") ON DELETE CASCADE);" +
+                    "FOREIGN KEY (" + StrengthExerciseTable.COLUMN_SESSIONID + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_ID + ") ON DELETE CASCADE, " +
                     "UNIQUE (" + StrengthExerciseTable.COLUMN_NAME + ", " + StrengthExerciseTable.COLUMN_SESSIONID + "));";
 
     public static final String SQL_CREATE_TIMEDEXERCISE_ENTRIES =
             "CREATE TABLE " + TimedExerciseTable.TABLE_NAME + " (" +
                     TimedExerciseTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TimedExerciseTable.COLUMN_NAME + " TEXT, " +
-                    TimedExerciseTable.COLUMN_DURATION + " INTEGER, " + // Assuming duration is in seconds or minutes, represented as INTEGER
+                    TimedExerciseTable.COLUMN_DURATION + " INTEGER, " +
                     TimedExerciseTable.COLUMN_SESSIONID + " INTEGER, " +
-                    "FOREIGN KEY (" + TimedExerciseTable.COLUMN_SESSIONID + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_ID + ") ON DELETE CASCADE);" +
+                    "FOREIGN KEY (" + TimedExerciseTable.COLUMN_SESSIONID + ") REFERENCES " + SessionsTable.TABLE_NAME + "(" + SessionsTable.COLUMN_ID + ") ON DELETE CASCADE, " +
                     "UNIQUE (" + TimedExerciseTable.COLUMN_NAME + ", " + TimedExerciseTable.COLUMN_SESSIONID + "));";
 
     public static final String SQL_DELETE_USERS_ENTRIES =
