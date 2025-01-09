@@ -159,7 +159,7 @@ public class RoutineActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View exerciseRow;
 
-        ArrayList<ArrayList<String>> exercisesList = controller.returnExercises(i);
+        ArrayList<ArrayList<String>> exercisesList = routineController.returnExercises(i);
 
         while (exercisesList != null) {
             for (int j = 0; j < exercisesList.size(); j++) {
@@ -176,7 +176,7 @@ public class RoutineActivity extends AppCompatActivity {
             }
 
             i++;
-            exercisesList =  controller.returnExercises(i);
+            exercisesList =  routineController.returnExercises(i);
         }
 
     }
