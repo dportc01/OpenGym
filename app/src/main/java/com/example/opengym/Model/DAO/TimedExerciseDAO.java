@@ -29,7 +29,6 @@ public class TimedExerciseDAO implements GenericDAO<TimedExercise> {
 
         ContentValues values = new ContentValues();
 
-        values.put(OpenGymDbContract.TimedExerciseTable.COLUMN_ID, entity.getId());
         values.put(OpenGymDbContract.TimedExerciseTable.COLUMN_NAME, entity.getName());
         values.put(OpenGymDbContract.TimedExerciseTable.COLUMN_DURATION, entity.getTime());
         values.put(OpenGymDbContract.TimedExerciseTable.COLUMN_SESSIONID, parentId);
