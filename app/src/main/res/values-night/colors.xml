@@ -5,9 +5,9 @@
     <color name="beige">#E6CFBC</color>
     <color name="brown">#492A20</color>
     <color name="purple">#601AAD</color>
-    <color name="grey">#474747</color>
-    <color name="puntos">#000000</color>
-    <color name="x">#FFFFFF</color>
-    <color name="boton">#000000</color>
-    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="grey">#383838</color>
+    <color name="puntos">#FFFFFF</color>
+    <color name="x">#000000</color>
+    <color name="boton">#6B6B6B</color>
+    <color name="colorOnBackground">#141218</color>
 </resources>
