@@ -11,6 +11,7 @@ import com.example.opengym.Model.OpenGymDbContract;
 import com.example.opengym.Model.OpenGymDbHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class UserDAO implements GenericDAO<User>  {
 
@@ -39,7 +40,7 @@ public class UserDAO implements GenericDAO<User>  {
 
         values.put(OpenGymDbContract.UsersTable.COLUMN_NAME, entity.getName());
         values.put(OpenGymDbContract.UsersTable.COLUMN_PASSWORD, entity.getPassword());
-
+        values.put(OpenGymDbContract.UsersTable.COLUMN_CREATION_DATE, String.valueOf(System.currentTimeMillis()));
         long id = db.insertOrThrow(OpenGymDbContract.UsersTable.TABLE_NAME, null, values);
 
         createLastLogin(entity.getName());
@@ -193,5 +194,40 @@ public class UserDAO implements GenericDAO<User>  {
         cursor.close();
 
         return new User(name, password, (premium!=0), id);
+    }
+
+    @SuppressLint("Range")
+    public String readDate(long id) {
+
+        db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                OpenGymDbContract.UsersTable.COLUMN_CREATION_DATE
+        };
+
+        String selection = OpenGymDbContract.UsersTable.COLUMN_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        Cursor cursor = db.query(
+                OpenGymDbContract.UsersTable.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        String date = null;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            date = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.UsersTable.COLUMN_CREATION_DATE));
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return date;
     }
 }

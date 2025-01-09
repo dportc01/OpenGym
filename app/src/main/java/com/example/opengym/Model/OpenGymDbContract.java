@@ -8,6 +8,7 @@ public final class OpenGymDbContract {
                     UsersTable.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     UsersTable.COLUMN_NAME + " TEXT UNIQUE, " +
                     UsersTable.COLUMN_PASSWORD + " TEXT, " +
+                    UsersTable.COLUMN_CREATION_DATE+ " TEXT, " +
                     UsersTable.COLUMN_PREMIUM + " INTEGER DEFAULT 0);";
 
     public static final String SQL_CREATE_LAST_LOGIN_ENTRIE =
@@ -81,6 +82,7 @@ public final class OpenGymDbContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PASSWORD = "password";
         public static final String COLUMN_PREMIUM = "premium";
+        public static final String COLUMN_CREATION_DATE = "date";
     }
 
     public static class RoutinesTable {

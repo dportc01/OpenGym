@@ -56,4 +56,8 @@ public class RoutineController {
         }
         return id;
     }
+
+    public ArrayList<Session> getSessionsList() {
+        return controlledRoutine.getSessionsList();
+    }
 }

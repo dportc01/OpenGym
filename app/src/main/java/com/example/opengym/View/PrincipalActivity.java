@@ -37,6 +37,8 @@ public class PrincipalActivity extends AppCompatActivity {
         Button addRowButton = findViewById(R.id.add_row_button);
 
         principalController = new PrincipalController(this, getIntent().getStringExtra("userName"));
+        // change the user to premium if the user has a premium account
+        principalController.changePremium(this);
 
         loadExistingRoutines();
 
@@ -46,6 +48,7 @@ public class PrincipalActivity extends AppCompatActivity {
     public void onRoutineSelection(long id) {
         Intent intent = new Intent(PrincipalActivity.this, RoutineActivity.class);
         intent.putExtra("routine", id);
+        intent.putExtra("premium", principalController.isPremium());
         startActivity(intent);
     }
 
@@ -164,6 +167,9 @@ public class PrincipalActivity extends AppCompatActivity {
                         Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                     } else {
                         if (edit == null) { // Añadir la rutina a la base de datos
+                            if (!checkRoutineLimit()) {
+                                return;
+                            }
                             if (principalController.addUserRoutine(this, routineName, routineDescription) == -1) { // Añadir la rutina a la base de datos
                                 Toast.makeText(this, "Ya existe una rutina con ese nombre", Toast.LENGTH_SHORT).show();
                                 return;
@@ -222,5 +228,17 @@ public class PrincipalActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
+    }
+
+    private boolean checkRoutineLimit() {
+        int routineNumber = principalController.getUserRoutines(this).size();
+        if (routineNumber == 3 && !principalController.isPremium()) {
+            Toast.makeText(this, "No puedes tener más de 3 rutinas sin ser premium", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(routineNumber == 10) {
+            Toast.makeText(this, "No puedes tener más de 10 rutinas", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }

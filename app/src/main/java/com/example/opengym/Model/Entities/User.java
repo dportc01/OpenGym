@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.example.opengym.Model.DAO.RoutineDAO;
+import com.example.opengym.Model.DAO.UserDAO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,10 +49,6 @@ public class User {
 
     public String getPassword() {
         return password;
-    }
-
-    public boolean getPremium() {
-        return premium;
     }
 
     public ArrayList<Routine> getRoutinesList() {
@@ -274,4 +271,21 @@ public class User {
             return -1;
         }
     }
+
+    public void changePremium(Context context) {
+        UserDAO userDAO = new UserDAO(context);
+        long userTime = Long.parseLong(userDAO.readDate(this.id));
+        long currentTime = System.currentTimeMillis();
+        long fourWeeksInMillis = 4L * 7 * 24 * 60 * 60 * 1000; // 4 weeks in milliseconds
+
+        if((currentTime - userTime) >= fourWeeksInMillis && !this.premium) {
+            this.premium = true;
+            userDAO.update(this, this.id);
+        }
+    }
+
+    public boolean getPremium() {
+        return this.premium;
+    }
+
 }
