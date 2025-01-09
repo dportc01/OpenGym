@@ -7,4 +7,8 @@
         android:id="@+id/sign_out"
         android:title="@string/sign_out"
         />
+    <item
+        android:id="@+id/import_routine"
+        android:title="Importar una rutina"
+        />
 </menu>
