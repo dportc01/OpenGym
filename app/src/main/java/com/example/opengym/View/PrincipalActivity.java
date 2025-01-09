@@ -138,6 +138,9 @@ public class PrincipalActivity extends AppCompatActivity {
      * @param edit view of the entry to be modified
      */
     private void showNameInputDialog(View edit) {
+        if (!checkRoutineLimit() && edit == null) {
+            return;
+        }
         // Primero crear un LinearLayout que contenga los 2 campos de nombre y descripcion
         LinearLayout routineLayout = new LinearLayout(this);
         routineLayout.setOrientation(LinearLayout.VERTICAL);
@@ -167,9 +170,6 @@ public class PrincipalActivity extends AppCompatActivity {
                         Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                     } else {
                         if (edit == null) { // Añadir la rutina a la base de datos
-                            if (!checkRoutineLimit()) {
-                                return;
-                            }
                             if (principalController.addUserRoutine(this, routineName, routineDescription) == -1) { // Añadir la rutina a la base de datos
                                 Toast.makeText(this, "Ya existe una rutina con ese nombre", Toast.LENGTH_SHORT).show();
                                 return;
