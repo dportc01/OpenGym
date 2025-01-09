@@ -177,7 +177,7 @@ public class SessionEditorActivity extends AppCompatActivity {
     }
 
     private boolean checkExerciseLimit() {
-        int exerciseNumber = sessionController.getSessionExercises().size();
+        int exerciseNumber = tableLayout.getChildCount() - 1;
         if (exerciseNumber == 7 && !getIntent().getBooleanExtra("premium", false)) {
             Toast.makeText(this, "No puedes tener más de 7 ejercicios sin ser premium", Toast.LENGTH_SHORT).show();
             return false;
