@@ -1,5 +1,6 @@
 package com.example.opengym.View;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.opengym.Controller.SessionController;
 import com.example.opengym.R;
+
+import java.util.ArrayList;
 
 public class SessionEditorActivity extends AppCompatActivity {
 
@@ -123,7 +126,7 @@ public class SessionEditorActivity extends AppCompatActivity {
         try {
             int series = Integer.parseInt(seriesStr);
             int reps = Integer.parseInt(repsStr);
-            int weight = Integer.parseInt(weightStr);
+            float weight = Float.parseFloat(weightStr);
             if (sessionController.addStrenghExercise(this, name, series, reps, weight) == -1) {
                 Toast.makeText(this, "Error al insertar compruebe el nombre", Toast.LENGTH_SHORT).show();
             }
@@ -158,6 +161,8 @@ public class SessionEditorActivity extends AppCompatActivity {
 
     private void saveSession() {
 
+        sessionController.removeExercises(this);
+
         for (int i = 1; i < tableLayout.getChildCount(); i++) {
             View child = tableLayout.getChildAt(i);
             if ("strength".equals(child.getTag())) {
@@ -177,6 +182,68 @@ public class SessionEditorActivity extends AppCompatActivity {
     }
 
     private void loadExercisesView() {
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View exerciseRow;
+
+        ArrayList<ArrayList<String>> exercisesList = sessionController.returnExercises();
+
+        for (int i = 0; i < exercisesList.size(); i++) {
+            if (exercisesList.get(i).get(0).equals("Strength")) {
+
+                exerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
+                loadStrengthExerciseRow(exerciseRow, exercisesList.get(i).get(1), exercisesList.get(i).get(2), exercisesList.get(i).get(3), exercisesList.get(i).get(4));
+            }
+            else {
+
+                exerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
+                loadDurationExerciseRow(exerciseRow, exercisesList.get(i).get(1), exercisesList.get(i).get(2));
+            }
+        }
+    }
+
+    private void loadStrengthExerciseRow(View view, String exerName, String exerSets, String exerReps, String exerWeight) {
+
+        view.setTag("strength");
+
+        // Configurar el botón "X" para eliminar la fila
+        Button btnRemove = view.findViewById(R.id.btn_remove);
+        btnRemove.setOnClickListener(v -> tableLayout.removeView(view));
+
+        EditText name = view.findViewById(R.id.et_name);
+        name.setText(exerName);
+
+        EditText sets = view.findViewById(R.id.et_series);
+        sets.setText(exerSets);
+
+        EditText reps = view.findViewById(R.id.et_reps);
+        reps.setText(exerReps);
+
+        EditText peso = view.findViewById(R.id.et_weight);
+        peso.setText(exerWeight);
+
+        // Añadir la fila a la tabla
+        tableLayout.addView(view);
+
+    }
+
+    private void loadDurationExerciseRow(View view, String exerName, String exerDuration) {
+
+        view.setTag("duration");
+
+        // Configurar el botón "X" para eliminar la fila
+        Button btnRemove = view.findViewById(R.id.btn_remove);
+        btnRemove.setOnClickListener(v -> tableLayout.removeView(view));
+
+        EditText name = view.findViewById(R.id.et_name);
+        name.setText(exerName);
+
+        EditText sets = view.findViewById(R.id.et_duration);
+        sets.setText(exerDuration);
+
+
+        // Añadir la fila a la tabla
+        tableLayout.addView(view);
 
     }
 

@@ -124,4 +124,19 @@ public class StrengthExerciseDAO implements GenericDAO<StrengthExercise> {
     public void closeConnection() {
         dbHelper.close();
     }
+
+    /**
+     * Removes all the exercises whose sessionID = <code>parentID</code>
+     * @param parentId id of the session
+     */
+    public void deleteAll(long parentId) {
+
+        db = dbHelper.getWritableDatabase();
+
+        String selection = OpenGymDbContract.StrengthExerciseTable.COLUMN_SESSIONID + " LIKE ?";
+
+        String[] selectionArgs = {String.valueOf(parentId)};
+
+        db.delete(OpenGymDbContract.StrengthExerciseTable.TABLE_NAME, selection, selectionArgs);
+    }
 }

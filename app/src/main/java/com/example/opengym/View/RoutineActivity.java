@@ -37,7 +37,17 @@ public class RoutineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.session_viewer);
 
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+
         // Initialize views
+         if (tableLayout != null) {
+             tableLayout.removeAllViews();
+         }
         tableLayout = findViewById(R.id.table_layout);
         Button btnAddSession = findViewById(R.id.btn_add_session);
 

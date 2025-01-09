@@ -93,6 +93,15 @@ public class Session {
         }
     }
 
+    public void removeAllExercises(Context context) {
+
+        StrengthExerciseDAO strengthExerciseDAO = new StrengthExerciseDAO(context);
+        strengthExerciseDAO.deleteAll(getId());
+
+        TimedExerciseDAO timedExerciseDAO = new TimedExerciseDAO(context);
+        timedExerciseDAO.deleteAll(getId());
+    }
+
     public long addStrengthExercise(IExercise STexercise, Long parentID ,Context context){
 
         try {

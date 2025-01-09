@@ -2,7 +2,6 @@ package com.example.opengym.Controller;
 
 import android.content.Context;
 
-import com.example.opengym.Model.DAO.UserDAO;
 import com.example.opengym.Model.Entities.IExercise;
 import com.example.opengym.Model.Entities.Session;
 import com.example.opengym.Model.Entities.ExerciseFactory;
@@ -84,13 +83,17 @@ public class SessionController {
         controlledSession.addTimedExercise(exercise, controlledSession.getId(), context);
     }
 
+    public void removeExercises(Context context) {
+
+        controlledSession.removeAllExercises(context);
+    }
+
     public ArrayList<ArrayList<String>> returnExercises() {
 
-        int i = 0;
         ArrayList<ArrayList<String>> exercisesArray = new ArrayList<>();
         ArrayList<String> exerciseFields;
 
-        for (i = 0; i < controlledSession.getExercisesList().size(); i++) {
+        for (int i = 0; i < controlledSession.getExercisesList().size(); i++) {
             IExercise exercise = controlledSession.getExerciseAt(i);
             if (exercise.getType().equals("Strength")) {
                 StrengthExercise strExercise = (StrengthExercise) exercise;
