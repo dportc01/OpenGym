@@ -67,4 +67,14 @@ public class PrincipalController {
             return controlledUser.updateRoutine(id, context, routineName, routineDescription);
          }
     }
+
+    public void changePremium(Context context) {
+        controlledUser.changePremium(context);
+    }
+
+    public boolean isPremium() {
+        return controlledUser.getPremium();
+    }
+
 }
+

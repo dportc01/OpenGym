@@ -66,6 +66,9 @@ public class SessionEditorActivity extends AppCompatActivity {
 
     // Métodos para agregar filas de ejercicios
     private void addStrengthExerciseRow() {
+        if (!checkExerciseLimit()) {
+            return;
+        }
         // Inflar el diseño para una fila de ejercicio de fuerza
         LayoutInflater inflater = LayoutInflater.from(this);
         View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
@@ -82,6 +85,9 @@ public class SessionEditorActivity extends AppCompatActivity {
     }
 
     private void addDurationExerciseRow() {
+        if (!checkExerciseLimit()) {
+            return;
+        }
         // Inflar el diseño para una fila de ejercicio de duración
         LayoutInflater inflater = LayoutInflater.from(this);
         View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
@@ -166,5 +172,17 @@ public class SessionEditorActivity extends AppCompatActivity {
         }
 
         finish();
+    }
+
+    private boolean checkExerciseLimit() {
+        int exerciseNumber = sessionController.getSessionExercises().size();
+        if (exerciseNumber == 7 && !getIntent().getBooleanExtra("premium", false)) {
+            Toast.makeText(this, "No puedes tener más de 7 ejercicios sin ser premium", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(exerciseNumber == 15) {
+            Toast.makeText(this, "No puedes tener más de 15 ejercicios", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }

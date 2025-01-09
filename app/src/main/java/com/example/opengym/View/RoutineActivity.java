@@ -25,7 +25,7 @@ import com.example.opengym.R;
 
 public class RoutineActivity extends AppCompatActivity {
 
-    private RoutineController controller;
+    private RoutineController routineController;
     private TableLayout tableLayout;
 
     @Override
@@ -40,29 +40,32 @@ public class RoutineActivity extends AppCompatActivity {
         // Set listener for "Añadir Sesión" button
         btnAddSession.setOnClickListener(v -> promptForSessionDetails());
 
-        controller = new RoutineController(this, getIntent().getLongExtra("routine", -1));
+        routineController = new RoutineController(this, getIntent().getLongExtra("routine", -1));
 
         loadSessions();
     }
 
     private void loadSessions() {
 
-        controller.loadSessions(this);
+        routineController.loadSessions(this);
 
         int i = 0;
-        String sessionName = controller.getSessionName(i);
-        String sessionRest = controller.getSessionRest(i);
+        String sessionName = routineController.getSessionName(i);
+        String sessionRest = routineController.getSessionRest(i);
 
         while (sessionName != null & sessionRest != null) {
             addSessionTable(sessionName, sessionRest);
             i++;
-            sessionName = controller.getSessionName(i);
-            sessionRest = controller.getSessionRest(i);
+            sessionName = routineController.getSessionName(i);
+            sessionRest = routineController.getSessionRest(i);
         }
     }
 
     // Prompt the user to enter session name and rest duration
     private void promptForSessionDetails() {
+        if (!checkSessionLimit()) {
+            return;
+        }
         // Create an AlertDialog for user input
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Añadir Sesión");
@@ -95,7 +98,7 @@ public class RoutineActivity extends AppCompatActivity {
             if (sessionName.isEmpty() || restDuration.isEmpty()) {
                 Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
             } else {
-                long sessionId = controller.addSession(this, sessionName, restDuration);
+                long sessionId = routineController.addSession(this, sessionName, restDuration);
                 if (sessionId == -1) {
                     Toast.makeText(this, "Error al insertar, por favor compruebe que el nombre no se repita", Toast.LENGTH_SHORT).show();
                     return;
@@ -108,6 +111,7 @@ public class RoutineActivity extends AppCompatActivity {
                 intent.putExtra("session_name", sessionName);
                 intent.putExtra("rest_duration", restDuration);
                 intent.putExtra("session_id", sessionId);
+                intent.putExtra("premium", getIntent().getBooleanExtra("premium", false));
                 startActivity(intent);
             }
         });
@@ -174,7 +178,7 @@ public class RoutineActivity extends AppCompatActivity {
         Intent intent = new Intent(RoutineActivity.this, WorkoutActivity.class);
         intent.putExtra("session_name", sessionName);
         intent.putExtra("rest_duration", restDuration);
-        intent.putExtra("session_id", controller.getSessionId(sessionName));
+        intent.putExtra("session_id", routineController.getSessionId(sessionName));
         startActivity(intent);
     }
     
@@ -182,15 +186,26 @@ public class RoutineActivity extends AppCompatActivity {
         Intent intent = new Intent(RoutineActivity.this, SessionEditorActivity.class);
         intent.putExtra("session_name", sessionName);
         intent.putExtra("rest_duration", restDuration);
-        intent.putExtra("session_id", controller.getSessionId(sessionName));
+        intent.putExtra("session_id", routineController.getSessionId(sessionName));
+        intent.putExtra("premium", getIntent().getBooleanExtra("premium", false));
         startActivity(intent);
     }
     
     private void deleteSession(TableRow sessionRow, String sessionName) {
         tableLayout.removeView(sessionRow);
-    
-        // TODO Borrar sesion de la base de datos
-        // long sessionId = controller.getSessionId(sessionName);
-        // controller.deleteSessionFromDatabase(sessionId);
+        routineController.removeRoutineSession(sessionName, this);
     }
+
+    private boolean checkSessionLimit() {
+        int sessionNumber = routineController.getSessionsList().size();
+        if (sessionNumber == 4 && !getIntent().getBooleanExtra("premium", false)) {
+            Toast.makeText(this, "No puedes tener más de 4 sesiones sin ser premium", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if(sessionNumber == 10) {
+            Toast.makeText(this, "No puedes tener más de 10 sesiones", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
 }
