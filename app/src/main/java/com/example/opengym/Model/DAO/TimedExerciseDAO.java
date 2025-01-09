@@ -47,7 +47,7 @@ public class TimedExerciseDAO implements GenericDAO<TimedExercise> {
 
         String[] selectionArgs = {String.valueOf(id)};
 
-        return db.delete(OpenGymDbContract.RoutinesTable.TABLE_NAME, selection, selectionArgs);
+        return db.delete(OpenGymDbContract.TimedExerciseTable.TABLE_NAME, selection, selectionArgs);
     }
 
     @SuppressLint("Range")
@@ -114,5 +114,20 @@ public class TimedExerciseDAO implements GenericDAO<TimedExercise> {
     @Override
     public void closeConnection() {
         dbHelper.close();
+    }
+
+    /**
+     * Removes all the exercises whose sessionID = <code>parentID</code>
+     * @param parentId id of the session
+     */
+    public void deleteAll(long parentId) {
+
+        db = dbHelper.getWritableDatabase();
+
+        String selection = OpenGymDbContract.TimedExerciseTable.COLUMN_SESSIONID + " LIKE ?";
+
+        String[] selectionArgs = {String.valueOf(parentId)};
+
+        db.delete(OpenGymDbContract.TimedExerciseTable.TABLE_NAME, selection, selectionArgs);
     }
 }
