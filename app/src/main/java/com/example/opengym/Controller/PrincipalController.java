@@ -19,12 +19,18 @@ public class PrincipalController {
         controlledUser = userDAO.read(userName);
     }
 
-    public void exportUserRoutine(String routineName) {
-        controlledUser.exportUserRoutine(routineName);
+    public void exportUserRoutine(Context context, String routineName) {
+        ArrayList<Routine> routinesList = controlledUser.getRoutinesDB(context);
+        for (Routine routine : routinesList) {
+            if (routine.getName().equals(routineName)) {
+                controlledUser.exportUserRoutine(context, routine);
+                break;
+            }
+        }
     }
 
-    public void importUserRoutine(String filePath) {
-        //controlledUser.importRoutine(filePath);
+    public String importUserRoutine(String filePath, Context context) {
+        return controlledUser.importUserRoutine(filePath, context);
     }
 
     public long removeUserRoutine(String routineName, Context context) {

@@ -83,57 +83,56 @@ public class User {
         return this.routinesList;
     }
 
-    public void exportUserRoutine(String name) {
-        Routine routine = null;
-        for (Routine r : routinesList) {
-            if (r.getName().equals(name)) {
-                routine = r;
-                break;
-            }
-        }
+
+    public void exportUserRoutine(Context context, Routine routine) {
         if (routine == null) {
             return;
         }
+
+        routine.setInfoDB(context, routine.getId());
+
+        for (Session session : routine.getSessionsList()) {
+            session.setInfoDB(context, session.getId());
+        }
+    
         File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(downloadsDir, name + ".csv");
+        File file = new File(downloadsDir, routine.getName() + "_simple.csv");
+    
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("Rutina,Descripcion,Sesion,Fecha,DuracionDescanso,NombreEjercicio,TipoEjercicio,Repeticiones,Series,Peso,Duracion\n");
-            String routineData = String.format(
-                "%s,%s\n",
-                routine.getName(),
-                routine.getDescription()
-            );
             for (Session session : routine.getSessionsList()) {
-                String sessionData = String.format(
-                    new Locale("es", "ES"),
-                    "%s%s,%s,%s,%d,",
-                    routineData,
-                    session.getName(),
-                    session.getDate().toString(),
-                    session.getRestDuration()
-                );
                 for (IExercise exercise : session.getExercisesList()) {
                     String exerciseData;
-                    if (exercise.getType().equals("Strength")) {
+                    if (exercise instanceof StrengthExercise) {
                         StrengthExercise strengthExercise = (StrengthExercise) exercise;
                         exerciseData = String.format(
-                            new Locale("es", "ES"),
-                            "%s%s,%s,%s,%d,%d,%.2f,-\n",
-                            sessionData,
-                            strengthExercise.getName(),
+                            "%s,%s,%s,%s,%d,%s,%s,%d,%d,%.2f,%d\n",
+                            routine.getName(),
+                            routine.getDescription(),
+                            session.getName(),
+                            session.getDate() != null ? session.getDate().toString() : "NoDate",
+                            session.getRestDuration(),
+                            exercise.getName(),
                             "Strength",
                             strengthExercise.getNumOfReps(),
                             strengthExercise.getNumOfSets(),
-                            strengthExercise.getWeight()
+                            strengthExercise.getWeight(),
+                            0
                         );
                     } else {
                         TimedExercise timedExercise = (TimedExercise) exercise;
                         exerciseData = String.format(
-                             new Locale("es", "ES"),
-                            "%s%s,%s,%s,-,-,-,%d\n",
-                            sessionData,
-                            timedExercise.getName(),
-                            "Timed",
+                            "%s,%s,%s,%s,%d,%s,%s,%d,%d,%.2f,%d\n",
+                            routine.getName(),
+                            routine.getDescription(),
+                            session.getName(),
+                            session.getDate() != null ? session.getDate().toString() : "NoDate",
+                            session.getRestDuration(),
+                            exercise.getName(),
+                            "Cardio",
+                            0,
+                            0, 
+                            0.0,
                             timedExercise.getTime()
                         );
                     }
@@ -146,17 +145,16 @@ public class User {
     }
 
 
-    public void importUserRoutine(String filePath) {
+    public String importUserRoutine(String filePath, Context context) {
         File file = new File(filePath);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
             Routine newRoutine;
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-
             line = reader.readLine();
             if(line == null) {
-                return;
+                return "No data found, No data found";
             }
 
             String[] parts = line.split(",");
@@ -164,7 +162,7 @@ public class User {
             String routineDescription = parts[1];
             ArrayList<Session> sessionList = new ArrayList<Session>();
             newRoutine = new Routine(routineName, routineDescription, sessionList);
-            routinesList.add(newRoutine);
+            this.addRoutine(routineName, routineDescription, context);
 
             String currentSession = parts[2];
             IExercise newExercise = null;
@@ -172,21 +170,27 @@ public class User {
                 parts = line.split(",");
                 currentSession = parts[2];
                 ArrayList<IExercise> exercises = new ArrayList<IExercise>();
-                while(Objects.equals(parts[2], currentSession)) {
-                    parts = line.split(",");
-                    newExercise = extractExerciseData(parts);
-                    exercises.add(newExercise);
-                    line = reader.readLine();
-                }
                 Date date = formatter.parse(parts[3]);
                 Session newSession = new Session(parts[2], date, Integer.parseInt(parts[4]), exercises);
-                // newRoutine.addSession(newSession); TODO cambiar para pasar parametros en vez de la sesion directa
-                // TODO Crear metodo para crear y añadir sesiones a rutinas
+                newRoutine.addSession(context, parts[2], date, Integer.parseInt(parts[4]));
+                while(Objects.equals(parts[2], currentSession) && line != null) {
+                    parts = line.split(",");
+                    newExercise = extractExerciseData(parts);
+                    if(parts[7].equals("Strength")) {
+                        newSession.addStrengthExercise(newExercise, newSession.getId(), context);
+                    } else {
+                        newSession.addTimedExercise(newExercise, newSession.getId(), context);
+                    }   
+                    line = reader.readLine();
+                }
                 line = reader.readLine();
             }  
+            String routineData = newRoutine.getName() + "," + newRoutine.getDescription(); 
+            return routineData;
         } catch (IOException | ParseException e) {
             Log.e("User", "Error importing user routine", e);
         }
+        return "No data found, No data found";
     }
 
     private IExercise extractExerciseData(String[] dataRow) {

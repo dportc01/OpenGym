@@ -106,6 +106,9 @@ public class PrincipalActivity extends AppCompatActivity {
         ImageView routineEdit = cardView.findViewById(R.id.edit_button);
         routineEdit.setOnClickListener(v -> showNameInputDialog(cardView));
 
+        ImageView routineDownload = cardView.findViewById(R.id.export_button);
+        routineDownload.setOnClickListener(v -> exportRoutine(routineName));
+
         // Set click listener on the card
         cardView.setOnClickListener(v -> {
             Toast.makeText(this, "Rutina seleccionada: " + routineName, Toast.LENGTH_SHORT).show();
@@ -205,6 +208,10 @@ public class PrincipalActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void exportRoutine(String routineName){
+        principalController.exportUserRoutine(this, routineName);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_overflow, menu);
@@ -218,6 +225,9 @@ public class PrincipalActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.github_link) {
             openGitHub();
+            return true;
+        } else if (item.getItemId() == R.id.import_routine) {
+            importRoutine();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -240,5 +250,28 @@ public class PrincipalActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void importRoutine() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            String filePath = uri.getPath();
+            String routineData = principalController.importUserRoutine(filePath, this);
+            if (routineData != null) {
+                String[] routineInfo = routineData.split(",");
+                addNewRoutine(routineInfo[0], routineInfo[1]);
+            } else {
+                Toast.makeText(this, "Error al importar la rutina", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
