@@ -66,6 +66,10 @@ public class Session {
         return exercisesList;
     }
 
+    public IExercise getExerciseAt(int i) {
+        return exercisesList.get(i);
+    }
+
     public void setId(long id) {
 
         this.id = id;
