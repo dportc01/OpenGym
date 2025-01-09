@@ -46,7 +46,7 @@
             android:layout_margin="8dp"
             android:background="@drawable/circle_background"
             android:gravity="center"
-            android:text="X"
+            android:text="@string/x"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:elevation="4dp" />
@@ -54,7 +54,7 @@
         <ImageView
             android:id="@+id/edit_button"
             android:src="@drawable/ic_edit"
-            android:contentDescription="Image of a pencil"
+            android:contentDescription="@string/image_of_a_pencil"
             android:background="@drawable/circle_background"
             android:layout_width="32dp"
             android:layout_height="32dp"
