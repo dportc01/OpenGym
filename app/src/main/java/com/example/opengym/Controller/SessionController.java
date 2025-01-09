@@ -73,14 +73,14 @@ public class SessionController {
         }
     }
 
-    public long addStrenghExercise(Context context, String exerciseName, int sets, int reps, float weight) {
+    public void addStrenghExercise(Context context, String exerciseName, int sets, int reps, float weight) {
         IExercise exercise = ExerciseFactory.createExercise(exerciseName, sets, reps, weight);
-        return controlledSession.addStrengthExercise(exercise);
+        controlledSession.addStrengthExercise(exercise, context);
     }
 
-    public long addTimedExercise(Context context, String exerciseName, int duration) {
+    public void addTimedExercise(Context context, String exerciseName, int duration) {
         IExercise exercise = ExerciseFactory.createExercise(exerciseName, duration);
-        return controlledSession.addTimedExercise(exercise);
+        controlledSession.addTimedExercise(exercise, context);
     }
     
     public ArrayList<String> getSessionExercises() {
