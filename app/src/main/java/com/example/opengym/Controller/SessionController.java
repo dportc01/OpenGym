@@ -21,6 +21,7 @@ public class SessionController {
     public SessionController(Context context , long id) {
         SessionDAO sessionDAO = new SessionDAO(context);
         controlledSession = sessionDAO.read(id);
+        loadExercises(context);
     }
 
     public void loadExercises(Context context){
@@ -82,13 +83,36 @@ public class SessionController {
         IExercise exercise = ExerciseFactory.createExercise(exerciseName, duration);
         controlledSession.addTimedExercise(exercise, controlledSession.getId(), context);
     }
-    
-    public ArrayList<String> getSessionExercises() {
-        ArrayList<IExercise> exerciseList = controlledSession.getExercisesList();
-        ArrayList<String> exerciseNames = new ArrayList<>();
-        for (IExercise exercise : exerciseList) {
-            exerciseNames.add(exercise.getName());
+
+    public ArrayList<ArrayList<String>> returnExercises() {
+
+        int i = 0;
+        ArrayList<ArrayList<String>> exercisesArray = new ArrayList<>();
+        ArrayList<String> exerciseFields;
+
+        for (i = 0; i < controlledSession.getExercisesList().size(); i++) {
+            IExercise exercise = controlledSession.getExerciseAt(i);
+            if (exercise.getType().equals("Strength")) {
+                StrengthExercise strExercise = (StrengthExercise) exercise;
+                exerciseFields = new ArrayList<>();
+
+                exerciseFields.add(strExercise.getType());
+                exerciseFields.add(strExercise.getName());
+                exerciseFields.add(String.valueOf(strExercise.getNumOfReps()));
+                exerciseFields.add(String.valueOf(strExercise.getNumOfSets()));
+                exerciseFields.add(String.valueOf(strExercise.getWeight()));
+            } else {
+                TimedExercise timedExercise = (TimedExercise) exercise;
+                exerciseFields = new ArrayList<>();
+
+                exerciseFields.add(timedExercise.getType());
+                exerciseFields.add(timedExercise.getName());
+                exerciseFields.add(String.valueOf(timedExercise.getTime()));
+            }
+
+            exercisesArray.add(exerciseFields);
         }
-        return exerciseNames;
+
+        return exercisesArray;
     }
 }
