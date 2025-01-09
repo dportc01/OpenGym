@@ -81,7 +81,6 @@ public class SessionEditorActivity extends AppCompatActivity {
         // Añadir la fila a la tabla
         tableLayout.addView(strengthExerciseRow);
 
-        Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
     }
 
     private void addDurationExerciseRow() {
@@ -100,7 +99,6 @@ public class SessionEditorActivity extends AppCompatActivity {
         // Añadir la fila a la tabla
         tableLayout.addView(durationExerciseRow);
 
-        Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
     }
 
     // Métodos auxiliares para guardar datos en la base de datos
