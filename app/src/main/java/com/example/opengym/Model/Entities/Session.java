@@ -75,9 +75,6 @@ public class Session {
         return this.id;
     }
 
-    public void getInfoDB() {
-        // TODO implement here
-    }
 
     public void removeExercise(String name) {
         if (exercisesList.isEmpty()){
@@ -91,19 +88,17 @@ public class Session {
         }
     }
 
-    public void addExercise(IExercise exercise) {
-        exercisesList.add(exercise);
-    }
-
-    public long addStrengthExercise(IExercise STexercise){
+    public long addStrengthExercise(IExercise STexercise, Context context){
         exercisesList.add(STexercise);
-        return 0; // TODO cambiar lo que devuelve cuando funcione con el DAO
+        StrengthExerciseDAO strengthExerciseTable = new StrengthExerciseDAO(context);
+        return strengthExerciseTable.create((StrengthExercise) STexercise, ((StrengthExercise) STexercise).getId());
     }
 
 
-    public long addTimedExercise(IExercise TIexercise){
+    public long addTimedExercise(IExercise TIexercise, Context context){
         exercisesList.add(TIexercise);
-        return 0; // TODO cambiar cuando funcione con el DAO
+        TimedExerciseDAO timedExerciseTable = new TimedExerciseDAO(context);
+        return timedExerciseTable.create((TimedExercise) TIexercise, ((TimedExercise)TIexercise).getId());
     }
 
 }

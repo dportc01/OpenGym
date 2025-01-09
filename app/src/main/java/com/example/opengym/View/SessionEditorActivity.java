@@ -46,7 +46,9 @@ public class SessionEditorActivity extends AppCompatActivity {
 
         Button btnAddStrength = findViewById(R.id.btn_add_strength);
         Button btnAddDuration = findViewById(R.id.btn_add_duration);
+        Button btnSave = findViewById(R.id.btn_save);
 
+        btnSave.setOnClickListener(v -> saveSession());
         btnAddStrength.setOnClickListener(v -> addStrengthExerciseRow());
         btnAddDuration.setOnClickListener(v -> addDurationExerciseRow());
     }
@@ -67,6 +69,7 @@ public class SessionEditorActivity extends AppCompatActivity {
         // Inflar el diseño para una fila de ejercicio de fuerza
         LayoutInflater inflater = LayoutInflater.from(this);
         View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
+        strengthExerciseRow.setTag("strength");
 
         // Configurar el botón "X" para eliminar la fila
         Button btnRemove = strengthExerciseRow.findViewById(R.id.btn_remove);
@@ -75,14 +78,14 @@ public class SessionEditorActivity extends AppCompatActivity {
         // Añadir la fila a la tabla
         tableLayout.addView(strengthExerciseRow);
 
-        // Guardar los datos en la base de datos al confirmar
-        saveStrengthExercise(strengthExerciseRow);
+        Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
     }
 
     private void addDurationExerciseRow() {
         // Inflar el diseño para una fila de ejercicio de duración
         LayoutInflater inflater = LayoutInflater.from(this);
         View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
+        durationExerciseRow.setTag("duration");
 
         // Configurar el botón "X" para eliminar la fila
         Button btnRemove = durationExerciseRow.findViewById(R.id.btn_remove);
@@ -91,12 +94,11 @@ public class SessionEditorActivity extends AppCompatActivity {
         // Añadir la fila a la tabla
         tableLayout.addView(durationExerciseRow);
 
-        // Guardar los datos en la base de datos al confirmar
-        saveDurationExercise(durationExerciseRow);
+        Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
     }
 
     // Métodos auxiliares para guardar datos en la base de datos
-    private void saveStrengthExercise(View strengthExerciseRow) {
+    private int saveStrengthExercise(View strengthExerciseRow) {
         EditText etName = strengthExerciseRow.findViewById(R.id.et_name);
         EditText etSeries = strengthExerciseRow.findViewById(R.id.et_series);
         EditText etReps = strengthExerciseRow.findViewById(R.id.et_reps);
@@ -109,7 +111,7 @@ public class SessionEditorActivity extends AppCompatActivity {
 
         if (name.isEmpty() || seriesStr.isEmpty() || repsStr.isEmpty() || weightStr.isEmpty()) {
             Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
-            return;
+            return -1;
         }
 
         try {
@@ -119,10 +121,12 @@ public class SessionEditorActivity extends AppCompatActivity {
             sessionController.addStrenghExercise(this, name, series, reps, weight);
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
+            return -1;
         }
+        return 0;
     }
 
-    private void saveDurationExercise(View durationExerciseRow) {
+    private int saveDurationExercise(View durationExerciseRow) {
         EditText etName = durationExerciseRow.findViewById(R.id.et_name);
         EditText etDuration = durationExerciseRow.findViewById(R.id.et_duration);
 
@@ -131,7 +135,7 @@ public class SessionEditorActivity extends AppCompatActivity {
 
         if (name.isEmpty() || durationStr.isEmpty()) {
             Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
-            return;
+            return -1;
         }
 
         try {
@@ -139,6 +143,28 @@ public class SessionEditorActivity extends AppCompatActivity {
             sessionController.addTimedExercise(this, name, duration);
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
+            return -1;
         }
+        return 0;
+    }
+
+    private void saveSession() {
+
+        for (int i = 1; i < tableLayout.getChildCount(); i++) {
+            View child = tableLayout.getChildAt(i);
+            if ("strength".equals(child.getTag())) {
+                if(saveStrengthExercise(child) == -1) {
+                    return;
+                }
+            } else if ("duration".equals(child.getTag())) {
+                if (saveDurationExercise(child) == -1) {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+
+        finish();
     }
 }
