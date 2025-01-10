@@ -1,6 +1,7 @@
 package com.example.opengym.Controller;
 
 import android.content.Context;
+import android.net.Uri;
 
 import java.util.List;
 
@@ -29,8 +30,9 @@ public class PrincipalController {
         }
     }
 
-    public String importUserRoutine(String filePath, Context context) {
-        return controlledUser.importUserRoutine(filePath, context);
+    public String importUserRoutine(Uri uri, Context context) {
+        return controlledUser.importUserRoutineSimple(context, uri);
+        // return controlledUser.importUserRoutine(filePath , context);
     }
 
     public long removeUserRoutine(String routineName, Context context) {
