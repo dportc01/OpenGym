@@ -82,5 +82,9 @@ public class PrincipalController {
         return controlledUser.getPremium();
     }
 
+    public void logOut(Context context) {
+        controlledUser.removeLastLogin(context);
+    }
+
 }
 

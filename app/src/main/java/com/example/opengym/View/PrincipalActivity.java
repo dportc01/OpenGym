@@ -199,7 +199,8 @@ public class PrincipalActivity extends AppCompatActivity {
     private void logOut() {
         AlertDialog.Builder logOutPopUp = new AlertDialog.Builder(this);
         logOutPopUp.setTitle("¿Quieres cerrar tu sesión?")
-                .setPositiveButton("Sí", (dialog, which) -> { 
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    principalController.logOut(this);
                     Intent intent = new Intent(PrincipalActivity.this, SignUpActivity.class);
                     startActivity(intent);
                     finish();
