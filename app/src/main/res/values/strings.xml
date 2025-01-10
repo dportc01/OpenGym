@@ -23,4 +23,6 @@
     <string name="x">X</string>
     <string name="image_of_a_pencil">Image of a pencil</string>
     <string name="download_button">Download button</string>
+    <string name="importar_una_rutina">Importar una rutina</string>
+    <string name="github">GitHub</string>
 </resources>
