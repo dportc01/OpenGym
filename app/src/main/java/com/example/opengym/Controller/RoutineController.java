@@ -49,10 +49,12 @@ public class RoutineController {
         int i = 0;
         ArrayList<ArrayList<String>> exercisesArray = new ArrayList<>();
         ArrayList<String> exerciseFields;
+        ArrayList<Session> sessions = controlledRoutine.getSessionsList();
+
 
         try {
-            while (i < controlledRoutine.getSessionsList().get(sessionPosition).getExercisesList().size()) {
-                IExercise exercise = controlledRoutine.getSessionsList().get(sessionPosition).getExerciseAt(i);
+            while (i < sessions.get(sessionPosition).getExercisesList().size()) {
+                IExercise exercise = sessions.get(sessionPosition).getExerciseAt(i);
                 if (exercise.getType().equals("Strength")) {
                     StrengthExercise strExercise = (StrengthExercise) exercise;
                     exerciseFields = new ArrayList<>();

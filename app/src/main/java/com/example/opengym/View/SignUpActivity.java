@@ -63,6 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
                         intent = new Intent(SignUpActivity.this, PrincipalActivity.class);
                         intent.putExtra("userName", username);
                         startActivity(intent);
+                        finish();
                 }
             }
         });
