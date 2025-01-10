@@ -154,7 +154,7 @@ public class SessionDAO implements GenericDAO<Session> {
     /**
      *
      * @param id of the no date entry
-     * @return that contains the entry name on 0, and the parentId on 1
+     * @return ArrayList that contains the entry name on 0, and the parentId on 1
      */
     @SuppressLint("Range")
     private ArrayList<String> getInfoForDateEntries(long id) {

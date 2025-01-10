@@ -26,6 +26,7 @@
         <activity android:name=".View.PrincipalActivity" />
         <activity android:name=".View.RoutineActivity" />
         <activity android:name=".View.SessionEditorActivity" />
+        <activity android:name=".View.SessionTrackingActivity" />
     </application>
 
 </manifest>
