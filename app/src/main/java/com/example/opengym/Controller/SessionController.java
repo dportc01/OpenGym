@@ -38,10 +38,17 @@ public class SessionController {
         controlledSession.addTimedExercise(exercise, controlledSession.getId(), context);
     }
 
+    /**
+     * Creates new session, if the session alredy exists does nothing
+     * @param context
+     * @param parentId
+     */
     public void createNewSession(Context context, long parentId) {
-        newSession = new Session(controlledSession.getName(), new Date(System.currentTimeMillis()), controlledSession.getRestDuration(), new ArrayList<IExercise>());
-        SessionDAO sessionDAO = new SessionDAO(context);
-        sessionDAO.create(newSession, parentId);
+        if(newSession == null) {
+            newSession = new Session(controlledSession.getName(), new Date(System.currentTimeMillis()), controlledSession.getRestDuration(), new ArrayList<IExercise>());
+            SessionDAO sessionDAO = new SessionDAO(context);
+            sessionDAO.create(newSession, parentId);
+        }
     }
 
     public void addStrengthExerciseToNewSession(Context context, String exerciseName, int sets, int reps, float weight) {
@@ -51,7 +58,7 @@ public class SessionController {
 
     public void addTimedExerciseToNewSession(Context context, String exerciseName, int duration) {
         IExercise exercise = ExerciseFactory.createExercise(exerciseName, duration);
-        newSession.addStrengthExercise(exercise, newSession.getId(), context);
+        newSession.addTimedExercise(exercise, newSession.getId(), context);
     }
 
     public void removeExercises(Context context) {
@@ -64,7 +71,7 @@ public class SessionController {
      * @param context
      * @return false if it doesn't have a previous recorded session and true otherwise
      */
-    public boolean loadOldestSession(Context context) {
+    public boolean loadNewestSession(Context context) {
 
         SessionDAO sessionsTable = new SessionDAO(context);
         ArrayList<Session> pastSessions = sessionsTable.getAllPast(controlledSession.getId());
@@ -80,6 +87,8 @@ public class SessionController {
                 previousSession = session;
             }
         }
+
+        previousSession.setInfoDB(context, previousSession.getId());
 
         return true;
     }

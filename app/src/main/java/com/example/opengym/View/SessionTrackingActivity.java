@@ -62,15 +62,11 @@ public class SessionTrackingActivity extends AppCompatActivity {
 
     private void loadExercises() {
 
-
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View exerciseRow;
-
         ArrayList<ArrayList<String>> exercisesList = sessionController.returnExercises();
         Iterator<ArrayList<String>> exercisesListIterator = exercisesList.iterator();
         ArrayList<String> exercise;
 
-        boolean hasPreviousExercises = sessionController.loadOldestSession(this);
+        boolean hasPreviousExercises = sessionController.loadNewestSession(this);
         ArrayList<ArrayList<String>> prevExercises;
         Iterator<ArrayList<String>> prevExercisesIterator = null;
         ArrayList<String> prevExercise = null;
@@ -150,13 +146,13 @@ public class SessionTrackingActivity extends AppCompatActivity {
     }
 
     private int saveStrengthExercise(View strengthExerciseRow) {
-        TextView etName = strengthExerciseRow.findViewById(R.id.et_name);
-        TextView etSeries = strengthExerciseRow.findViewById(R.id.et_series);
+        TextView tvName = strengthExerciseRow.findViewById(R.id.tv_name);
+        TextView tvSeries = strengthExerciseRow.findViewById(R.id.tv_series);
         EditText etReps = strengthExerciseRow.findViewById(R.id.et_reps);
         EditText etWeight = strengthExerciseRow.findViewById(R.id.et_weight);
 
-        String name = etName.getText().toString().trim();
-        String seriesStr = etSeries.getText().toString().trim();
+        String name = tvName.getText().toString().trim();
+        String seriesStr = tvSeries.getText().toString().trim();
         String repsStr = etReps.getText().toString().trim();
         String weightStr = etWeight.getText().toString().trim();
 
@@ -166,6 +162,7 @@ public class SessionTrackingActivity extends AppCompatActivity {
         }
 
         try {
+            sessionController.createNewSession(this, getIntent().getLongExtra("routine_id", -1));
             int series = Integer.parseInt(seriesStr);
             int reps = Integer.parseInt(repsStr);
             float weight = Float.parseFloat(weightStr);
@@ -178,10 +175,10 @@ public class SessionTrackingActivity extends AppCompatActivity {
     }
 
     private int saveDurationExercise(View durationExerciseRow) {
-        EditText etName = durationExerciseRow.findViewById(R.id.et_name);
+        TextView tvName = durationExerciseRow.findViewById(R.id.tv_name);
         EditText etDuration = durationExerciseRow.findViewById(R.id.et_duration);
 
-        String name = etName.getText().toString().trim();
+        String name = tvName.getText().toString().trim();
         String durationStr = etDuration.getText().toString().trim();
 
         if (name.isEmpty() || durationStr.isEmpty()) {
@@ -190,6 +187,7 @@ public class SessionTrackingActivity extends AppCompatActivity {
         }
 
         try {
+            sessionController.createNewSession(this, getIntent().getLongExtra("routine_id", -1));
             int duration = Integer.parseInt(durationStr);
             sessionController.addTimedExerciseToNewSession(this, name, duration);
         } catch (NumberFormatException e) {
@@ -200,8 +198,6 @@ public class SessionTrackingActivity extends AppCompatActivity {
     }
 
     private void saveSession() {
-
-        sessionController.createNewSession(this, getIntent().getLongExtra("routine_id", -1));
 
         for (int i = 1; i < tableLayout.getChildCount(); i++) {
             View child = tableLayout.getChildAt(i);
