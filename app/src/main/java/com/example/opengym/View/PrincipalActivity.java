@@ -72,7 +72,7 @@ public class PrincipalActivity extends AppCompatActivity {
         AlertDialog.Builder removePopUp = new AlertDialog.Builder(this);
         removePopUp.setTitle("Eliminar rutina")
                 .setMessage("¿Estás seguro de que quieres eliminar esta rutina?")
-                .setPositiveButton("Sí", (dialog, which) -> { removeRoutine(cardView); })
+                .setPositiveButton("Sí", (dialog, which) -> removeRoutine(cardView))
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
