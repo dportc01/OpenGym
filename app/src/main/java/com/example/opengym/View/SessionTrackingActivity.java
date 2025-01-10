@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,7 +15,7 @@ import com.example.opengym.R;
 
 import java.util.ArrayList;
 
-public class WorkoutActivity extends AppCompatActivity {
+public class SessionTrackingActivity extends AppCompatActivity {
 
     private TableLayout tableLayout;
     private SessionController sessionController;
@@ -76,43 +74,29 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     private void addStrengthExerciseRow(String exerciseName, ArrayList<String> previousValues) {
+
         LayoutInflater inflater = LayoutInflater.from(this);
-        View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
+        View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_tracking_row, tableLayout, false);
 
-        TextView tvExerciseName = strengthExerciseRow.findViewById(R.id.tv_exercise_name);
-        tvExerciseName.setText(exerciseName);
+        TextView name = strengthExerciseRow.findViewById(R.id.tv_name);
+        name.setText(exerciseName);
 
-        EditText etSeries = strengthExerciseRow.findViewById(R.id.et_series);
-        EditText etReps = strengthExerciseRow.findViewById(R.id.et_reps);
-        EditText etWeight = strengthExerciseRow.findViewById(R.id.et_weight);
-
-        TextView tvPreviousSeries = strengthExerciseRow.findViewById(R.id.tv_previous_series);
-        TextView tvPreviousReps = strengthExerciseRow.findViewById(R.id.tv_previous_reps);
-        TextView tvPreviousWeight = strengthExerciseRow.findViewById(R.id.tv_previous_weight);
-
-        tvPreviousSeries.setText(previousValues.get(0));
-        tvPreviousReps.setText(previousValues.get(1));
-        tvPreviousWeight.setText(previousValues.get(2));
+        TextView series = strengthExerciseRow.findViewById(R.id.tv_series);
+        TextView previousInfo = strengthExerciseRow.findViewById(R.id.tv_previous);
 
         tableLayout.addView(strengthExerciseRow);
     }
 
     private void addDurationExerciseRow(String exerciseName, String previousValue) {
+
         LayoutInflater inflater = LayoutInflater.from(this);
-        View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
-
-        TextView tvExerciseName = durationExerciseRow.findViewById(R.id.tv_exercise_name);
-        tvExerciseName.setText(exerciseName);
-
-        EditText etDuration = durationExerciseRow.findViewById(R.id.et_duration);
-        TextView tvPreviousDuration = durationExerciseRow.findViewById(R.id.tv_previous_duration);
-
-        tvPreviousDuration.setText(previousValue);
+        View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_tracking_row, tableLayout, false);
 
         tableLayout.addView(durationExerciseRow);
     }
 
     private void saveSession() {
+        /*
         int childCount = tableLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View row = tableLayout.getChildAt(i);
@@ -159,5 +143,7 @@ public class WorkoutActivity extends AppCompatActivity {
             }
         }
         Toast.makeText(this, "Sesión guardada", Toast.LENGTH_SHORT).show();
+
+         */
     }
 }

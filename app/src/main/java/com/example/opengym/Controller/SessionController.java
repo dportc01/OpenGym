@@ -9,13 +9,13 @@ import com.example.opengym.Model.Entities.StrengthExercise;
 import com.example.opengym.Model.Entities.TimedExercise;
 import com.example.opengym.Model.DAO.SessionDAO;
 
-
-
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class SessionController {
     private final Session controlledSession;
+    private Session oldestSession;
 
     public SessionController(Context context , long id) {
         SessionDAO sessionDAO = new SessionDAO(context);
@@ -88,13 +88,32 @@ public class SessionController {
         controlledSession.removeAllExercises(context);
     }
 
-    public ArrayList<ArrayList<String>> returnExercises() {
+    public void retrieveOldestSession(Context context) {
+
+        SessionDAO sessionsTable = new SessionDAO(context);
+        ArrayList<Session> pastSessions = sessionsTable.getAllPast(controlledSession.getId());
+        Date sessionDate = new Date(0);
+
+        for (Session session : pastSessions) {
+            if (sessionDate.getTime()  < session.getDate().getTime()) {
+                oldestSession = session;
+            }
+        }
+    }
+
+    public ArrayList<ArrayList<String>> returnExercises(boolean isTemplate) {
+
+        Session objetiveSession = controlledSession;
+
+        if (!isTemplate) {
+            objetiveSession = oldestSession;
+        }
 
         ArrayList<ArrayList<String>> exercisesArray = new ArrayList<>();
         ArrayList<String> exerciseFields;
 
-        for (int i = 0; i < controlledSession.getExercisesList().size(); i++) {
-            IExercise exercise = controlledSession.getExerciseAt(i);
+        for (int i = 0; i < objetiveSession.getExercisesList().size(); i++) {
+            IExercise exercise = objetiveSession.getExerciseAt(i);
             if (exercise.getType().equals("Strength")) {
                 StrengthExercise strExercise = (StrengthExercise) exercise;
                 exerciseFields = new ArrayList<>();

@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.ViewParent;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -274,7 +272,7 @@ public class RoutineActivity extends AppCompatActivity {
     }
     
     private void startSession(String sessionName, String restDuration) {
-        Intent intent = new Intent(RoutineActivity.this, WorkoutActivity.class);
+        Intent intent = new Intent(RoutineActivity.this, SessionTrackingActivity.class);
         intent.putExtra("session_name", sessionName);
         intent.putExtra("rest_duration", restDuration);
         intent.putExtra("session_id", routineController.getSessionId(sessionName));

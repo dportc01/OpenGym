@@ -80,19 +80,6 @@ public class Session {
         return this.id;
     }
 
-
-    public void removeExercise(String name) {
-        if (exercisesList.isEmpty()){
-            return;
-        }
-        for (IExercise exercise : exercisesList) {
-            if (exercise.getName().equals(name)) {
-                exercisesList.remove(exercise);
-                return;
-            }
-        }
-    }
-
     public void removeAllExercises(Context context) {
 
         StrengthExerciseDAO strengthExerciseDAO = new StrengthExerciseDAO(context);
@@ -134,6 +121,4 @@ public class Session {
             return -1;
         }
     }
-
-
 }

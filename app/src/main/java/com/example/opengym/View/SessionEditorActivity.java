@@ -186,7 +186,7 @@ public class SessionEditorActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View exerciseRow;
 
-        ArrayList<ArrayList<String>> exercisesList = sessionController.returnExercises();
+        ArrayList<ArrayList<String>> exercisesList = sessionController.returnExercises(true);
 
         for (int i = 0; i < exercisesList.size(); i++) {
             if (exercisesList.get(i).get(0).equals("Strength")) {
