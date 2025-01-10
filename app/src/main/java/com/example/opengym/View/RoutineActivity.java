@@ -69,6 +69,7 @@ public class RoutineActivity extends AppCompatActivity {
 
         while (sessionName != null && sessionRest != null) {
             addSessionTable(sessionName, sessionRest);
+            loadSessionExercises(i);
             i++;
             sessionName = routineController.getSessionName(i);
             sessionRest = routineController.getSessionRest(i);
@@ -118,7 +119,6 @@ public class RoutineActivity extends AppCompatActivity {
                     return;
                 }
 
-                addSessionTable(sessionName, restDuration);
 
                 // Inicia SessionEditorActivity con los detalles de la sesión
                 Intent intent = new Intent(this, SessionEditorActivity.class);
@@ -127,6 +127,7 @@ public class RoutineActivity extends AppCompatActivity {
                 intent.putExtra("session_id", sessionId);
                 intent.putExtra("premium", getIntent().getBooleanExtra("premium", false));
                 startActivity(intent);
+                addSessionTable(sessionName, restDuration);
             }
         });
 
@@ -151,7 +152,7 @@ public class RoutineActivity extends AppCompatActivity {
         ImageButton optionsButton = new ImageButton(this);
         optionsButton.setImageResource(R.drawable.ic_more_vert); // Asegúrate de tener un ícono de tres puntos verticales en drawable
         optionsButton.setBackgroundColor(Color.TRANSPARENT); // Hacer el fondo transparente
-        optionsButton.setOnClickListener(v -> sessionOptionMenu(v, sessionName, restDuration, sessionDetailsRow));
+        optionsButton.setOnClickListener(v -> sessionOptionMenu(v, sessionName, restDuration));
         optionsButton.setLayoutParams(new TableRow.LayoutParams(
             TableRow.LayoutParams.WRAP_CONTENT,
             TableRow.LayoutParams.WRAP_CONTENT));
@@ -159,36 +160,30 @@ public class RoutineActivity extends AppCompatActivity {
         sessionDetailsRow.addView(optionsButton);
     
         tableLayout.addView(sessionDetailsRow);
-
-        loadSessionExercises();
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View sessionTable = inflater.inflate(R.layout.session_table, tableLayout, false);
+        tableLayout.addView(sessionTable);
     }
 
-    private void loadSessionExercises() {
+    private void loadSessionExercises(int i) {
 
-        int i = 0;
         LayoutInflater inflater = LayoutInflater.from(this);
         View exerciseRow;
 
         ArrayList<ArrayList<String>> exercisesList = routineController.returnExercises(i);
 
-        while (exercisesList != null) {
-            for (int j = 0; j < exercisesList.size(); j++) {
-                if (exercisesList.get(j).get(0).equals("Strength")) {
+        for (int j = 0; j < exercisesList.size(); j++) {
+            if (exercisesList.get(j).get(0).equals("Strength")) {
 
-                    exerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
-                    prepareViewStrengthExercise(exerciseRow, exercisesList.get(j).get(1), exercisesList.get(j).get(2), exercisesList.get(j).get(3), exercisesList.get(j).get(4));
-                }
-                else {
-
-                    exerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
-                    prepareViewTimed(exerciseRow, exercisesList.get(j).get(1), exercisesList.get(j).get(2));
-                }
+                exerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
+                prepareViewStrengthExercise(exerciseRow, exercisesList.get(j).get(1), exercisesList.get(j).get(2), exercisesList.get(j).get(3), exercisesList.get(j).get(4));
             }
+            else {
 
-            i++;
-            exercisesList =  routineController.returnExercises(i);
+                exerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
+                prepareViewTimed(exerciseRow, exercisesList.get(j).get(1), exercisesList.get(j).get(2));
+            }
         }
-
     }
 
     private void prepareViewTimed(View view, String exerName, String exerDuration) {
@@ -258,7 +253,7 @@ public class RoutineActivity extends AppCompatActivity {
         tableLayout.addView(view);
     }
 
-    private void sessionOptionMenu(View view, String sessionName, String restDuration, TableRow sessionRow) {
+    private void sessionOptionMenu(View view, String sessionName, String restDuration) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.session_options_menu, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
@@ -269,7 +264,7 @@ public class RoutineActivity extends AppCompatActivity {
                 editSession(sessionName, restDuration);
                 return true;
             } else if (item.getItemId() == R.id.delete_session) {
-                deleteSession(sessionRow, sessionName);
+                deleteSession(sessionName);
                 return true;
             } else {
                 return false;
@@ -295,9 +290,10 @@ public class RoutineActivity extends AppCompatActivity {
         startActivity(intent);
     }
     
-    private void deleteSession(TableRow sessionRow, String sessionName) {
-        tableLayout.removeView(sessionRow);
+    private void deleteSession(String sessionName) {
         routineController.removeRoutineSession(sessionName, this);
+        recreate();
+
     }
 
     private boolean checkSessionLimit() {
