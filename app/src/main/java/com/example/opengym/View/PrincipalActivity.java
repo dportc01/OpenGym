@@ -107,7 +107,10 @@ public class PrincipalActivity extends AppCompatActivity {
         routineEdit.setOnClickListener(v -> showNameInputDialog(cardView));
 
         ImageView routineDownload = cardView.findViewById(R.id.export_button);
-        routineDownload.setOnClickListener(v -> exportRoutine(routineName));
+        routineDownload.setOnClickListener(v -> {
+            exportRoutine(routineName);
+            Toast.makeText(this, "Rutina descargada correctamente", Toast.LENGTH_SHORT).show();
+        });
 
         // Set click listener on the card
         cardView.setOnClickListener(v -> {

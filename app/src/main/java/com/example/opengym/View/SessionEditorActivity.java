@@ -70,6 +70,10 @@ public class SessionEditorActivity extends AppCompatActivity {
         sessionRow.addView(sessionDetails);
 
         tableLayout.addView(sessionRow);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View sessionTable = inflater.inflate(R.layout.session_table_edit, tableLayout, false);
+        tableLayout.addView(sessionTable);
     }
 
     // Métodos para agregar filas de ejercicios
@@ -77,6 +81,7 @@ public class SessionEditorActivity extends AppCompatActivity {
         if (!checkExerciseLimit()) {
             return;
         }
+
         // Inflar el diseño para una fila de ejercicio de fuerza
         LayoutInflater inflater = LayoutInflater.from(this);
         View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
@@ -86,15 +91,26 @@ public class SessionEditorActivity extends AppCompatActivity {
         Button btnRemove = strengthExerciseRow.findViewById(R.id.btn_remove);
         btnRemove.setOnClickListener(v -> tableLayout.removeView(strengthExerciseRow));
 
+        // Hacer invisibles las líneas verticales
+        View line1 = strengthExerciseRow.findViewById(R.id.vertical_line_1);
+        View line2 = strengthExerciseRow.findViewById(R.id.vertical_line_2);
+        View line3 = strengthExerciseRow.findViewById(R.id.vertical_line_3);
+        View line4 = strengthExerciseRow.findViewById(R.id.horizontal_line);
+        line1.setVisibility(View.GONE);
+        line2.setVisibility(View.GONE);
+        line3.setVisibility(View.GONE);
+        line4.setVisibility(View.GONE);
+
         // Añadir la fila a la tabla
         tableLayout.addView(strengthExerciseRow);
-
     }
+
 
     private void addDurationExerciseRow() {
         if (!checkExerciseLimit()) {
             return;
         }
+
         // Inflar el diseño para una fila de ejercicio de duración
         LayoutInflater inflater = LayoutInflater.from(this);
         View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
@@ -104,10 +120,16 @@ public class SessionEditorActivity extends AppCompatActivity {
         Button btnRemove = durationExerciseRow.findViewById(R.id.btn_remove);
         btnRemove.setOnClickListener(v -> tableLayout.removeView(durationExerciseRow));
 
+        // Hacer invisible la línea vertical
+        View line1 = durationExerciseRow.findViewById(R.id.vertical_line_1);
+        View line2 = durationExerciseRow.findViewById(R.id.horizontal_line);
+        line1.setVisibility(View.GONE);
+        line2.setVisibility(View.GONE);
+
         // Añadir la fila a la tabla
         tableLayout.addView(durationExerciseRow);
-
     }
+
 
     // Métodos auxiliares para guardar datos en la base de datos
     private int saveStrengthExercise(View strengthExerciseRow) {
@@ -166,7 +188,7 @@ public class SessionEditorActivity extends AppCompatActivity {
 
         sessionController.removeExercises(this);
 
-        for (int i = 1; i < tableLayout.getChildCount(); i++) {
+        for (int i = 0; i < tableLayout.getChildCount(); i++) {
             View child = tableLayout.getChildAt(i);
             if ("strength".equals(child.getTag())) {
                 if(saveStrengthExercise(child) == -1) {
@@ -176,8 +198,6 @@ public class SessionEditorActivity extends AppCompatActivity {
                 if (saveDurationExercise(child) == -1) {
                     return;
                 }
-            } else {
-                return;
             }
         }
 
@@ -212,6 +232,14 @@ public class SessionEditorActivity extends AppCompatActivity {
         // Configurar el botón "X" para eliminar la fila
         Button btnRemove = view.findViewById(R.id.btn_remove);
         btnRemove.setOnClickListener(v -> tableLayout.removeView(view));
+        View line1 = view.findViewById(R.id.vertical_line_1);
+        View line2 = view.findViewById(R.id.vertical_line_2);
+        View line3 = view.findViewById(R.id.vertical_line_3);
+        View line4 = view.findViewById(R.id.horizontal_line);
+        line1.setVisibility(View.GONE);
+        line2.setVisibility(View.GONE);
+        line3.setVisibility(View.GONE);
+        line4.setVisibility(View.GONE);
 
         EditText name = view.findViewById(R.id.et_name);
         name.setText(exerName);
@@ -237,6 +265,10 @@ public class SessionEditorActivity extends AppCompatActivity {
         // Configurar el botón "X" para eliminar la fila
         Button btnRemove = view.findViewById(R.id.btn_remove);
         btnRemove.setOnClickListener(v -> tableLayout.removeView(view));
+        View line1 = view.findViewById(R.id.vertical_line_1);
+        View line2 = view.findViewById(R.id.horizontal_line);
+        line1.setVisibility(View.GONE);
+        line2.setVisibility(View.GONE);
 
         EditText name = view.findViewById(R.id.et_name);
         name.setText(exerName);
