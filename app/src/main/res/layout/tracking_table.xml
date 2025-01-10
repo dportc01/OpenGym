@@ -24,12 +24,6 @@
             android:textColor="@android:color/white"
             android:text="@string/nombre" />
 
-        <!-- Línea vertical -->
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000" />
-
         <!-- Series -->
         <TextView
             android:id="@+id/tv_series"
@@ -41,12 +35,16 @@
             android:textColor="@android:color/white"
             android:text="@string/series" />
 
-        <!-- Línea vertical -->
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000" />
-
+        <!-- Previous -->
+        <TextView
+            android:id="@+id/tv_previous_strength"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:textColor="@android:color/white"
+            android:text="@string/anterior" />
         <!-- Reps -->
         <TextView
             android:id="@+id/tv_reps"
@@ -57,12 +55,6 @@
             android:layout_margin="4dp"
             android:textColor="@android:color/white"
             android:text="@string/reps" />
-
-        <!-- Línea vertical -->
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000" />
 
         <!-- Peso -->
         <TextView
@@ -98,12 +90,17 @@
             android:layout_margin="4dp"
             android:textColor="@android:color/white"
             android:text="@string/nombre" />
+        <!-- Previous -->
+        <TextView
+            android:id="@+id/tv_previous_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:textColor="@android:color/white"
+            android:text="@string/anterior" />
 
-        <!-- Línea vertical -->
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#000000" />
         <!-- Duración -->
         <TextView
             android:id="@+id/tv_duration"

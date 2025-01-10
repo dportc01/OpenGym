@@ -72,7 +72,7 @@ public class PrincipalActivity extends AppCompatActivity {
         AlertDialog.Builder removePopUp = new AlertDialog.Builder(this);
         removePopUp.setTitle("Eliminar rutina")
                 .setMessage("¿Estás seguro de que quieres eliminar esta rutina?")
-                .setPositiveButton("Sí", (dialog, which) -> { removeRoutine(cardView); })
+                .setPositiveButton("Sí", (dialog, which) -> removeRoutine(cardView))
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
@@ -107,7 +107,10 @@ public class PrincipalActivity extends AppCompatActivity {
         routineEdit.setOnClickListener(v -> showNameInputDialog(cardView));
 
         ImageView routineDownload = cardView.findViewById(R.id.export_button);
-        routineDownload.setOnClickListener(v -> exportRoutine(routineName));
+        routineDownload.setOnClickListener(v -> {
+            exportRoutine(routineName);
+            Toast.makeText(this, "Rutina descargada correctamente", Toast.LENGTH_SHORT).show();
+        });
 
         // Set click listener on the card
         cardView.setOnClickListener(v -> {

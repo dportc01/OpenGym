@@ -1,42 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/duration_exercise"
+    android:id="@+id/d_exercise"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="8dp">
 
-    <!-- Nombre -->
-    <EditText
-        android:id="@+id/et_name"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/duration_exercise"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:hint="@string/nombre"
-        android:textColor="@color/puntos"
-        android:inputType="text" />
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-    <!-- Duración -->
-    <EditText
-        android:id="@+id/et_duration"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:hint="@string/duracion"
-        android:textColor="@color/puntos"
-        android:inputType="numberDecimal" />
-    <!-- Remove button -->
-    <Button
-        android:id="@+id/btn_remove"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:text="@string/x"
-        android:textColor="@color/x"
-        android:padding="2dp"
-        android:textSize="13sp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/circle_background" />
+        <!-- Nombre -->
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/nombre"
+            android:textColor="@color/puntos"
+            android:inputType="text" />
+
+        <!-- Línea vertical -->
+        <View
+            android:id="@+id/vertical_line_1"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/puntos" />
+
+        <!-- Duración -->
+        <EditText
+            android:id="@+id/et_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/duracion"
+            android:textColor="@color/puntos"
+            android:inputType="numberDecimal" />
+
+        <!-- Botón de eliminar -->
+        <Button
+            android:id="@+id/btn_remove"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="@string/x"
+            android:textColor="@color/x"
+            android:padding="2dp"
+            android:textSize="13sp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/circle_background" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/puntos"
+        android:layout_marginTop="0dp" />
 </LinearLayout>
