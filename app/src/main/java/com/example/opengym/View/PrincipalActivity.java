@@ -215,19 +215,31 @@ public class PrincipalActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_overflow, menu);
+        getMenuInflater().inflate(R.menu.info_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.sign_out) {
+        int id = item.getItemId();
+        if (id == R.id.sign_out) {
             logOut();
             return true;
-        } else if (item.getItemId() == R.id.github_link) {
+        } else if (id == R.id.github_link) {
             openGitHub();
             return true;
-        } else if (item.getItemId() == R.id.import_routine) {
+        } else if (id == R.id.import_routine) {
             importRoutine();
+            return true;
+        } else if (id == R.id.action_info) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Info")
+                    .setMessage("Esta es la pantalla principal. Aquí puedes ver tus rutinas y seleccionar una para modificarla," +
+                            " eliminarla o realizar el seguimiento de una de sus sesiones. También puedes crear una nueva rutina," +
+                            " importarla o exportar una ya creada a un archivo.\n El límite de rutinas es de 3 si eres un usuario base" +
+                            " y de 10 si eres premium.")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -274,4 +286,6 @@ public class PrincipalActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

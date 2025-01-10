@@ -1,7 +1,10 @@
 package com.example.opengym.View;  // Asegúrate de usar el paquete correcto
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -67,4 +70,26 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.info_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_info) {
+            // Show an AlertDialog with the info message
+            new AlertDialog.Builder(this)
+                    .setTitle("Info")
+                    .setMessage("Esta es la pantalla de registro. Aquí puedes crear una cuenta nueva para acceder a la aplicación o acceder a una cuenta ya creada previamente.")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

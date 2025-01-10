@@ -1,7 +1,10 @@
 package com.example.opengym.View;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -145,5 +148,30 @@ public class SessionTrackingActivity extends AppCompatActivity {
         Toast.makeText(this, "Sesión guardada", Toast.LENGTH_SHORT).show();
 
          */
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.info_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_info) {
+            // Show an AlertDialog with the info message
+            new AlertDialog.Builder(this)
+                    .setTitle("Info")
+                    .setMessage("Esta pantalla muestra los ejercicios de la sesión seleccionada. Puedes ingresar " +
+                            "los valores de las repeticiones y peso para los ejercicios de fuerza, o la duración para los ejercicios de tiempo.")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
