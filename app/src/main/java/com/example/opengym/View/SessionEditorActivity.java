@@ -130,7 +130,7 @@ public class SessionEditorActivity extends AppCompatActivity {
             int series = Integer.parseInt(seriesStr);
             int reps = Integer.parseInt(repsStr);
             float weight = Float.parseFloat(weightStr);
-            if (sessionController.addStrenghExercise(this, name, series, reps, weight) == -1) {
+            if (sessionController.addStrengthExercise(this, name, series, reps, weight) == -1) {
                 Toast.makeText(this, "Error al insertar compruebe el nombre", Toast.LENGTH_SHORT).show();
             }
         } catch (NumberFormatException e) {
@@ -189,7 +189,7 @@ public class SessionEditorActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View exerciseRow;
 
-        ArrayList<ArrayList<String>> exercisesList = sessionController.returnExercises(true);
+        ArrayList<ArrayList<String>> exercisesList = sessionController.returnExercises();
 
         for (int i = 0; i < exercisesList.size(); i++) {
             if (exercisesList.get(i).get(0).equals("Strength")) {

@@ -172,16 +172,16 @@ public class RoutineActivity extends AppCompatActivity {
 
         ArrayList<ArrayList<String>> exercisesList = routineController.returnExercises(i);
 
-        for (int j = 0; j < exercisesList.size(); j++) {
-            if (exercisesList.get(j).get(0).equals("Strength")) {
+        for (ArrayList<String> exercise : exercisesList) {
+            if (exercise.get(0).equals("Strength")) {
 
                 exerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
-                prepareViewStrengthExercise(exerciseRow, exercisesList.get(j).get(1), exercisesList.get(j).get(2), exercisesList.get(j).get(3), exercisesList.get(j).get(4));
+                prepareViewStrengthExercise(exerciseRow, exercise.get(1), exercise.get(2), exercise.get(3), exercise.get(4));
             }
             else {
 
                 exerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
-                prepareViewTimed(exerciseRow, exercisesList.get(j).get(1), exercisesList.get(j).get(2));
+                prepareViewTimed(exerciseRow, exercise.get(1), exercise.get(2));
             }
         }
     }
@@ -278,6 +278,7 @@ public class RoutineActivity extends AppCompatActivity {
         intent.putExtra("session_name", sessionName);
         intent.putExtra("rest_duration", restDuration);
         intent.putExtra("session_id", routineController.getSessionId(sessionName));
+        intent.putExtra("routine_id", routineController.getId());
         startActivity(intent);
     }
     

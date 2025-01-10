@@ -27,6 +27,9 @@ public class RoutineController {
         return controlledRoutine.addSession(context, sessionName, null, Integer.parseInt(restDuration));
     }
 
+    public long getId() {
+        return controlledRoutine.getId();
+    }
 
     public String getSessionName(int position) {
         try {
