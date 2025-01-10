@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +16,7 @@ import com.example.opengym.Controller.SessionController;
 import com.example.opengym.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SessionTrackingActivity extends AppCompatActivity {
 
@@ -55,95 +58,163 @@ public class SessionTrackingActivity extends AppCompatActivity {
     }
 
     private void loadExercises() {
-        sessionController.loadExercises(this);
 
-        int i = 0;
-        String exerciseName = sessionController.getExerciseName(i);
-        String exerciseType = sessionController.getExerciseType(i);
 
-        while (exerciseName != null && exerciseType != null) {
-            if (exerciseType.equals("Strength")) {
-                addStrengthExerciseRow(exerciseName, sessionController.getPreviousStrengthValues(i));
-            } else if (exerciseType.equals("Timed")) {
-                addDurationExerciseRow(exerciseName, sessionController.getPreviousDurationValues(i));
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View exerciseRow;
+
+        ArrayList<ArrayList<String>> exercisesList = sessionController.returnExercises();
+        Iterator<ArrayList<String>> exercisesListIterator = exercisesList.iterator();
+        ArrayList<String> exercise;
+
+        boolean hasPreviousExercises = sessionController.loadOldestSession(this);
+        ArrayList<ArrayList<String>> prevExercises;
+        Iterator<ArrayList<String>> prevExercisesIterator = null;
+        ArrayList<String> prevExercise = null;
+
+        if(hasPreviousExercises) {
+            prevExercises = sessionController.returnPreviousExerciseData();
+            prevExercisesIterator = prevExercises.iterator();
+        }
+
+
+        while (exercisesListIterator.hasNext()) {
+            exercise = exercisesListIterator.next();
+
+            if(hasPreviousExercises) {
+                prevExercise = prevExercisesIterator.next();
             }
-            i++;
-            exerciseName = sessionController.getExerciseName(i);
-            exerciseType = sessionController.getExerciseType(i);
+
+            if (exercise.get(0).equals("Strength")) {
+
+                String previous = null;
+                if (hasPreviousExercises) {
+                    previous = prevExercise.get(1) + "x" + prevExercise.get(2);
+                }
+
+                addStrengthExerciseRow(exercise.get(1), exercise.get(3), previous);
+            }
+            else {
+
+                String previous = null;
+                if (hasPreviousExercises) {
+                    previous = prevExercise.get(1);
+                }
+
+                addDurationExerciseRow(exercise.get(1), previous);
+            }
         }
     }
 
-    private void addStrengthExerciseRow(String exerciseName, ArrayList<String> previousValues) {
+
+    private void addStrengthExerciseRow(String name, String series, String previous) {
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_tracking_row, tableLayout, false);
 
-        TextView name = strengthExerciseRow.findViewById(R.id.tv_name);
-        name.setText(exerciseName);
+        TextView exerciseName = strengthExerciseRow.findViewById(R.id.tv_name);
+        exerciseName.setText(name);
 
-        TextView series = strengthExerciseRow.findViewById(R.id.tv_series);
-        TextView previousInfo = strengthExerciseRow.findViewById(R.id.tv_previous);
+        TextView exerciseSeries = strengthExerciseRow.findViewById(R.id.tv_series);
+        exerciseSeries.setText(series);
+
+        TextView exercisePrevious = strengthExerciseRow.findViewById(R.id.tv_previous);
+        if (previous != null) {
+            exercisePrevious.setText(previous);
+        }
+
+        strengthExerciseRow.setTag("strength");
 
         tableLayout.addView(strengthExerciseRow);
     }
 
-    private void addDurationExerciseRow(String exerciseName, String previousValue) {
+    private void addDurationExerciseRow(String name, String previous) {
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_tracking_row, tableLayout, false);
 
+        TextView exerciseName = durationExerciseRow.findViewById(R.id.tv_name);
+        exerciseName.setText(name);
+
+        TextView exercisePrevious = durationExerciseRow.findViewById(R.id.tv_duration);
+        if (previous != null) {
+            exercisePrevious.setText(previous);
+        }
+
+        durationExerciseRow.setTag("duration");
+
         tableLayout.addView(durationExerciseRow);
     }
 
+    private int saveStrengthExercise(View strengthExerciseRow) {
+        TextView etName = strengthExerciseRow.findViewById(R.id.et_name);
+        TextView etSeries = strengthExerciseRow.findViewById(R.id.et_series);
+        EditText etReps = strengthExerciseRow.findViewById(R.id.et_reps);
+        EditText etWeight = strengthExerciseRow.findViewById(R.id.et_weight);
+
+        String name = etName.getText().toString().trim();
+        String seriesStr = etSeries.getText().toString().trim();
+        String repsStr = etReps.getText().toString().trim();
+        String weightStr = etWeight.getText().toString().trim();
+
+        if (repsStr.isEmpty() || weightStr.isEmpty()) {
+            Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
+            return -1;
+        }
+
+        try {
+            int series = Integer.parseInt(seriesStr);
+            int reps = Integer.parseInt(repsStr);
+            float weight = Float.parseFloat(weightStr);
+            sessionController.addStrengthExerciseToNewSession(this, name, series, reps, weight);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
+            return -1;
+        }
+        return 0;
+    }
+
+    private int saveDurationExercise(View durationExerciseRow) {
+        EditText etName = durationExerciseRow.findViewById(R.id.et_name);
+        EditText etDuration = durationExerciseRow.findViewById(R.id.et_duration);
+
+        String name = etName.getText().toString().trim();
+        String durationStr = etDuration.getText().toString().trim();
+
+        if (name.isEmpty() || durationStr.isEmpty()) {
+            Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
+            return -1;
+        }
+
+        try {
+            int duration = Integer.parseInt(durationStr);
+            sessionController.addTimedExerciseToNewSession(this, name, duration);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
+            return -1;
+        }
+        return 0;
+    }
+
     private void saveSession() {
-        /*
-        int childCount = tableLayout.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View row = tableLayout.getChildAt(i);
-            if (row instanceof TableRow) {
-                EditText etSeries = row.findViewById(R.id.et_series);
-                EditText etReps = row.findViewById(R.id.et_reps);
-                EditText etWeight = row.findViewById(R.id.et_weight);
-                EditText etDuration = row.findViewById(R.id.et_duration);
 
-                String name = ((TextView) row.findViewById(R.id.tv_exercise_name)).getText().toString().trim();
-                if (etSeries != null && etReps != null && etWeight != null) {
-                    String seriesStr = etSeries.getText().toString().trim();
-                    String repsStr = etReps.getText().toString().trim();
-                    String weightStr = etWeight.getText().toString().trim();
+        sessionController.createNewSession(this, getIntent().getLongExtra("routine_id", -1));
 
-                    if (seriesStr.isEmpty() || repsStr.isEmpty() || weightStr.isEmpty()) {
-                        Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    try {
-                        int series = Integer.parseInt(seriesStr);
-                        int reps = Integer.parseInt(repsStr);
-                        int weight = Integer.parseInt(weightStr);
-                        // sessionController.updateStrengthExercise(this, name, series, reps, weight);
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
-                    }
-                } else if (etDuration != null) {
-                    String durationStr = etDuration.getText().toString().trim();
-
-                    if (durationStr.isEmpty()) {
-                        Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    try {
-                        int duration = Integer.parseInt(durationStr);
-                        // sessionController.updateDurationExercise(this, name, duration);
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(this, "Datos numéricos inválidos", Toast.LENGTH_SHORT).show();
-                    }
+        for (int i = 1; i < tableLayout.getChildCount(); i++) {
+            View child = tableLayout.getChildAt(i);
+            if ("strength".equals(child.getTag())) {
+                if(saveStrengthExercise(child) == -1) {
+                    return;
                 }
+            } else if ("duration".equals(child.getTag())) {
+                if (saveDurationExercise(child) == -1) {
+                    return;
+                }
+            } else {
+                return;
             }
         }
-        Toast.makeText(this, "Sesión guardada", Toast.LENGTH_SHORT).show();
 
-         */
+        finish();
     }
 }

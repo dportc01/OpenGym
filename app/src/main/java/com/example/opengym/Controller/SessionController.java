@@ -15,7 +15,8 @@ import java.util.Date;
 
 public class SessionController {
     private final Session controlledSession;
-    private Session oldestSession;
+    private Session previousSession;
+    private Session newSession;
 
     public SessionController(Context context , long id) {
         SessionDAO sessionDAO = new SessionDAO(context);
@@ -27,53 +28,7 @@ public class SessionController {
         controlledSession.setInfoDB(context, controlledSession.getId());
     }
 
-    public String getExerciseName(int position){
-        try{
-            return controlledSession.getExercisesList().get(position).getName();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public String getExerciseType(int position){
-        try{
-            return controlledSession.getExercisesList().get(position).getType();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public ArrayList<String> getPreviousStrengthValues(int position) {
-        try {
-            IExercise exercise = controlledSession.getExercisesList().get(position);
-            if (exercise instanceof StrengthExercise) {
-                StrengthExercise strengthExercise = (StrengthExercise) exercise;
-                ArrayList<String> pastValues = new ArrayList<>();
-                pastValues.add(String.valueOf(strengthExercise.getNumOfReps()));
-                pastValues.add(String.valueOf(strengthExercise.getNumOfSets()));
-                pastValues.add(String.valueOf(strengthExercise.getWeight()));
-                return pastValues;
-            }
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public String getPreviousDurationValues(int position) {
-        try {
-            IExercise exercise = controlledSession.getExercisesList().get(position);
-            if (exercise instanceof TimedExercise) {
-                TimedExercise timedExercise = (TimedExercise) exercise;
-                return String.valueOf(timedExercise.getTime());
-            }
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public long addStrenghExercise(Context context, String exerciseName, int sets, int reps, float weight) {
+    public long addStrengthExercise(Context context, String exerciseName, int sets, int reps, float weight) {
         IExercise exercise = ExerciseFactory.createExercise(exerciseName, sets, reps, weight);
         return controlledSession.addStrengthExercise(exercise, controlledSession.getId(), context);
     }
@@ -83,37 +38,87 @@ public class SessionController {
         controlledSession.addTimedExercise(exercise, controlledSession.getId(), context);
     }
 
+    public void createNewSession(Context context, long parentId) {
+        newSession = new Session(controlledSession.getName(), new Date(System.currentTimeMillis()), controlledSession.getRestDuration(), new ArrayList<IExercise>());
+        SessionDAO sessionDAO = new SessionDAO(context);
+        sessionDAO.create(newSession, parentId);
+    }
+
+    public void addStrengthExerciseToNewSession(Context context, String exerciseName, int sets, int reps, float weight) {
+        IExercise exercise = ExerciseFactory.createExercise(exerciseName, sets, reps, weight);
+        newSession.addStrengthExercise(exercise, newSession.getId(), context);
+    }
+
+    public void addTimedExerciseToNewSession(Context context, String exerciseName, int duration) {
+        IExercise exercise = ExerciseFactory.createExercise(exerciseName, duration);
+        newSession.addStrengthExercise(exercise, newSession.getId(), context);
+    }
+
     public void removeExercises(Context context) {
 
         controlledSession.removeAllExercises(context);
     }
 
-    public void retrieveOldestSession(Context context) {
+    /**
+     *
+     * @param context
+     * @return false if it doesn't have a previous recorded session and true otherwise
+     */
+    public boolean loadOldestSession(Context context) {
 
         SessionDAO sessionsTable = new SessionDAO(context);
         ArrayList<Session> pastSessions = sessionsTable.getAllPast(controlledSession.getId());
+
+        if (pastSessions.isEmpty()) {
+            return false;
+        }
+
         Date sessionDate = new Date(0);
 
         for (Session session : pastSessions) {
             if (sessionDate.getTime()  < session.getDate().getTime()) {
-                oldestSession = session;
+                previousSession = session;
             }
         }
+
+        return true;
     }
 
-    public ArrayList<ArrayList<String>> returnExercises(boolean isTemplate) {
-
-        Session objetiveSession = controlledSession;
-
-        if (!isTemplate) {
-            objetiveSession = oldestSession;
-        }
+    public ArrayList<ArrayList<String>> returnPreviousExerciseData() {
 
         ArrayList<ArrayList<String>> exercisesArray = new ArrayList<>();
         ArrayList<String> exerciseFields;
 
-        for (int i = 0; i < objetiveSession.getExercisesList().size(); i++) {
-            IExercise exercise = objetiveSession.getExerciseAt(i);
+        for (int i = 0; i < previousSession.getExercisesList().size(); i++) {
+            IExercise exercise = previousSession.getExerciseAt(i);
+            if (exercise.getType().equals("Strength")) {
+                StrengthExercise strExercise = (StrengthExercise) exercise;
+                exerciseFields = new ArrayList<>();
+
+                exerciseFields.add(strExercise.getType());
+                exerciseFields.add(String.valueOf(strExercise.getNumOfReps()));
+                exerciseFields.add(String.valueOf(strExercise.getWeight()));
+            } else {
+                TimedExercise timedExercise = (TimedExercise) exercise;
+                exerciseFields = new ArrayList<>();
+
+                exerciseFields.add(timedExercise.getType());
+                exerciseFields.add(String.valueOf(timedExercise.getTime()));
+            }
+
+            exercisesArray.add(exerciseFields);
+        }
+
+        return exercisesArray;
+    }
+
+    public ArrayList<ArrayList<String>> returnExercises() {
+
+        ArrayList<ArrayList<String>> exercisesArray = new ArrayList<>();
+        ArrayList<String> exerciseFields;
+
+        for (int i = 0; i < controlledSession.getExercisesList().size(); i++) {
+            IExercise exercise = controlledSession.getExerciseAt(i);
             if (exercise.getType().equals("Strength")) {
                 StrengthExercise strExercise = (StrengthExercise) exercise;
                 exerciseFields = new ArrayList<>();

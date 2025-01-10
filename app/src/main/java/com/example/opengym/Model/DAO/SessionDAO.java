@@ -320,7 +320,7 @@ public class SessionDAO implements GenericDAO<Session> {
             try {
               date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("es", "ES")).parse(cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_DATE)));
             } catch (ParseException e) {
-                Log.e("Session", e.getMessage(), e);
+                Log.i("Session", e.getMessage(), e);
             }
         } else {
             return null;
