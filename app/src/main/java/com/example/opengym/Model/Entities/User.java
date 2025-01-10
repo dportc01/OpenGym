@@ -254,6 +254,10 @@ public class User {
         return id;
     }
 
+    public void removeLastLogin(Context context) {
+        UserDAO userDAO = new UserDAO(context);
+        userDAO.deleteLastLogin();
+    }
     public int updateRoutine(long routineId, Context context, String routineName, String routineDescription) {
 
         RoutineDAO routineTable = new RoutineDAO(context);

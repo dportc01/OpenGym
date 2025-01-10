@@ -104,9 +104,15 @@ public class UserDAO implements GenericDAO<User>  {
 
     public void updateLastLogIn(String name) {
 
-        db.delete(OpenGymDbContract.LoginTable.TABLE_NAME, null, null);
+        deleteLastLogin();
 
         createLastLogin(name);
+    }
+
+    public void deleteLastLogin() {
+        db = dbHelper.getWritableDatabase();
+
+        db.delete(OpenGymDbContract.LoginTable.TABLE_NAME, null, null);
     }
 
     /**
