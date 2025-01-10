@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/strength_exercise"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- Nombre -->
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/nombre"
+        android:textColor="@color/puntos"
+        />
+
+    <!-- Series -->
+    <TextView
+        android:id="@+id/tv_series"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/series"
+        android:textColor="@color/puntos"
+        />
+
+    <!-- Previous -->
+    <TextView
+        android:id="@+id/tv_previous"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="0x0"
+        android:textColor="@color/puntos"
+        />
+    <!-- Reps -->
+    <EditText
+        android:id="@+id/et_reps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="@string/reps"
+        android:textColor="@color/puntos"
+        android:inputType="number" />
+
+    <!-- Peso -->
+    <EditText
+        android:id="@+id/et_weight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="@string/peso"
+        android:textColor="@color/puntos"
+        android:inputType="number" />
+</LinearLayout>
