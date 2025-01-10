@@ -1,14 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/github_link"
-        android:title="GitHub"
-        />
+        android:title="GitHub" />
     <item
         android:id="@+id/sign_out"
-        android:title="@string/sign_out"
-        />
+        android:title="@string/sign_out" />
     <item
         android:id="@+id/import_routine"
-        android:title="Importar una rutina"
-        />
+        android:title="Importar una rutina" />
 </menu>

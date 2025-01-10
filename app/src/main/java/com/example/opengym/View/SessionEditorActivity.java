@@ -1,8 +1,11 @@
 package com.example.opengym.View;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -257,5 +260,29 @@ public class SessionEditorActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.info_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_info) {
+            // Show an AlertDialog with the info message
+            new AlertDialog.Builder(this)
+                    .setTitle("Info")
+                    .setMessage("Esta es la pantalla de edición de sesiones. Aquí puedes añadir y eliminar ejercicios de fuerza y duración a tu sesión. " +
+                            "El usuario puede añadir hasta 7 ejercicios sin ser premium y hasta 15 ejercicios siendo premium.")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

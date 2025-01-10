@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -306,4 +308,27 @@ public class RoutineActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.info_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_info) {
+            // Show an AlertDialog with the info message
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("Info")
+                    .setMessage("Aquí puedes ver las sesiones de tu rutina. Puedes añadir, editar o eliminar sesiones además de realizar su seguimiento. " +
+                            "Si eres usuario premium, puedes añadir hasta 10 sesiones, de lo contrario, solo puedes añadir hasta 4 sesiones.")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
