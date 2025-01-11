@@ -125,7 +125,7 @@ public class SessionEditorActivity extends AppCompatActivity {
         EditText etReps = strengthExerciseRow.findViewById(R.id.et_reps);
         EditText etWeight = strengthExerciseRow.findViewById(R.id.et_weight);
 
-        String name = etName.getText().toString().trim();
+        String name = etName.getText().toString().trim().replace(",", ".");
         String seriesStr = etSeries.getText().toString().trim();
         String repsStr = etReps.getText().toString().trim();
         String weightStr = etWeight.getText().toString().trim();
@@ -153,7 +153,7 @@ public class SessionEditorActivity extends AppCompatActivity {
         EditText etName = durationExerciseRow.findViewById(R.id.et_name);
         EditText etDuration = durationExerciseRow.findViewById(R.id.et_duration);
 
-        String name = etName.getText().toString().trim();
+        String name = etName.getText().toString().trim().replace(",", ".");
         String durationStr = etDuration.getText().toString().trim();
 
         if (name.isEmpty() || durationStr.isEmpty()) {

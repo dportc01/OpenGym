@@ -99,7 +99,7 @@ public class RoutineActivity extends AppCompatActivity {
         builder.setView(layout);
 
         builder.setPositiveButton("Aceptar", (dialog, which) -> {
-            String sessionName = etSessionName.getText().toString().trim();
+            String sessionName = etSessionName.getText().toString().trim().replace(",", "");
             String restDuration = etRestDuration.getText().toString().trim();
 
             if (sessionName.isEmpty() || restDuration.isEmpty()) {
@@ -132,21 +132,21 @@ public class RoutineActivity extends AppCompatActivity {
     private void addSessionTable(String sessionName, String restDuration) {
         TableRow sessionDetailsRow = new TableRow(this);
         TextView sessionDetailsText = new TextView(this);
-        sessionDetailsText.setText(String.format("Sesión: %s | Descanso: %s minutos", sessionName, restDuration));
-        sessionDetailsText.setTextSize(16);
-        sessionDetailsText.setPadding(8, 8, 8, 8);
-        sessionDetailsRow.addView(sessionDetailsText);
-    
         ImageButton optionsButton = new ImageButton(this);
         optionsButton.setImageResource(R.drawable.ic_more_vert); // Asegúrate de tener un ícono de tres puntos verticales en drawable
         optionsButton.setBackgroundColor(Color.TRANSPARENT); // Hacer el fondo transparente
         optionsButton.setOnClickListener(v -> sessionOptionMenu(v, sessionName, restDuration));
         optionsButton.setLayoutParams(new TableRow.LayoutParams(
-            TableRow.LayoutParams.WRAP_CONTENT,
-            TableRow.LayoutParams.WRAP_CONTENT));
+                TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
         optionsButton.setPadding(8, 8, 8, 8);
         sessionDetailsRow.addView(optionsButton);
+        sessionDetailsText.setText(String.format("Sesión: %s | Descanso: %s minutos", sessionName, restDuration));
+        sessionDetailsText.setTextSize(16);
+        sessionDetailsText.setPadding(8, 8, 8, 8);
+        sessionDetailsRow.addView(sessionDetailsText);
     
+
         tableLayout.addView(sessionDetailsRow);
         LayoutInflater inflater = LayoutInflater.from(this);
         View sessionTable = inflater.inflate(R.layout.session_table, tableLayout, false);

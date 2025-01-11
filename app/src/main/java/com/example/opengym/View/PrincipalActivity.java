@@ -192,8 +192,8 @@ public class PrincipalActivity extends AppCompatActivity {
         builder.setTitle("Nuevo nombre de rutina")
                 .setView(routineLayout)
                 .setPositiveButton("Aceptar", (dialog, which) -> {
-                    String routineName = nameInput.getText().toString().trim();
-                    String routineDescription = descriptionInput.getText().toString().trim();
+                    String routineName = nameInput.getText().toString().trim().replace(",", "");
+                    String routineDescription = descriptionInput.getText().toString().trim().replace(",", "");
                     if(routineDescription.isEmpty()){
                         routineDescription = "No hay descripción";
                     }
