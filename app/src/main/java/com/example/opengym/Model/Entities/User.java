@@ -10,14 +10,10 @@ import com.example.opengym.Model.DAO.UserDAO;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -98,7 +94,7 @@ public class User {
         }
     
         File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(downloadsDir, routine.getName() + "_simple.csv");
+        File file = new File(downloadsDir, routine.getName() + ".csv");
     
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("Rutina,Descripcion,Sesion,DuracionDescanso,NombreEjercicio,TipoEjercicio,Repeticiones,Series,Peso,Duracion\n");
@@ -202,6 +198,7 @@ public class User {
             }
             return newRoutine.getName() + "," + newRoutine.getDescription();
         } catch (IOException e) {
+            Log.e("User", "Error exporting user routine", e);
             return "Error";
         }
     }

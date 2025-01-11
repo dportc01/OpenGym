@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class PrincipalController {
 
-    private User controlledUser;
+    private final User controlledUser;
 
     public PrincipalController(Context context, String userName) {
         UserDAO userDAO = new UserDAO(context);
