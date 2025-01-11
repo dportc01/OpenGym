@@ -80,7 +80,7 @@ public class SessionTrackingActivity extends AppCompatActivity {
         while (exercisesListIterator.hasNext()) {
             exercise = exercisesListIterator.next();
 
-            if(hasPreviousExercises) {
+            if (hasPreviousExercises && prevExercisesIterator.hasNext()) {
                 prevExercise = prevExercisesIterator.next();
             }
 
