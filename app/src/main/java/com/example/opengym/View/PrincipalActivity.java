@@ -16,6 +16,8 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +30,7 @@ import java.util.List;
 public class PrincipalActivity extends AppCompatActivity {
     private PrincipalController principalController;
     private TableLayout tableLayout;
+    private ActivityResultLauncher<Intent> importRoutineLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,30 @@ public class PrincipalActivity extends AppCompatActivity {
         loadExistingRoutines();
 
         addRowButton.setOnClickListener(v -> showNameInputDialog(null));
+        addRowButton.setOnClickListener(v -> showNameInputDialog(null));
+
+        importRoutineLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            Uri uri = data.getData();
+                            String filePath = uri.getPath();
+                            Log.d("File path", filePath);
+                            String routineData = principalController.importUserRoutine(uri, this);
+                            if (routineData.equals("Error")) {
+                                Toast.makeText(this, "Error al importar la rutina", Toast.LENGTH_SHORT).show();
+                            } else if (routineData.equals("Existe")) {
+                                Toast.makeText(this, "Ya existe esta rutina", Toast.LENGTH_SHORT).show();
+                            } else {
+                                String[] routineInfo = routineData.split(",");
+                                addNewRoutine(routineInfo[0], routineInfo[1]);
+                            }
+                        }
+                    }
+                }
+        );
     }
 
     public void onRoutineSelection(long id) {
@@ -110,7 +137,11 @@ public class PrincipalActivity extends AppCompatActivity {
         ImageView routineDownload = cardView.findViewById(R.id.export_button);
         routineDownload.setOnClickListener(v -> {
             exportRoutine(routineName);
-            Toast.makeText(this, "Rutina descargada correctamente", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(this)
+                    .setTitle("Exportación")
+                    .setMessage("La rutina se ha exportado correctamente")
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
         });
 
         // Set click listener on the card
@@ -273,7 +304,7 @@ public class PrincipalActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, 1);
+        importRoutineLauncher.launch(intent);
     }
 
     @Override

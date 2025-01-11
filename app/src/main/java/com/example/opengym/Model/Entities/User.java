@@ -257,9 +257,28 @@ public class User {
             newRoutine.setId(routineID);
 
             ArrayList<IExercise> exercises = new ArrayList<>();
-            Session newSession = new Session(parts[2], null, Integer.parseInt(parts[3]), exercises); // La fecha es null
-            newRoutine.addSession(context, parts[2], null, Integer.parseInt(parts[3]));
-    
+            Session newSession = new Session(parts[2], null, Integer.parseInt(parts[4]), exercises); // La fecha es null
+            long sessionId = newRoutine.addSession(context, parts[2], null, Integer.parseInt(parts[4]));
+            newSession.setId(sessionId);
+
+            while (line != null) {
+
+                if (!parts[2].equals(newSession.getName())) {
+                    newSession = new Session(parts[2], null, Integer.parseInt(parts[4]), exercises); // La fecha es null
+                    sessionId = newRoutine.addSession(context, parts[2], null, Integer.parseInt(parts[4]));
+                    newSession.setId(sessionId);
+                }
+
+                IExercise newExercise = extractExerciseData(parts);
+                if (parts[6].equals("Strength")) {
+                    newSession.addStrengthExercise(newExercise, newSession.getId(), context);
+                } else {
+                    newSession.addTimedExercise(newExercise, newSession.getId(), context);
+                }
+                newSession.getExercisesList().add(newExercise);
+                line = reader.readLine();
+            }
+
             String routineData = newRoutine.getName() + "," + newRoutine.getDescription();
             Log.d("User", "Rutina importada correctamente: " + routineData);
             return routineData;
@@ -284,9 +303,9 @@ public class User {
     private IExercise extractExerciseData(String[] dataRow) {
         IExercise newExercise;
         if (dataRow[6].equals("Strength")) {
-            newExercise = new StrengthExercise(dataRow[4], Integer.parseInt(dataRow[7]), Integer.parseInt(dataRow[8]), Float.parseFloat(dataRow[9]));
+            newExercise = new StrengthExercise(dataRow[5], Integer.parseInt(dataRow[7]), Integer.parseInt(dataRow[8]), Float.parseFloat(dataRow[9]));
         } else {
-            newExercise = new TimedExercise(dataRow[4], Integer.parseInt(dataRow[10]));
+            newExercise = new TimedExercise(dataRow[5], Integer.parseInt(dataRow[10]));
         }
         return newExercise;
     }
