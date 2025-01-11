@@ -19,7 +19,6 @@ import com.example.opengym.Controller.SessionController;
 import com.example.opengym.R;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class SessionTrackingActivity extends AppCompatActivity {
 
@@ -58,6 +57,9 @@ public class SessionTrackingActivity extends AppCompatActivity {
         sessionRow.addView(sessionDetails);
 
         tableLayout.addView(sessionRow);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View sessionTable = inflater.inflate(R.layout.tracking_table, tableLayout, false);
+        tableLayout.addView(sessionTable);
     }
 
     private void loadExercises() {
@@ -201,7 +203,7 @@ public class SessionTrackingActivity extends AppCompatActivity {
 
     private void saveSession() {
 
-        for (int i = 1; i < tableLayout.getChildCount(); i++) {
+        for (int i = 2; i < tableLayout.getChildCount(); i++) {
             View child = tableLayout.getChildAt(i);
             if ("strength".equals(child.getTag())) {
                 if(saveStrengthExercise(child) == -1) {
@@ -234,7 +236,7 @@ public class SessionTrackingActivity extends AppCompatActivity {
             // Show an AlertDialog with the info message
             new AlertDialog.Builder(this)
                     .setTitle("Info")
-                    .setMessage("Esta pantalla muestra los ejercicios de la sesión seleccionada. Puedes ingresar " +
+                    .setMessage("Esta pantalla muestra los ejercicios de la sesión seleccionada y las marcas obtenidas la última vez que la sesión fue realizada (En el caso de los ejercicios de fuerza, las marcas vienen dadas por Repeticiones x Peso). Puedes ingresar " +
                             "los valores de las repeticiones y peso para los ejercicios de fuerza, o la duración para los ejercicios de tiempo.")
                     .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                     .show();
