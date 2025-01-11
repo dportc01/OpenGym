@@ -242,7 +242,7 @@ public class SessionDAO implements GenericDAO<Session> {
             return null;
         }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
         db = dbHelper.getReadableDatabase();
 
@@ -318,7 +318,7 @@ public class SessionDAO implements GenericDAO<Session> {
             name = cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_NAME));
             rest = cursor.getInt(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_RESTDURATION));
             try {
-              date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", new Locale("es", "ES")).parse(cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_DATE)));
+              date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH).parse(cursor.getString(cursor.getColumnIndex(OpenGymDbContract.SessionsTable.COLUMN_DATE)));
             } catch (ParseException e) {
                 Log.i("Session", e.getMessage(), e);
             }
