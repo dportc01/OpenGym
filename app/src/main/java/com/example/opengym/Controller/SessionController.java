@@ -80,13 +80,7 @@ public class SessionController {
             return false;
         }
 
-        Date sessionDate = new Date(0);
-
-        for (Session session : pastSessions) {
-            if (sessionDate.getTime()  < session.getDate().getTime()) {
-                previousSession = session;
-            }
-        }
+        previousSession = pastSessions.get(pastSessions.size() - 1);
 
         previousSession.setInfoDB(context, previousSession.getId());
 
@@ -98,6 +92,10 @@ public class SessionController {
         ArrayList<ArrayList<String>> exercisesArray = new ArrayList<>();
         ArrayList<String> exerciseFields;
 
+        if (previousSession == null) {
+            return null;
+        }
+
         for (int i = 0; i < previousSession.getExercisesList().size(); i++) {
             IExercise exercise = previousSession.getExerciseAt(i);
             if (exercise.getType().equals("Strength")) {
@@ -105,6 +103,7 @@ public class SessionController {
                 exerciseFields = new ArrayList<>();
 
                 exerciseFields.add(strExercise.getType());
+                exerciseFields.add(strExercise.getName());
                 exerciseFields.add(String.valueOf(strExercise.getNumOfReps()));
                 exerciseFields.add(String.valueOf(strExercise.getWeight()));
             } else {
@@ -112,6 +111,7 @@ public class SessionController {
                 exerciseFields = new ArrayList<>();
 
                 exerciseFields.add(timedExercise.getType());
+                exerciseFields.add(timedExercise.getName());
                 exerciseFields.add(String.valueOf(timedExercise.getTime()));
             }
 
