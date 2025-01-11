@@ -259,6 +259,7 @@ public class User {
                         return -1;
                     }
                     routinesList.remove(routine);
+                    break;
                 }
             }
         } catch (Exception e) {
