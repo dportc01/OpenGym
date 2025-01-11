@@ -106,7 +106,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void removeRoutine(View cardView){//TODO
+    private void removeRoutine(View cardView){
         TextView routineNameTextView = cardView.findViewById(R.id.routine_name);
         if (principalController.removeUserRoutine(routineNameTextView.getText().toString(),this) == -1) {
             Toast.makeText(this, "No se ha podido eliminar la rutina", Toast.LENGTH_SHORT).show();
@@ -172,8 +172,10 @@ public class PrincipalActivity extends AppCompatActivity {
      * @param edit view of the entry to be modified
      */
     private void showNameInputDialog(View edit) {
-        if (!checkRoutineLimit() && edit == null) {
-            return;
+        if (edit == null) {
+            if(!checkRoutineLimit()){
+                return;
+            }
         }
         LinearLayout routineLayout = new LinearLayout(this);
         routineLayout.setOrientation(LinearLayout.VERTICAL);
