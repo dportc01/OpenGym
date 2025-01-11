@@ -25,4 +25,5 @@
     <string name="download_button">Download button</string>
     <string name="importar_una_rutina">Importar una rutina</string>
     <string name="github">GitHub</string>
+    <string name="guardar_sesion">Guardar Sesión</string>
 </resources>
