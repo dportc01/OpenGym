@@ -31,8 +31,7 @@ public class PrincipalController {
     }
 
     public String importUserRoutine(Uri uri, Context context) {
-        return controlledUser.importUserRoutineSimple(context, uri);
-        // return controlledUser.importUserRoutine(filePath , context);
+        return controlledUser.importUserRoutine(context, uri);
     }
 
     public long removeUserRoutine(String routineName, Context context) {

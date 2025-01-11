@@ -66,6 +66,7 @@ public class PrincipalActivity extends AppCompatActivity {
                             } else {
                                 String[] routineInfo = routineData.split(",");
                                 addNewRoutine(routineInfo[0], routineInfo[1]);
+                                Toast.makeText(this, "Rutina importada", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -139,7 +140,7 @@ public class PrincipalActivity extends AppCompatActivity {
             exportRoutine(routineName);
             new AlertDialog.Builder(this)
                     .setTitle("Exportación")
-                    .setMessage("La rutina se ha exportado correctamente")
+                    .setMessage("La rutina se ha exportado correctamente en el directorio del descargas del dispositivo")
                     .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                     .show();
         });
