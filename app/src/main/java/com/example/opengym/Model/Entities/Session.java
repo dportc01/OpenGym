@@ -90,7 +90,6 @@ public class Session {
     }
 
     public long addStrengthExercise(IExercise STexercise, Long parentID ,Context context){
-
         try {
             StrengthExerciseDAO strengthExerciseTable = new StrengthExerciseDAO(context);
             long exerciseID = strengthExerciseTable.create((StrengthExercise) STexercise, parentID);

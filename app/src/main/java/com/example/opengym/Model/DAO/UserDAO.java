@@ -61,8 +61,6 @@ public class UserDAO implements GenericDAO<User>  {
 
     @Override
     public int delete(long id) {
-
-        // delete entries from LoginTable to make sure there are no foreign key references
         db.delete(OpenGymDbContract.LoginTable.TABLE_NAME, null, null);
 
         String selection = OpenGymDbContract.UsersTable.COLUMN_ID + " LIKE ?";
