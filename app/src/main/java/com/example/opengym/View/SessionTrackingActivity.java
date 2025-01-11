@@ -19,7 +19,6 @@ import com.example.opengym.Controller.SessionController;
 import com.example.opengym.R;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class SessionTrackingActivity extends AppCompatActivity {
 
