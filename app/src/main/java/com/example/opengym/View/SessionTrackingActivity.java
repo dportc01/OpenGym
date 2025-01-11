@@ -63,45 +63,47 @@ public class SessionTrackingActivity extends AppCompatActivity {
     private void loadExercises() {
 
         ArrayList<ArrayList<String>> exercisesList = sessionController.returnExercises();
-        Iterator<ArrayList<String>> exercisesListIterator = exercisesList.iterator();
-        ArrayList<String> exercise;
 
         boolean hasPreviousExercises = sessionController.loadNewestSession(this);
-        ArrayList<ArrayList<String>> prevExercises;
-        Iterator<ArrayList<String>> prevExercisesIterator = null;
-        ArrayList<String> prevExercise = null;
+        ArrayList<ArrayList<String>> prevExercisesList = sessionController.returnPreviousExerciseData();
 
-        if(hasPreviousExercises) {
-            prevExercises = sessionController.returnPreviousExerciseData();
-            prevExercisesIterator = prevExercises.iterator();
-        }
+        boolean added = false;
 
+        for (ArrayList<String> exercise : exercisesList) {
+            if (hasPreviousExercises) {
+                for (ArrayList<String> prevExercise : prevExercisesList) {
+                    if (exercise.get(1).equals(prevExercise.get(1)) && exercise.get(0).equals(prevExercise.get(0))) {
 
-        while (exercisesListIterator.hasNext()) {
-            exercise = exercisesListIterator.next();
+                        added = true;
 
-            if (hasPreviousExercises && prevExercisesIterator.hasNext()) {
-                prevExercise = prevExercisesIterator.next();
-            }
-
-            if (exercise.get(0).equals("Strength")) {
-
-                String previous = null;
-                if (hasPreviousExercises) {
-                    previous = prevExercise.get(1) + "x" + prevExercise.get(2);
+                        if (exercise.get(0).equals("Strength")) {
+                            addStrengthExerciseRow(exercise.get(1), exercise.get(3), prevExercise.get(2) + "x" + prevExercise.get(3));
+                        }
+                        else {
+                            addDurationExerciseRow(exercise.get(1), prevExercise.get(2));
+                        }
+                    }
                 }
 
-                addStrengthExerciseRow(exercise.get(1), exercise.get(3), previous);
+                if (!added) {
+                    if (exercise.get(0).equals("Strength")) {
+                        addStrengthExerciseRow(exercise.get(1), exercise.get(3), null);
+                    }
+                    else {
+                        addDurationExerciseRow(exercise.get(1), null);
+                    }
+                }
             }
             else {
-
-                String previous = null;
-                if (hasPreviousExercises) {
-                    previous = prevExercise.get(1);
+                if (exercise.get(0).equals("Strength")) {
+                    addStrengthExerciseRow(exercise.get(1), exercise.get(3), null);
                 }
-
-                addDurationExerciseRow(exercise.get(1), previous);
+                else {
+                    addDurationExerciseRow(exercise.get(1), null);
+                }
             }
+
+            added = false;
         }
     }
 
