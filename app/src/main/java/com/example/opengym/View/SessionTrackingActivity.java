@@ -30,11 +30,9 @@ public class SessionTrackingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workout_sesion);
 
-        // Initialize views
         tableLayout = findViewById(R.id.table_layout_tracker);
         Button btnSaveSession = findViewById(R.id.btn_save_session);
 
-        // Get session details from intent
         long sessionId = getIntent().getLongExtra("session_id", -1);
         String sessionName = getIntent().getStringExtra("session_name");
         String restDuration = getIntent().getStringExtra("rest_duration");
@@ -42,10 +40,8 @@ public class SessionTrackingActivity extends AppCompatActivity {
 
         addSessionTable(sessionName, restDuration);
 
-        // Load exercises for the session
         loadExercises();
 
-        // Set listener for "Guardar Sesión" button
         btnSaveSession.setOnClickListener(v -> saveSession());
     }
 

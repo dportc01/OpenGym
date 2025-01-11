@@ -119,7 +119,6 @@ public class PrincipalActivity extends AppCompatActivity {
 
     private void addNewRoutine(String routineName, String routineDescription) {
 
-        // Inflate the card from the XML template
         LayoutInflater inflater = LayoutInflater.from(this);
         View cardView = inflater.inflate(R.layout.routine_card, tableLayout, false);
 
@@ -145,19 +144,15 @@ public class PrincipalActivity extends AppCompatActivity {
                     .show();
         });
 
-        // Set click listener on the card
         cardView.setOnClickListener(v -> {
             Toast.makeText(this, "Rutina seleccionada: " + routineName, Toast.LENGTH_SHORT).show();
             onRoutineSelection(principalController.getRoutineId(routineName)); // Navigate to the selected routine
         });
 
-        // Add the card to the container
         tableLayout.addView(cardView);
     }
 
     private void updateRoutine(String routineName, String routineDescription, View edit) {
-
-        //voler a poner los botones porque si no la view coge el antiguo routine na,e
 
         TextView routineText = edit.findViewById(R.id.routine_name);
         routineText.setText(routineName);
@@ -180,12 +175,10 @@ public class PrincipalActivity extends AppCompatActivity {
         if (!checkRoutineLimit() && edit == null) {
             return;
         }
-        // Primero crear un LinearLayout que contenga los 2 campos de nombre y descripcion
         LinearLayout routineLayout = new LinearLayout(this);
         routineLayout.setOrientation(LinearLayout.VERTICAL);
         routineLayout.setPadding(50,40,50,10);
 
-        // Crear un EditText para que el usuario introduzca el nombre de la rutina
         final EditText nameInput = new EditText(this);
         nameInput.setHint("Escribe el nombre de la rutina");
 
@@ -195,7 +188,6 @@ public class PrincipalActivity extends AppCompatActivity {
 
         routineLayout.addView(nameInput);
         routineLayout.addView(descriptionInput);
-        // Crear el AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Nuevo nombre de rutina")
                 .setView(routineLayout)
@@ -208,8 +200,8 @@ public class PrincipalActivity extends AppCompatActivity {
                     if (routineName.isEmpty()) {
                         Toast.makeText(this, "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (edit == null) { // Añadir la rutina a la base de datos
-                            if (principalController.addUserRoutine(this, routineName, routineDescription) == -1) { // Añadir la rutina a la base de datos
+                        if (edit == null) {
+                            if (principalController.addUserRoutine(this, routineName, routineDescription) == -1) {
                                 Toast.makeText(this, "Ya existe una rutina con ese nombre", Toast.LENGTH_SHORT).show();
                                 return;
                             }
