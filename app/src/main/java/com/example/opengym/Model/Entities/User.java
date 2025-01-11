@@ -91,10 +91,8 @@ public class User {
             return;
         }
     
-        // Cargar sesiones desde la base de datos
         routine.setInfoDB(context, routine.getId());
     
-        // Cargar ejercicios para cada sesión
         for (Session session : routine.getSessionsList()) {
             session.setInfoDB(context, session.getId());
         }
@@ -109,7 +107,7 @@ public class User {
                     String exerciseData;
                     if (exercise instanceof StrengthExercise) {
                         StrengthExercise strengthExercise = (StrengthExercise) exercise;
-                        exerciseData = String.format(
+                        exerciseData = String.format(Locale.US,
                             "%s,%s,%s,%d,%s,%s,%d,%d,%.2f,%d\n",
                             routine.getName(),
                             routine.getDescription(),
@@ -120,20 +118,21 @@ public class User {
                             strengthExercise.getNumOfReps(),
                             strengthExercise.getNumOfSets(),
                             strengthExercise.getWeight(),
-                            0 // Duracion para StrengthExercise es 0
+                            0
                         );
                     } else {
                         TimedExercise timedExercise = (TimedExercise) exercise;
-                        exerciseData = String.format(
+                        exerciseData = String.format(Locale.US,
                             "%s,%s,%s,%d,%s,%s,%d,%d,%.2f,%d\n",
                             routine.getName(),
                             routine.getDescription(),
+                            session.getName(),
                             session.getRestDuration(),
                             exercise.getName(),
-                            "Cardio",
-                            0, // Repeticiones para TimedExercise es 0
-                            0, // Series para TimedExercise es 0
-                            0, // Peso para TimedExercise es 0.0
+                            "Timed",
+                            0,
+                            0,
+                            0.0,
                             timedExercise.getTime()
                         );
                     }
@@ -142,153 +141,71 @@ public class User {
             }
         } catch (IOException e) {
             Log.e("User", "Error exporting user routine", e);
+            return;
         }
     }
 
-    /*
-    public String importUserRoutine(String filePath, Context context) {
-        File file = new File(filePath);
 
-        Log.e("User", "Importando rutina de usuario desde: " + filePath);
-    
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            Log.d("User", "Archivo abierto correctamente: " + filePath);
-            String line = reader.readLine();
-            Routine newRoutine;
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    
-            if (line == null) {
-                Log.d("User", "El archivo está vacío");
-                return "Error";
-            }
-    
-            line = reader.readLine();
-            if (line == null) {
-                Log.d("User", "No hay datos después de la primera línea");
-                return "Error";
-            }
-    
-            String[] parts = line.split(",");
-            if (parts.length < 2) {
-                Log.d("User", "Formato de línea incorrecto: " + line);
-                return "Error";
-            }
-    
-            String routineName = parts[0];
-            String routineDescription = parts[1];
-            ArrayList<Session> sessionList = new ArrayList<>();
-            newRoutine = new Routine(routineName, routineDescription, sessionList);
-            this.addRoutine(routineName, routineDescription, context);
-    
-            String currentSession = parts[2];
-            IExercise newExercise = null;
-            while (line != null) {
-                parts = line.split(",");
-                if (parts.length < 5) {
-                    Log.d("User", "Formato de línea incorrecto: " + line);
-                    return "Error";
-                }
-    
-                currentSession = parts[2];
-                ArrayList<IExercise> exercises = new ArrayList<>();
-                Date date = formatter.parse(parts[3]);
-                Session newSession = new Session(parts[2], date, Integer.parseInt(parts[4]), exercises);
-                newRoutine.addSession(context, parts[2], date, Integer.parseInt(parts[4]));
-    
-                while (Objects.equals(parts[2], currentSession) && line != null) {
-                    parts = line.split(",");
-                    newExercise = extractExerciseData(parts);
-                    if (parts[7].equals("Strength")) {
-                        newSession.addStrengthExercise(newExercise, newSession.getId(), context);
-                    } else {
-                        newSession.addTimedExercise(newExercise, newSession.getId(), context);
-                    }
-                    line = reader.readLine();
-                }
-                line = reader.readLine();
-            }
-            String routineData = newRoutine.getName() + "," + newRoutine.getDescription();
-            return routineData;
-        } catch (IOException | ParseException e) {
-            Log.e("User", "Error importing user routine", e);
-        }
-        return "Error";
-    }
-    */
-
-    public String importUserRoutineSimple(Context context, Uri uri) {
-        Log.e("User", "Importando rutina de usuario desde: " + uri.toString());
-    
+    public String importUserRoutine(Context context, Uri uri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            Log.d("User", "Archivo abierto correctamente: " + uri.toString());
             String line = reader.readLine();
             Routine newRoutine;
     
             if (line == null) {
-                Log.d("User", "El archivo está vacío");
                 return "Error";
             }
     
             line = reader.readLine();
             if (line == null) {
-                Log.d("User", "No hay datos después de la primera línea");
                 return "Error";
             }
     
             String[] parts = line.split(",");
-            if (parts.length < 2) {
-                Log.d("User", "Formato de línea incorrecto: " + line);
-                return "Error";
-            }
-    
             String routineName = parts[0];
             String routineDescription = parts[1];
-            
-            // Verificar si la rutina ya existe
+   
             if (routineExists(context, routineName)) {
-                Log.d("User", "La rutina ya existe: " + routineName);
                 return "Existe";
             }
-    
+
             ArrayList<Session> sessionList = new ArrayList<>();
             newRoutine = new Routine(routineName, routineDescription, sessionList);
             long routineID = this.addRoutine(routineName, routineDescription, context);
             newRoutine.setId(routineID);
 
-            ArrayList<IExercise> exercises = new ArrayList<>();
-            Session newSession = new Session(parts[2], null, Integer.parseInt(parts[4]), exercises); // La fecha es null
-            long sessionId = newRoutine.addSession(context, parts[2], null, Integer.parseInt(parts[4]));
-            newSession.setId(sessionId);
+            String currentSession = parts[2];
+            IExercise newExercise = null;
 
             while (line != null) {
-
-                if (!parts[2].equals(newSession.getName())) {
-                    newSession = new Session(parts[2], null, Integer.parseInt(parts[4]), exercises); // La fecha es null
-                    sessionId = newRoutine.addSession(context, parts[2], null, Integer.parseInt(parts[4]));
-                    newSession.setId(sessionId);
+                parts = line.split(",");
+                currentSession = parts[2];
+                ArrayList<IExercise> exercises = new ArrayList<>();
+                Session newSession = new Session(parts[2], null, Integer.parseInt(parts[3]), exercises);
+                long sessionId = newRoutine.addSession(context, parts[2], null, Integer.parseInt(parts[3]));
+                newSession.setId(sessionId);
+            
+                while (line != null && Objects.equals(parts[2], currentSession)) {
+                    newExercise = extractExerciseData(parts);
+                    if (parts[5].equals("Strength")) {
+                        newSession.addStrengthExercise(newExercise, newSession.getId(), context);
+                    } else {
+                        newSession.addTimedExercise(newExercise, newSession.getId(), context);
+                    }
+                    newSession.getExercisesList().add(newExercise);
+            
+                    line = reader.readLine();
+                    if (line != null) {
+                        parts = line.split(",");
+                    }
                 }
-
-                IExercise newExercise = extractExerciseData(parts);
-                if (parts[6].equals("Strength")) {
-                    newSession.addStrengthExercise(newExercise, newSession.getId(), context);
-                } else {
-                    newSession.addTimedExercise(newExercise, newSession.getId(), context);
-                }
-                newSession.getExercisesList().add(newExercise);
-                line = reader.readLine();
             }
-
-            String routineData = newRoutine.getName() + "," + newRoutine.getDescription();
-            Log.d("User", "Rutina importada correctamente: " + routineData);
-            return routineData;
+            return newRoutine.getName() + "," + newRoutine.getDescription();
         } catch (IOException e) {
-            Log.e("User", "Error importing user routine", e);
             return "Error";
         }
     }
  
-    
     private boolean routineExists(Context context, String routineName) {
         RoutineDAO routineDAO = new RoutineDAO(context);
         ArrayList<Routine> routines = routineDAO.readAll(this.id);
@@ -302,10 +219,10 @@ public class User {
     
     private IExercise extractExerciseData(String[] dataRow) {
         IExercise newExercise;
-        if (dataRow[6].equals("Strength")) {
-            newExercise = new StrengthExercise(dataRow[5], Integer.parseInt(dataRow[7]), Integer.parseInt(dataRow[8]), Float.parseFloat(dataRow[9]));
+        if (dataRow[5].equals("Strength")) {
+            newExercise = new StrengthExercise(dataRow[4], Integer.parseInt(dataRow[6]), Integer.parseInt(dataRow[7]), Float.parseFloat(dataRow[8]));
         } else {
-            newExercise = new TimedExercise(dataRow[5], Integer.parseInt(dataRow[10]));
+            newExercise = new TimedExercise(dataRow[4], Integer.parseInt(dataRow[9]));
         }
         return newExercise;
     }
