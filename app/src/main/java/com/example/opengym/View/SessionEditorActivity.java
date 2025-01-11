@@ -30,18 +30,14 @@ public class SessionEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.session_editor);
 
-        // Inicializar variables y vistas
         initViews();
 
-        // Obtener los datos de la sesión
         String sessionName = getIntent().getStringExtra("session_name");
         String restDuration = getIntent().getStringExtra("rest_duration");
         long sessionId = getIntent().getLongExtra("session_id", -1);
 
-        // Crear controlador para la sesión
         sessionController = new SessionController(this, sessionId);
 
-        // Mostrar la tabla inicial con los detalles de la sesión
         addSessionTable(sessionName, restDuration);
 
         loadExercisesView();
@@ -81,16 +77,13 @@ public class SessionEditorActivity extends AppCompatActivity {
             return;
         }
 
-        // Inflar el diseño para una fila de ejercicio de fuerza
         LayoutInflater inflater = LayoutInflater.from(this);
         View strengthExerciseRow = inflater.inflate(R.layout.strength_exercise_row, tableLayout, false);
         strengthExerciseRow.setTag("strength");
 
-        // Configurar el botón "X" para eliminar la fila
         Button btnRemove = strengthExerciseRow.findViewById(R.id.btn_remove);
         btnRemove.setOnClickListener(v -> tableLayout.removeView(strengthExerciseRow));
 
-        // Hacer invisibles las líneas verticales
         View line1 = strengthExerciseRow.findViewById(R.id.vertical_line_1);
         View line2 = strengthExerciseRow.findViewById(R.id.vertical_line_2);
         View line3 = strengthExerciseRow.findViewById(R.id.vertical_line_3);
@@ -100,7 +93,6 @@ public class SessionEditorActivity extends AppCompatActivity {
         line3.setVisibility(View.GONE);
         line4.setVisibility(View.GONE);
 
-        // Añadir la fila a la tabla
         tableLayout.addView(strengthExerciseRow);
     }
 
@@ -110,22 +102,18 @@ public class SessionEditorActivity extends AppCompatActivity {
             return;
         }
 
-        // Inflar el diseño para una fila de ejercicio de duración
         LayoutInflater inflater = LayoutInflater.from(this);
         View durationExerciseRow = inflater.inflate(R.layout.duration_exercise_row, tableLayout, false);
         durationExerciseRow.setTag("duration");
 
-        // Configurar el botón "X" para eliminar la fila
         Button btnRemove = durationExerciseRow.findViewById(R.id.btn_remove);
         btnRemove.setOnClickListener(v -> tableLayout.removeView(durationExerciseRow));
 
-        // Hacer invisible la línea vertical
         View line1 = durationExerciseRow.findViewById(R.id.vertical_line_1);
         View line2 = durationExerciseRow.findViewById(R.id.horizontal_line);
         line1.setVisibility(View.GONE);
         line2.setVisibility(View.GONE);
 
-        // Añadir la fila a la tabla
         tableLayout.addView(durationExerciseRow);
     }
 
